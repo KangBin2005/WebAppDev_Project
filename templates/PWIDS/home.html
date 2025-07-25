@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navbar_style.css') }}">
+
+{% extends "PWIDS/base.html" %}
+{% block title %}SGEnable - Home{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="hero-section position-relative text-white p-5"
+     style="
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ url_for('static', filename='images/PWIDS_Home.jpeg') }}');
+        background-attachment: fixed;
+        background-size: contain;           /* Show full image without cropping */
+        background-repeat: no-repeat;       /* Prevent tiling */
+        background-position: center;
+        height: 600px;                      /* Fixed height for consistent display */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+">
+    <!-- Text content -->
+    <div class="position-relative text-center" style="z-index: 1;">
+        <h1 class="display-4 text-shadow">Home</h1>
+        <h3 class="text-shadow">Welcome back, <strong>Participant Name</strong>!</h3>
+        <blockquote class="blockquote mt-3">
+            <p class="mb-0 text-shadow">"We have to carry through to the next day and hope that we will be okay tomorrow as we are today and in the meantime, enjoy life."</p>
+            <footer class="blockquote-footer text-white">Amos Oz</footer>
+        </blockquote>
+    </div>
+</div>
+
+
+<!-- Upcoming Activities Section -->
+<div class="container mt-5">
+    <h2 class="mb-4">Upcoming Activities</h2>
+    <div class="row">
+        {% for i in range(3) %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Activity {{ i+1 }}</h5>
+                    <p class="card-text">Brief description of the upcoming activity goes here.</p>
+                    <p class="text-muted">Date: 25 July 2025</p>
+                    <p class="text-muted">Venue: Evergreen Home</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Quick Links Section -->
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-alt fa-3x mb-3 text-primary"></i>
+                    <h4>Browse Events</h4>
+                    <a href="{{ url_for('participant_activities') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marked-alt fa-3x mb-3 text-success"></i>
+                    <h4>Explore Nearby</h4>
+                    <a href="{{ url_for('participant_locations') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-question-circle fa-3x mb-3 text-info"></i>
+                    <h4>Get Help</h4>
+                    <a href="{{ url_for('participant_help') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

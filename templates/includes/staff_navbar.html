@@ -1,0 +1,127 @@
+<style>
+ /* Enhanced active state for navbar items */
+  .navbar-nav .active > .nav-link {
+    font-weight: bold;
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.3) !important;  /* More opaque */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);  /* Added shadow */
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);  /* Glow effect */
+  }
+
+  /* Enhanced dropdown active items */
+  .dropdown-item.active,
+  .dropdown-item:active {
+    background-color: #007BFF !important;
+    color: white !important;
+    font-weight: bold;
+  }
+
+  /* Hover states */
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .dropdown-item:hover {
+    background-color: #f8f9fa !important;
+    color: #007BFF !important;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg"
+     style="background: linear-gradient(90deg, #007BFF, #28A745); padding: 0.5rem 1rem;">
+    <a class="navbar-brand d-flex flex-column align-items-start" href="/"
+       style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <span style="font-size: 2rem; letter-spacing: 2px; font-weight: bold;">
+          <span style="color: white;">SG</span><span style="color: #7ed957;">Enable</span>
+        </span>
+        <small style="color: white; font-size: 0.8rem; line-height: 1;">Inclusive Society, Enabled Lives</small>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span style="display: inline-block; width: 25px;">
+            <span style="display: block; height: 2px; background: white; margin: 5px 0;"></span>
+            <span style="display: block; height: 2px; background: white; margin: 5px 0;"></span>
+            <span style="display: block; height: 2px; background: white; margin: 5px 0;"></span>
+        </span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <!-- Left: Nav links -->
+        <ul class="navbar-nav">
+            <li class="nav-item {% if current_page == 'dashboard' %}active{% endif %}">
+                <a class="nav-link text-white" href="{{ url_for('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item {% if current_page == 'account_management' %}active{% endif %}">
+                <a class="nav-link text-white" href="{{ url_for('manage_accounts') }}">Account Management</a>
+            </li>
+
+            <!-- Activity Management Dropdown -->
+            <li class="nav-item dropdown {% if current_page in ['activity_participants', 'activity_public'] %}active{% endif %}">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="activityDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Activity Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="activityDropdown">
+                    <a class="dropdown-item {% if current_page == 'activity_participants' %}active{% endif %}"
+                       href="{{ url_for('activity_participants') }}">Participants</a>
+                    <a class="dropdown-item {% if current_page == 'activity_public' %}active{% endif %}"
+                       href="{{ url_for('activity_public') }}">Public</a>
+                </div>
+            </li>
+
+            <!-- Enquiry Management Dropdown -->
+            <li class="nav-item dropdown {% if current_page in ['enquiry_participants', 'enquiry_public'] %}active{% endif %}">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="enquiryDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Enquiry Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="enquiryDropdown">
+                    <a class="dropdown-item {% if current_page == 'enquiry_participants' %}active{% endif %}"
+                       href="{{ url_for('enquiry_participants') }}">Participants</a>
+                    <a class="dropdown-item {% if current_page == 'enquiry_public' %}active{% endif %}"
+                       href="{{ url_for('enquiry_public') }}">Public</a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Right: Notification + Dropdown -->
+        <ul class="navbar-nav align-items-center">
+            <!-- Notification Bell -->
+            <li class="nav-item dropdown mx-3">
+                <a class="nav-link text-white position-relative" href="#"
+                   id="notificationsDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                          style="font-size: 0.6rem;">3
+                        <span class="sr-only">unread notifications</span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown"
+                     style="min-width: 250px;">
+                    <h6 class="dropdown-header">Notifications</h6>
+                    <a class="dropdown-item" href="#">You have 3 new messages</a>
+                    <a class="dropdown-item" href="#">Event starting in 1 hour</a>
+                    <a class="dropdown-item" href="#">New announcement available</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item text-center small text-muted" href="#">View all</a>
+                </div>
+            </li>
+
+            <!-- Staff Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Staff Name
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

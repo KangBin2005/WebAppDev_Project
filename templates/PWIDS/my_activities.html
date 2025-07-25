@@ -1,0 +1,71 @@
+{% extends "PWIDS/base.html" %}
+{% block title %}SGEnable - My Activities{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">My Activities</h1>
+    
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="location">Location</label>
+                <select class="form-control" id="location">
+                    <option>Evergreen Home</option>
+                    <option>Sunshine Center</option>
+                    <option>Harmony House</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" id="date">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary btn-block">Search</button>
+        </div>
+    </div>
+    
+    <!-- Activities List -->
+    <div class="row">
+        {% for i in range(3) %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Activity {{ i+1 }}</h5>
+                    <p class="card-text">Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
+                    <p class="text-muted">Date & Time: 25 July 2025, 2:00 PM</p>
+                    <p class="text-muted">Location: Evergreen Home</p>
+                    <div class="d-flex justify-content-between">
+                        <a href="#" class="btn btn-outline-primary">View Event Detail</a>
+                        <a href="#" class="btn btn-success">Join</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Suggested Activities -->
+    <h3 class="mt-5 mb-4">Suggested Activities based on your preferences</h3>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Suggested Activity</h5>
+                    <p class="card-text">Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
+                    <p class="text-muted">Date & Time: 30 July 2025, 10:00 AM</p>
+                    <p class="text-muted">Location: Sunshine Center</p>
+                    <div class="d-flex justify-content-between">
+                        <a href="#" class="btn btn-outline-primary">View Event Detail</a>
+                        <a href="#" class="btn btn-success">Join</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

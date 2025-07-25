@@ -1,0 +1,75 @@
+<style>
+    .navbar-nav .active > .nav-link {
+      font-weight: bold;
+      color: #ffffff !important;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .dropdown-item.active, .dropdown-item:active {
+      background-color: #007BFF !important;
+      color: white !important;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg"
+     style="background: linear-gradient(90deg, #007BFF, #28A745); padding: 0.5rem 1rem;">
+    <a class="navbar-brand d-flex flex-column align-items-start" href="{{ url_for('public_home') }}"
+       style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <span style="font-size: 2rem; letter-spacing: 2px; font-weight: bold;">
+          <span style="color: white;">SG</span><span style="color: #7ed957;">Enable</span>
+        </span>
+        <small style="color: white; font-size: 0.8rem; line-height: 1;">Inclusive Society, Enabled Lives</small>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span style="display: inline-block; width: 25px;">
+            <span style="display: block; height: 2px; background: white; margin: 5px 0;"></span>
+            <span style="display: block; height: 2px; background: white; margin: 5px 0;"></span>
+            <span style="display: block; height: 2px; background: white; margin: 5px 0;"></span>
+        </span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <!-- Left: Nav links -->
+        <ul class="navbar-nav">
+            <li class="nav-item {% if current_page == 'public_home' %}active{% endif %}">
+                <a class="nav-link text-white" href="{{ url_for('public_home') }}">Home</a>
+            </li>
+            <li class="nav-item {% if current_page == 'public_about' %}active{% endif %}">
+                <a class="nav-link text-white" href="{{ url_for('public_about') }}">About Us</a>
+            </li>
+            <li class="nav-item {% if current_page == 'public_activities' %}active{% endif %}">
+                <a class="nav-link text-white" href="{{ url_for('public_activities') }}">Activities</a>
+            </li>
+            <li class="nav-item dropdown {% if current_page in ['enquiries', 'locations', 'faq'] %}active{% endif %}">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="contactDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Contact Us
+                </a>
+                <div class="dropdown-menu" aria-labelledby="contactDropdown">
+                    <a class="dropdown-item {% if current_page == 'public_enquiries' %}active{% endif %}"
+                       href="{{ url_for('public_enquiries') }}">Enquiries</a>
+                    <a class="dropdown-item {% if current_page == 'public_locations' %}active{% endif %}"
+                       href="{{ url_for('public_locations') }}">Locations</a>
+                    <a class="dropdown-item {% if current_page == 'public_faq' %}active{% endif %}"
+                       href="{{ url_for('public_faq') }}">FAQ</a>
+                </div>
+            </li>
+            <li class="nav-item {% if current_page == 'public_donations' %}active{% endif %}">
+                <a class="nav-link text-white" href="{{ url_for('public_donations') }}">Donation Gifts</a>
+            </li>
+        </ul>
+
+        <!-- Right: Auth Links -->
+        <ul class="navbar-nav align-items-center">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li class="nav-item ml-2">
+                <a class="btn btn-outline-light" href="{{ url_for('signup') }}">Sign Up</a>
+            </li>
+        </ul>
+    </div>
+</nav>
