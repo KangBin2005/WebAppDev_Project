@@ -19,7 +19,17 @@ def manage_activities():
 
 @app.route('/activity-management/participants')
 def activity_participants():
-    return render_template('Staff/activity_participants.html', current_page='activity_participants')
+    participants_activities_dict = {}
+    db = shelve.open('participant_activity_storage.db', 'r')
+    participants_activities_dict = db['Activities']
+    db.close()
+
+    activities_list = []
+    for key in participants_activities_dict:
+        activity = participants_activities_dict.get(key)
+        activities_list.append(activity)
+    return render_template('Staff/activity_participants.html',
+   current_page='activity_participants', count = len(activities_list), activities_list = activities_list)
 
 @app.route('/create-participant-activity', methods=['GET', 'POST'])
 def create_participant_activity():
@@ -39,14 +49,7 @@ def create_participant_activity():
             create_participant_activity_form.end_time.data)
         participants_activities_dict[activity.get_activity_id()] = activity
         db['Activities'] = participants_activities_dict
-
-        # Test codes
-        participants_activities_dict = db['Activities']
-        activity = participants_activities_dict[activity.get_activity_id()]
-        print(activity.get_name(), "was stored successfully in participant_activity_storage.db"
-                                   "with activity_id ==", activity.get_activity_id())
         db.close()
-
         return redirect(url_for('activity_participants'))
     return render_template('Staff/create_activity_participant.html', form=create_participant_activity_form)
 
