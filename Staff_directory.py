@@ -51,7 +51,43 @@ def create_participant_activity():
         db['Activities'] = participants_activities_dict
         db.close()
         return redirect(url_for('activity_participants'))
-    return render_template('Staff/create_activity_participant.html', form=create_participant_activity_form)
+    return render_template('Staff/create_participant_activity.html', form=create_participant_activity_form)
+
+@app.route('/update-participant-activity/<int:id>/', methods=['GET', 'POST'])
+def update_participant_activity(id):
+    update_participant_activity_form = CreateActivityForm(request.form)
+    if request.method == 'POST' and update_participant_activity_form.validate():
+        activities_dict = {}
+        db = shelve.open('participant_activity_storage.db', 'w')
+        activities_dict = db['Activities']
+
+        activity = activities_dict.get(id)
+        activity.set_name(update_participant_activity_form.name.data)
+        activity.set_description(update_participant_activity_form.description.data)
+        activity.set_venue(update_participant_activity_form.venue.data)
+        activity.set_date(update_participant_activity_form.date.data)
+        activity.set_start_time(update_participant_activity_form.start_time.data)
+        activity.set_end_time(update_participant_activity_form.end_time.data)
+
+        db['Activities'] = activities_dict
+        db.close()
+        return redirect(url_for('activity_participants'))
+    else:
+        participants_activities_dict = {}
+        db = shelve.open('participant_activity_storage.db', 'r')
+        participants_activities_dict = db['Activities']
+        db.close()
+
+        activity = participants_activities_dict.get(id)
+        update_participant_activity_form.name.data = activity.get_name()
+        update_participant_activity_form.description.data = activity.get_description()
+        update_participant_activity_form.venue.data = activity.get_venue()
+        update_participant_activity_form.date.data = activity.get_date()
+        update_participant_activity_form.start_time.data = activity.get_start_time()
+        update_participant_activity_form.end_time.data = activity.get_end_time()
+
+        return render_template('Staff/update_participant_activity.html',
+                               form = update_participant_activity_form)
 
 @app.route('/activity-management/public')
 def activity_public():
