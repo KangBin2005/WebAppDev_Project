@@ -89,6 +89,19 @@ def update_participant_activity(id):
         return render_template('Staff/update_participant_activity.html',
                                form = update_participant_activity_form)
 
+@app.route('/delete-participant-activity/<int:id>', methods=['POST'])
+def delete_participant_activity(id):
+    activities_dict = {}
+    db = shelve.open('participant_activity_storage.db', 'w')
+    activities_dict = db['Activities']
+
+    activities_dict.pop(id)
+
+    db['Activities'] = activities_dict
+    db.close()
+
+    return redirect(url_for('activity_participants'))
+
 @app.route('/activity-management/public')
 def activity_public():
     return render_template('Staff/activity_public.html', current_page='activity_public')
