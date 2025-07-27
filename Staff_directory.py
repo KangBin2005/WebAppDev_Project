@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
+from Forms import CreateActivityForm
+import shelve, Participant_Activity
 
 app = Flask(__name__)
 
@@ -18,6 +20,35 @@ def manage_activities():
 @app.route('/activity-management/participants')
 def activity_participants():
     return render_template('Staff/activity_participants.html', current_page='activity_participants')
+
+@app.route('/create-participant-activity', methods=['GET', 'POST'])
+def create_participant_activity():
+    create_participant_activity_form = CreateActivityForm(request.form)
+    if request.method == 'POST' and create_participant_activity_form.validate():
+        participants_activities_dict = {}
+        db = shelve.open('participant_activity_storage.db', 'c')
+        try:
+            participants_activities_dict = db['Activities']
+        except:
+            print("Error in retrieving Activities from storage.db.")
+        activity = Participant_Activity.ParticipantActivity(create_participant_activity_form.name.data,
+            create_participant_activity_form.description.data,
+            create_participant_activity_form.venue.data,
+            create_participant_activity_form.date.data,
+            create_participant_activity_form.start_time.data,
+            create_participant_activity_form.end_time.data)
+        participants_activities_dict[activity.get_activity_id()] = activity
+        db['Activities'] = participants_activities_dict
+
+        # Test codes
+        participants_activities_dict = db['Activities']
+        activity = participants_activities_dict[activity.get_activity_id()]
+        print(activity.get_name(), "was stored successfully in participant_activity_storage.db"
+                                   "with activity_id ==", activity.get_activity_id())
+        db.close()
+
+        return redirect(url_for('activity_participants'))
+    return render_template('Staff/create_activity_participant.html', form=create_participant_activity_form)
 
 @app.route('/activity-management/public')
 def activity_public():
