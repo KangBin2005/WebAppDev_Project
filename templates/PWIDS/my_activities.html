@@ -4,68 +4,71 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">My Activities</h1>
-    
+
     <!-- Search and Filter Section -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="location">Location</label>
-                <select class="form-control" id="location">
-                    <option>Evergreen Home</option>
-                    <option>Sunshine Center</option>
-                    <option>Harmony House</option>
-                </select>
+    <form method="GET" action="{{ url_for('participant_activities') }}">
+        <div class="row align-items-end mb-4">  <!-- Added align-items-end here -->
+            <div class="col-md-4">
+                <div class="form-group mb-0">  <!-- Added mb-0 to remove bottom margin -->
+                    <label for="activity_name">Activity Name</label>
+                    <select class="form-control" id="activity_name" name="activity_name">
+                        <option value="">All Activities</option>
+                        {% for name in activity_names %}
+                        <option value="{{ name }}" {% if name == selected_activity %}selected{% endif %}>
+                            {{ name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-0">  <!-- Added mb-0 to remove bottom margin -->
+                    <label for="location">Location</label>
+                    <select class="form-control" id="location" name="location">
+                        <option value="">All Locations</option>
+                        {% for venue in venues %}
+                        <option value="{{ venue }}" {% if venue == selected_location %}selected{% endif %}>
+                            {{ venue }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary" style="height: 38px; width: 120px;">
+                    <i class="fas fa-search mr-2"></i> Search
+                </button>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date">
-            </div>
-        </div>
-        <div class="col-md-4">
-            <label>&nbsp;</label>
-            <button class="btn btn-primary btn-block">Search</button>
-        </div>
-    </div>
-    
-    <!-- Activities List -->
+    </form>
+
+    <!-- Rest of your template remains the same -->
     <div class="row">
-        {% for i in range(3) %}
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Activity {{ i+1 }}</h5>
-                    <p class="card-text">Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
-                    <p class="text-muted">Date & Time: 25 July 2025, 2:00 PM</p>
-                    <p class="text-muted">Location: Evergreen Home</p>
-                    <div class="d-flex justify-content-between">
-                        <a href="#" class="btn btn-outline-primary">View Event Detail</a>
-                        <a href="#" class="btn btn-success">Join</a>
+        {% if activities_list %}
+            {% for activity in activities_list %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ activity.get_name() }}</h5>
+                        <p class="card-text">Description: {{ activity.get_description() }}</p>
+                        <p class="text-muted">Date: {{ activity.get_date().strftime('%d %B %Y') }}</p>
+                        <p class="text-muted">Time: {{ activity.get_start_time().strftime('%H:%M') }} - {{ activity.get_end_time().strftime('%H:%M') }}</p>
+                        <p class="text-muted">Location: {{ activity.get_venue() }}</p>
+                        <div class="d-flex justify-content-between">
+
+                            <a href="#" class="btn btn-success">Join</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-    
-    <!-- Suggested Activities -->
-    <h3 class="mt-5 mb-4">Suggested Activities based on your preferences</h3>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Suggested Activity</h5>
-                    <p class="card-text">Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
-                    <p class="text-muted">Date & Time: 30 July 2025, 10:00 AM</p>
-                    <p class="text-muted">Location: Sunshine Center</p>
-                    <div class="d-flex justify-content-between">
-                        <a href="#" class="btn btn-outline-primary">View Event Detail</a>
-                        <a href="#" class="btn btn-success">Join</a>
-                    </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No activities found matching your filters.
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
