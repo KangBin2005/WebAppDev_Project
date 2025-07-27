@@ -1,0 +1,30 @@
+{% extends "PWIDS/base.html" %}
+{% block title %}Outlet Map{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ outlet.name }} - Location Map</h1>
+        <a href="{{ url_for('participant_locations') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Outlets
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="row no-gutters">
+                <div class="col-md-12">
+                    <iframe
+                        src="{{ outlet.map_url }}"
+                        width="100%"
+                        height="500"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

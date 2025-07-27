@@ -1,7 +1,27 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import shelve
 from datetime import date
 app = Flask(__name__)
+
+# Sample outlet data (you might want to move this to a database)
+outlets = {
+    1: {
+        'name': 'Evergreen Home',
+        'address': '123 Harmony Street<br>Singapore 123456',
+        'phone': '+65 6123 4567',
+        'hours': 'Mon-Fri: 9am-6pm',
+        'map_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.6783916679!2d103.8198!3d1.3521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMDcuNiJOIDEwM8KwNDknMTEuMyJF!5e0!3m2!1sen!2ssg!4v1620000000000!5m2!1sen!2ssg',
+        'wheelchair_accessible': True
+    },
+    2: {
+        'name': 'Sunshine Center',
+        'address': '456 Bright Avenue<br>Singapore 654321',
+        'phone': '+65 6876 5432',
+        'hours': 'Mon-Sat: 8am-7pm',
+        'map_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.1234567890!2d103.7764!3d1.2966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTcnNDkuOSJOIDEwM8KwNDYnMzUuMSJF!5e0!3m2!1sen!2ssg!4v1620000000000!5m2!1sen!2ssg',
+        'wheelchair_accessible': True
+    }
+}
 
 # ========================
 # Public Routes (main site)
@@ -125,9 +145,20 @@ def participant_activities():
             selected_location=''
         )
 
-@app.route('/participants/locations')
-def participant_locations():
-    return render_template('PWIDS/locations.html', current_page='participant_locations')
+@app.route('/participants/outlets')
+def participant_locations():  # Renamed to match navbar
+    return render_template('PWIDS/outlets.html',
+                         outlets=outlets,
+                         current_page='our_outlets')  # Keep current_page consistent
+
+@app.route('/participants/outlet/<int:outlet_id>')
+def outlet_map(outlet_id):
+    outlet = outlets.get(outlet_id)
+    if not outlet:
+        return redirect(url_for('participant_locations'))
+    return render_template('PWIDS/outlet_map.html',
+                         outlet=outlet,
+                         current_page='outlet_map')
 
 @app.route('/participants/help')
 def participant_help():

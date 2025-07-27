@@ -1,0 +1,64 @@
+{% extends "PWIDS/base.html" %}
+{% block title %}Our Outlets{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Our Outlets</h1>
+
+    <div class="row">
+        <!-- Location 1 -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Evergreen Home</h3>
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <th>Address</th>
+                            <td>123 Harmony Street<br>Singapore 123456</td>
+                        </tr>
+                        <tr>
+                            <th>Telephone</th>
+                            <td>+65 6123 4567</td>
+                        </tr>
+                        <tr>
+                            <th>Operating Hours</th>
+                            <td>Mon-Fri: 9am-6pm</td>
+                        </tr>
+                    </table>
+                    <div class="mt-3">
+                        <span class="badge badge-success">Wheelchair Accessible</span>
+                    </div>
+                   <a href="{{ url_for('outlet_map', outlet_id=1) }}" class="btn btn-primary mt-3">View Map</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location 2 -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Sunshine Center</h3>
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <th>Address</th>
+                            <td>456 Bright Avenue<br>Singapore 654321</td>
+                        </tr>
+                        <tr>
+                            <th>Telephone</th>
+                            <td>+65 6876 5432</td>
+                        </tr>
+                        <tr>
+                            <th>Operating Hours</th>
+                            <td>Mon-Sat: 8am-7pm</td>
+                        </tr>
+                    </table>
+                    <div class="mt-3">
+                        <span class="badge badge-success">Wheelchair Accessible</span>
+                    </div>
+                   <a href="{{ url_for('outlet_map', outlet_id=2) }}" class="btn btn-primary mt-3">View Map</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
