@@ -1,30 +1,119 @@
 {% extends "PWIDS/base.html" %}
-{% block title %}Outlet Map{% endblock %}
+{% block title %}{{ outlet.name }} Location{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>{{ outlet.name }} - Location Map</h1>
-        <a href="{{ url_for('participant_locations') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left mr-2"></i>Back to Outlets
+    <!-- Back Button -->
+    <a href="{{ url_for('participant_locations') }}" class="btn btn-outline-secondary mb-3">
+        <i class="fas fa-arrow-left mr-2"></i> Back to Outlets
+    </a>
+
+    <!-- Special Notice for Main Office -->
+    {% if outlet.name == 'SG Enable Headquarters' %}
+    <div class="alert alert-info mt-3">
+        <i class="fas fa-info-circle"></i> <strong>Headquarters Notice:</strong>
+        This is SG Enable's main administrative office at Enabling Village.
+    </div>
+    {% endif %}
+
+    <!-- Header with name and address -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-1">{{ outlet.name }}</h2>
+            <p class="text-muted mb-0">
+                <i class="fas fa-map-marker-alt text-danger"></i> {{ outlet.address }}
+            </p>
+        </div>
+        <a href="{{ outlet.map_url }}" target="_blank" class="btn btn-primary">
+            <i class="fas fa-external-link-alt"></i> Open in Maps
         </a>
     </div>
 
+    <!-- Responsive Map Embed -->
+    <div class="map-container mb-4 rounded shadow-sm overflow-hidden">
+        <iframe
+            width="100%"
+            height="450"
+            frameborder="0"
+            style="border:0"
+            src="{{ outlet.embed_url }}"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+
+    <!-- Information Card -->
     <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <div class="row no-gutters">
-                <div class="col-md-12">
-                    <iframe
-                        src="{{ outlet.map_url }}"
-                        width="100%"
-                        height="500"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy">
-                    </iframe>
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="fas fa-info-circle text-primary"></i> Location Details
+            </h5>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-2">
+                        <i class="fas fa-phone text-muted"></i>
+                        <strong>Phone:</strong>
+                        <a href="tel:{{ outlet.phone }}">{{ outlet.phone }}</a>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-2">
+                        <i class="far fa-clock text-muted"></i>
+                        <strong>Operating Hours:</strong> {{ outlet.hours }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                {% if outlet.wheelchair_accessible %}
+                    <span class="badge badge-success p-2">
+                        <i class="fas fa-wheelchair"></i> Wheelchair Accessible
+                    </span>
+                {% endif %}
+
+                <!-- Additional action buttons -->
+                <div class="mt-3">
+                    <a href="{{ outlet.map_url }}" target="_blank" class="btn btn-sm btn-outline-primary mr-2">
+                        <i class="fas fa-directions"></i> Get Directions
+                    </a>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('{{ outlet.address }}')">
+                        <i class="far fa-copy"></i> Copy Address
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Small JavaScript for copy functionality -->
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('Address copied to clipboard!');
+    }, function(err) {
+        console.error('Could not copy text: ', err);
+    });
+}
+</script>
+
+<style>
+    .map-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+    }
+    .map-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .alert-info {
+        border-left: 4px solid #17a2b8;
+    }
+</style>
 {% endblock %}

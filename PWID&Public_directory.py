@@ -3,23 +3,87 @@ import shelve
 from datetime import date
 app = Flask(__name__)
 
-# Sample outlet data (you might want to move this to a database)
+# ========================
+# Sample SG Enable Outlets Data
+# ========================
 outlets = {
     1: {
-        'name': 'Evergreen Home',
-        'address': '123 Harmony Street<br>Singapore 123456',
-        'phone': '+65 6123 4567',
-        'hours': 'Mon-Fri: 9am-6pm',
-        'map_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.6783916679!2d103.8198!3d1.3521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMDcuNiJOIDEwM8KwNDknMTEuMyJF!5e0!3m2!1sen!2ssg!4v1620000000000!5m2!1sen!2ssg',
-        'wheelchair_accessible': True
+        'name': 'SG Enable Headquarters',
+        'address': '20 Lengkok Bahru (Enabling Village), #01-01, Singapore 159053',
+        'phone': '+65 6479 3700',
+        'hours': 'Mon-Fri: 9am to 5.30pm',
+        'wheelchair_accessible': True,
+        'lat': '1.2875454',
+        'lng': '103.8149975',
+        'map_zoom': '17',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/SG+Enable/@1.2875508,103.8124226,17z/data=!3m1!4b1!4m6!3m5!1s0x31da19792f952f6d:0xb7db38a7c6c26ba1!8m2!3d1.2875454!4d103.8149975!16s%2Fg%2F1vg_9cwl?entry=ttu',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.669318672029!2d103.8124226!3d1.2875508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19792f952f6d%3A0xb7db38a7c6c26ba1!2sSG%20Enable!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
     },
     2: {
-        'name': 'Sunshine Center',
-        'address': '456 Bright Avenue<br>Singapore 654321',
-        'phone': '+65 6876 5432',
+        'name': 'Toa Payoh Enable Hub',
+        'address': '190 Lorong 6 Toa Payoh, #02-510, Singapore 310190',
+        'phone': '+65 6123 4567',
+        'hours': 'Mon-Fri: 9am-6pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3345',
+        'lng': '103.8568',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/190+Lor+6+Toa+Payoh,+%2302-510,+Singapore+310190',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.73834704838!2d103.854225!3d1.3345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjAnMDQuMiJOIDEwM8KwNTEnMjQuNSJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    3: {
+        'name': 'Bishan Enable Support Centre',
+        'address': '51 Bishan Street 13, #01-01, Singapore 579799',
+        'phone': '+65 6234 5678',
         'hours': 'Mon-Sat: 8am-7pm',
-        'map_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.1234567890!2d103.7764!3d1.2966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTcnNDkuOSJOIDEwM8KwNDYnMzUuMSJF!5e0!3m2!1sen!2ssg!4v1620000000000!5m2!1sen!2ssg',
-        'wheelchair_accessible': True
+        'wheelchair_accessible': True,
+        'lat': '1.3506',
+        'lng': '103.8484',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/51+Bishan+St+13,+%2301-01,+Singapore+579799',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.584402768847!2d103.846212!3d1.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMDIuMiJOIDEwM8KwNTAnNTQuMiJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    4: {
+        'name': 'Yishun Enable Care Centre',
+        'address': '101 Yishun Ave 5, #03-01, Singapore 760101',
+        'phone': '+65 6345 6789',
+        'hours': 'Mon-Fri: 8:30am-5:30pm',
+        'wheelchair_accessible': True,
+        'lat': '1.4295',
+        'lng': '103.8350',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/101+Yishun+Ave+5,+%2303-01,+Singapore+760101',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.263601270874!2d103.832812!3d1.4295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjUnNDYuMiJOIDEwM8KwNTAnMDYuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    5: {
+        'name': 'Tampines Enable Hub',
+        'address': '5 Tampines Central 6, #04-10, Singapore 529482',
+        'phone': '+65 6456 7890',
+        'hours': 'Mon-Sat: 9am-6pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3536',
+        'lng': '103.9386',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/5+Tampines+Central+6,+%2304-10,+Singapore+529482',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.678350727765!2d103.936412!3d1.3536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMTMuMCJOIDEwM8KwNTYnMTkuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    6: {
+        'name': 'Jurong East Enable Centre',
+        'address': '135 Jurong Gateway Rd, #02-317, Singapore 600135',
+        'phone': '+65 6567 8901',
+        'hours': 'Mon-Fri: 8am-5pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3333',
+        'lng': '103.7426',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/135+Jurong+Gateway+Rd,+%2302-317,+Singapore+600135',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.917197049249!2d103.740412!3d1.3333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTknNTkuOSJOIDEwM8KwNDQnMzMuNCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
     }
 }
 
@@ -156,9 +220,13 @@ def outlet_map(outlet_id):
     outlet = outlets.get(outlet_id)
     if not outlet:
         return redirect(url_for('participant_locations'))
+
+    facility_type = request.args.get('facility', 'bus stop')
     return render_template('PWIDS/outlet_map.html',
-                         outlet=outlet,
-                         current_page='outlet_map')
+                           outlet=outlet,
+                           facility_type=facility_type,
+                           current_page='outlet_map')
+
 
 @app.route('/participants/help')
 def participant_help():
