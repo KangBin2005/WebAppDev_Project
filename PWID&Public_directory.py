@@ -221,10 +221,10 @@ def outlet_map(outlet_id):
     if not outlet:
         return redirect(url_for('participant_locations'))
 
-    facility_type = request.args.get('facility', 'bus stop')
+
     return render_template('PWIDS/outlet_map.html',
                            outlet=outlet,
-                           facility_type=facility_type,
+
                            current_page='outlet_map')
 
 
