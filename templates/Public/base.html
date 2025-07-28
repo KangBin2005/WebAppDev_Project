@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
@@ -16,7 +17,7 @@
         {% include 'includes/public_navbar.html' %}
     {% endblock %}
 
-    <div class="container-fluid">
+    <div class="container-fluid vh-100">
         {% block content %}
         {% endblock %}
     </div>
