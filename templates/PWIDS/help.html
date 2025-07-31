@@ -130,7 +130,6 @@
             </div>
         </div>
 
-
         <!-- Tab 2: My Enquiries -->
         <div class="tab-pane fade {% if show_enquiries %}show active{% endif %}" id="enquiries" role="tabpanel"
              aria-labelledby="enquiries-tab">
@@ -145,7 +144,6 @@
             </div>
             <div class="mt-3">
                 <!-- Filter Form -->
-
                 <form method="GET" action="{{ url_for('participant_help') }}">
                     <input type="hidden" name="show_enquiries" value="1">
 
@@ -208,18 +206,31 @@
                                     </div>
                                     <span class="badge
                                       {% if enquiry.get_status() == 'Pending' %}badge-warning
-                                      {% elif enquiry.get_status() == 'Replied' %}badge-info
-                                      {% else %}badge-success{% endif %}">
-                                {{ enquiry.get_status() }}
-                            </span>
+                                      {% elif enquiry.get_status() == 'Replied' %}badge-success
+                                      {% else %}badge-info{% endif %}">
+                                        {{ enquiry.get_status() }}
+                                    </span>
                                 </div>
+
+                                <!-- Staff Reply Section (Only show if status is Replied) -->
+                                {% if enquiry.get_status() == 'Replied' %}
+                                <div class="mt-3 p-3 bg-light rounded">
+                                    <h6 class="font-weight-bold">Staff Reply:</h6>
+                                    <p>{{ enquiry.get_reply() }}</p>
+                                </div>
+                                {% endif %}
 
                                 <!-- Action Buttons -->
                                 <div class="d-flex justify-content-end">
+                                    {% if enquiry.get_status() == 'Pending' %}
+                                    <!-- Show Edit button only for Pending status -->
                                     <a href="/update_participant_enquiry/{{enquiry.get_enquiry_id()}}"
                                        class="btn btn-sm btn-warning mr-2">
                                         <i class="fas fa-edit mr-1"></i> Edit
                                     </a>
+                                    {% endif %}
+
+                                    <!-- Always show Delete button -->
                                     <form action="{{url_for('delete_participant_enquiry', id=enquiry.get_enquiry_id())}}"
                                           method="POST">
                                         <!-- Button to Open the Modal -->
@@ -232,7 +243,6 @@
                                         <div class="modal" id="myModal_{{enquiry.get_enquiry_id()}}">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title">Delete Confirmation</h4>
@@ -243,8 +253,7 @@
 
                                                     <!-- Modal body -->
                                                     <div class="modal-body">
-                                                        Are you sure you want to delete {{enquiry.get_name()}}'s
-                                                        enquiry?
+                                                        Are you sure you want to delete your enquiry?
                                                     </div>
 
                                                     <!-- Modal footer -->
@@ -254,7 +263,6 @@
                                                                 data-dismiss="modal">Cancel
                                                         </button>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -273,7 +281,6 @@
                     </div>
                     {% endif %}
                     {% endif %}
-
                 </div>
             </div>
         </div>

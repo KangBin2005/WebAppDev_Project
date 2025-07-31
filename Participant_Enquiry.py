@@ -8,6 +8,7 @@ class ParticipantEnquiry:
         self.__subject = subject
         self.__message = message
         self.__status = status  # Pending, Replied
+        self.__reply = ""
 
 
     # Getter methods
@@ -26,6 +27,9 @@ class ParticipantEnquiry:
     def get_status(self):
         return self.__status
 
+    def get_reply(self):
+        return self.__reply
+
     # Setter methods
     def set_enquiry_id(self, enquiry_id):
         self.__enquiry_id = enquiry_id
@@ -41,3 +45,7 @@ class ParticipantEnquiry:
 
     def set_status(self, status):
         self.__status = status
+
+    def set_reply(self, reply):
+        self.__reply = reply
+        self.__status = "Replied"

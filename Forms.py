@@ -25,14 +25,32 @@ class CreateEnquiryForm(Form):
     ])
 
     subject = SelectField('Subject', choices=[
-        ('', 'Select a subject'),  # Empty default option
+        ('', 'Select a subject'),  # Default empty option
         ('Activity', 'Activity'),
-        ('Account', 'Account'),
-        ('Technical Issue', 'Technical Issue'),
-        ('Other', 'Other')
+        ('Technical Issues', 'Technical Issues'),
+        ('Account Issues', 'Account Issues'),
+        ('General Feedback / Concerns', 'General Feedback / Concerns'),
+        ('Navigation Issues', 'Navigation Issues'),
+        ('Others', 'Others')
     ], validators=[validators.DataRequired()])
+    # ... other fields ...
 
     message = TextAreaField('Message', [
         validators.Length(min=1, max=1000),
         validators.DataRequired()
     ])
+
+
+class ReplyParticipantEnquiryForm(CreateEnquiryForm):
+    # Class-level field definition (required by WTForms)
+    reply_text = TextAreaField('Staff Reply', [
+        validators.Length(min=1, max=1000),
+        validators.DataRequired()
+    ])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Modify existing fields
+        self.name.render_kw = {'readonly': True}
+        self.subject.render_kw = {'readonly': True}
+        self.message.render_kw = {'readonly': True}

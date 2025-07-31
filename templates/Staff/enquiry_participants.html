@@ -4,6 +4,114 @@
 {% block content %}
 <div class="container mt-4">
     <h1>Enquiry Management - Participants</h1>
-    <p>This section handles enquiries from registered participants.</p>
+
+    <div class="mt-4">
+        <!-- Count Display -->
+        <div>
+            {% if count == 0 %}
+            <h1>There are no enquiries available.</h1>
+            {% elif count == 1 %}
+            <h2>There is 1 enquiry.</h2>
+            {% else %}
+            <h2>There are {{ count }} enquiries.</h2>
+            {% endif %}
+        </div>
+
+        <!-- Filter Form -->
+        <div class="mt-3">
+            <form method="GET" action="">
+                <div class="row align-items-end mb-4">
+                    <div class="col-md-4">
+                        <div class="form-group mb-0">
+                            <label for="subject">Subject</label>
+                            <select class="form-control" id="subject" name="subject">
+                                <option value="">All Subjects</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject }}" {% if selected_subject== subject %}selected{% endif %}>
+                                    {{ subject }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group mb-0">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="">All Statuses</option>
+                                {% for status in statuses %}
+                                <option value="{{ status }}" {% if selected_status== status %}selected{% endif %}>
+                                    {{ status }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary" style="height: 38px; width: 120px;">
+                            <i class="fas fa-search mr-2"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Enquiry Cards -->
+        <div class="row">
+            {% if enquiries %}
+            {% for enquiry in enquiries %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <small class="text-muted">Enquiry ID: {{ enquiry.get_enquiry_id() }}</small>
+                        <h5 class="card-title mt-2 mb-3">Message: {{ enquiry.get_message() }}</h5>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="font-weight-bold">Subject:</span> {{ enquiry.get_subject() }}<br>
+                                <span class="font-weight-bold">From:</span> {{ enquiry.get_name() }}
+                            </div>
+                            <span class="badge
+                                {% if enquiry.get_status() == 'Pending' %}badge-warning
+                                {% elif enquiry.get_status() == 'Replied' %}badge-success
+                                {% else %}badge-secondary{% endif %}">
+                                {{ enquiry.get_status() }}
+                            </span>
+                        </div>
+                        <!-- NEW: Show reply if exists -->
+                        {% if enquiry.get_status() == 'Replied' %}
+                        <div class="mt-3 p-3 bg-light rounded">
+                            <h6 class="font-weight-bold">Staff Reply:</h6>
+                            <p>{{ enquiry.get_reply() }}</p>
+                        </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-end">
+                            {% if enquiry.get_status() == 'Pending' %}
+                            <a href="{{ url_for('participant_enquiry_reply', id=enquiry.get_enquiry_id()) }}"
+                               class="btn btn-sm btn-primary mr-2">
+                                <i class="fas fa-reply mr-1"></i> Reply
+                            </a>
+                            {% endif %}
+
+                            <!-- Your existing delete button -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            {% if request.args.get('subject') or request.args.get('status') %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-2"></i> No enquiries found matching your search criteria.
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

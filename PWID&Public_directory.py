@@ -279,7 +279,8 @@ def participant_help():
         print(f"Error loading enquiries: {str(e)}")
 
     # Defined subject and status field data
-    subjects = ['Activity', 'Account', 'Technical Issue', 'Other']
+    subjects = ['Activity', 'Technical Issues', 'Account Issues',
+                'General Feedback / Concerns', 'Navigation Issues', 'Others']
     statuses = ['Pending', 'Replied']
 
     return render_template('PWIDS/help.html',

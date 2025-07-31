@@ -1,0 +1,53 @@
+{% extends "Staff/Staff_base.html" %}
+{% block title %}Reply to Enquiry{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0">Enquiries Reply (Particpants) </h1>
+        <a href="{{ url_for('enquiry_participants') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Participants Enquiries Management
+        </a>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <form method="POST" action="">
+                <!-- Enquiry Information (Readonly) -->
+                <div class="form-group">
+                    {{ form.name.label }}
+                    {{ form.name(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.subject.label }}
+                    {{ form.subject(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.message.label }}
+                    {{ form.message(class="form-control", rows=4) }}
+                </div>
+
+                <!-- Staff reply field -->
+                <div class="form-group">
+                    {{ form.reply_text.label }}
+                    {{ form.reply_text(class="form-control", rows=5) }}
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-group text-right mt-4">
+                    <button type="submit" class="btn btn-primary mr-2">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                    <a href="{{ url_for('enquiry_participants') }}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

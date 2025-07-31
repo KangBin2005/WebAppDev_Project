@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from Forms import CreateActivityForm
+from Forms import CreateActivityForm, ReplyParticipantEnquiryForm
 import shelve, Participant_Activity
 
 app = Flask(__name__)
@@ -110,10 +110,81 @@ def activity_public():
 def manage_enquries():
     return render_template('Staff/enquiry_management.html', current_page='manage_enquires')
 
+
 @app.route('/enquiry-management/participants')
 def enquiry_participants():
-    return render_template('Staff/enquiry_participants.html', current_page='enquiry_participants')
+    # Handle filter parameters
+    selected_subject = request.args.get('subject', '')
+    selected_status = request.args.get('status', '')
 
+    # Initialize variables
+    enquiries = []
+    all_enquiries = []
+
+    try:
+        # Open the shelve database in read-only mode
+        with shelve.open('participant_enquiries_storage.db', 'r') as db:
+            # Retrieve all enquiries from the database
+            all_enquiries = list(db.get('Participant_Enquiries', {}).values())
+
+            # Apply filters if any
+            for enquiry in all_enquiries:
+                subject_match = not selected_subject or enquiry.get_subject() == selected_subject
+                status_match = not selected_status or enquiry.get_status() == selected_status
+                if subject_match and status_match:
+                    enquiries.append(enquiry)
+
+            # Sort enquiries by ID
+            enquiries.sort(key=lambda x: x.get_enquiry_id())
+
+    except Exception as e:
+        print(f"Error loading enquiries: {str(e)}")
+
+    # Define subject and status options (same as in participant_help)
+    subjects = ['Activity', 'Technical Issues', 'Account Issues',
+                'General Feedback / Concerns', 'Navigation Issues', 'Others']
+    statuses = ['Pending', 'Replied']
+
+    return render_template('Staff/enquiry_participants.html',
+                           current_page='enquiry_participants',
+                           enquiries=enquiries,
+                           count=len(all_enquiries),
+                           selected_subject=selected_subject,
+                           selected_status=selected_status,
+                           subjects=subjects,
+                           statuses=statuses)
+
+
+@app.route('/reply-participant-enquiry/<int:id>/', methods=['GET', 'POST'])
+def participant_enquiry_reply(id):
+    form = ReplyParticipantEnquiryForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        db = shelve.open('participant_enquiries_storage.db', 'w')
+        enquiries_dict = db['Participant_Enquiries']
+        enquiry = enquiries_dict.get(id)
+
+        # Save reply and update status
+        enquiry.set_reply(form.reply_text.data)
+        enquiry.set_status("Replied")
+
+        db['Participant_Enquiries'] = enquiries_dict
+        db.close()
+
+        # Redirect back to enquiries list with success
+        return redirect(url_for('enquiry_participants'))
+
+    # GET request - load existing enquiry
+    db = shelve.open('participant_enquiries_storage.db', 'r')
+    enquiry = db['Participant_Enquiries'].get(id)
+    db.close()
+
+    # Pre-fill form data
+    form.name.data = enquiry.get_name()
+    form.subject.data = enquiry.get_subject()
+    form.message.data = enquiry.get_message()
+
+    return render_template('Staff/participant_enquiry_reply.html', form=form)
 @app.route('/enquiry-management/public')
 def enquiry_public():
     return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
