@@ -1,0 +1,14 @@
+#hero-carousel {
+    height:85vh
+}
+
+img {
+    object-fit: contain;
+    background-size: cover;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.card-img-top img{
+    object-fit: contain;
+}
