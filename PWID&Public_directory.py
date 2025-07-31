@@ -102,6 +102,10 @@ def public_about():
 def public_activities():
     return render_template('Public/activities.html', current_page='public_activities')
 
+@app.route('/contact')
+def public_contact():
+    return render_template('Public/contact_us.html', current_page='public_contact')
+
 @app.route('/contact/enquiries')
 def public_enquiries():
     return render_template('Public/contact_enquries.html', current_page='public_enquiries')
