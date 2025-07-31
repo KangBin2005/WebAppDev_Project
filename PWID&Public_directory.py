@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
-import shelve
+import shelve, Participant_Enquiry
 from datetime import date
+from Forms import CreateEnquiryForm
+
 app = Flask(__name__)
 
 # ========================
@@ -231,10 +233,103 @@ def outlet_map(outlet_id):
 
                            current_page='outlet_map')
 
-
-@app.route('/participants/help')
+@app.route('/participants/help', methods=['GET', 'POST'])
 def participant_help():
-    return render_template('PWIDS/help.html', current_page='participant_help')
+    create_enquiry_form = CreateEnquiryForm(request.form)
+
+    # Handle form submission
+    if request.method == 'POST' and create_enquiry_form.validate():
+        enquiries_dict = {}
+        db = shelve.open('participant_enquiries_storage.db', 'c')
+        try:
+            enquiries_dict = db.get('Participant_Enquiries', {})
+        except:
+            print("Error in retrieving Participant_Enquiries from shelve.")
+
+        new_enquiry = Participant_Enquiry.ParticipantEnquiry(
+            name=create_enquiry_form.name.data,
+            subject=create_enquiry_form.subject.data,
+            message=create_enquiry_form.message.data,
+            status="Pending"
+        )
+
+        enquiries_dict[new_enquiry.get_enquiry_id()] = new_enquiry
+        db['Participant_Enquiries'] = enquiries_dict
+        db.close()
+        return redirect(url_for('participant_help', show_enquiries=1))
+
+    # Handle GET requests
+    selected_subject = request.args.get('subject', '')
+    selected_status = request.args.get('status', '')
+    show_enquiries = request.args.get('show_enquiries', default=0, type=int)
+
+    enquiries = []
+    try:
+        with shelve.open('participant_enquiries_storage.db', 'r') as db:
+            all_enquiries = list(db.get('Participant_Enquiries', {}).values())
+
+            for enquiry in all_enquiries:
+                subject_match = not selected_subject or enquiry.get_subject() == selected_subject
+                status_match = not selected_status or enquiry.get_status() == selected_status
+                if subject_match and status_match:
+                    enquiries.append(enquiry)
+
+            enquiries.sort(key=lambda x: x.get_enquiry_id())
+    except Exception as e:
+        print(f"Error loading enquiries: {str(e)}")
+
+    # Defined subject and status field data
+    subjects = ['Activity', 'Account', 'Technical Issue', 'Other']
+    statuses = ['Pending', 'Replied']
+
+    return render_template('PWIDS/help.html',
+                           form=create_enquiry_form,
+                           enquiries=enquiries,
+                           count=len(all_enquiries),
+                           selected_subject=selected_subject,
+                           selected_status=selected_status,
+                           show_enquiries=show_enquiries,
+                           subjects=subjects,
+                           statuses=statuses,
+                           current_page='participant_help'
+                           )
+
+@app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])
+def update_participant_enquiry(id):
+    update_participant_enquiry_form = CreateEnquiryForm(request.form)
+    if request.method == "POST" and update_participant_enquiry_form.validate():
+        db = shelve.open('participant_enquiries_storage.db', 'w')
+        enquiries_dict = db['Participant_Enquiries']
+
+        enquiry = enquiries_dict.get(id)
+        enquiry.set_name(update_participant_enquiry_form.name.data)
+        enquiry.set_subject(update_participant_enquiry_form.subject.data)
+        enquiry.set_message(update_participant_enquiry_form.message.data)
+
+        db['Participant_Enquiries'] = enquiries_dict
+        db.close()
+        return redirect(url_for('participant_help', show_enquiries=1))
+    else:
+        db = shelve.open('participant_enquiries_storage.db', 'r')
+        enquiries_dict = db['Participant_Enquiries']
+        db.close()
+
+        enquiry = enquiries_dict.get(id)
+        update_participant_enquiry_form.name.data = enquiry.get_name()
+        update_participant_enquiry_form.subject.data = enquiry.get_subject()
+        update_participant_enquiry_form.message.data = enquiry.get_message()
+        return render_template('PWIDS/update_enquiry.html', form=update_participant_enquiry_form)
+
+@app.route('/delete_participant_enquiry/<int:id>', methods=['POST'])
+def delete_participant_enquiry(id):
+    enquiries_dict = {}
+    db = shelve.open('participant_enquiries_storage.db', 'w')
+    enquiries_dict = db['Participant_Enquiries']
+
+    enquiries_dict.pop(id)
+    db['Participant_Enquiries'] = enquiries_dict
+    db.close()
+    return redirect(url_for('participant_help', show_enquiries=1))
 
 # ========================
 # Login_Sign Up Routes

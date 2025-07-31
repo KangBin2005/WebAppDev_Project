@@ -2,91 +2,126 @@
 {% block title %}SGEnable - Help Center{% endblock %}
 
 {% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
 <div class="container mt-4">
     <h1 class="mb-4">Help Center</h1>
 
-    <div class="row">
-        <!-- Contact Form Section -->
-        <div class="col-md-6">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Contact Support</h5>
-                    <p>Any matters to address fill up this form below.</p>
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" value="James">
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs" id="helpTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link {% if not show_enquiries %}active{% endif %}" id="help-tab" data-toggle="tab"
+               href="#help" role="tab"
+               aria-controls="help" aria-selected="{% if not show_enquiries %}true{% else %}false{% endif %}">
+                Help & Support
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if show_enquiries %}active{% endif %}" id="enquiries-tab" data-toggle="tab"
+               href="#enquiries" role="tab"
+               aria-controls="enquiries" aria-selected="{% if show_enquiries %}true{% else %}false{% endif %}">
+                My Enquiries
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="helpTabsContent">
+        <!-- Tab 1: Contact Form -->
+        <div class="tab-pane fade {% if not show_enquiries %}show active{% endif %}" id="help" role="tabpanel"
+             aria-labelledby="help-tab">
+            <div class="row mt-3">
+                <!-- Contact Form Section -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Contact Support</h5>
+                            <p>Any matters to address fill up this form below.</p>
+
+                            <form method="POST" action="" class="mt-4">
+                                <div class="form-group">
+                                    {{ render_field(form.name, class="form-control", placeholder="Enter your name") }}
+                                </div>
+                                <div class="form-group">
+                                    {{ render_field(form.subject, class="form-control") }}
+                                </div>
+                                <div class="form-group">
+                                    {{ render_field(form.message, class="form-control", rows=4,
+                                    placeholder="Enter your message details") }}
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-primary px-4">
+                                        <i class="fas fa-paper-plane"></i> Submit Enquiry
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <select class="form-control" id="subject">
-                                <option>Activity</option>
-                                <option>Account</option>
-                                <option>Technical Issue</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea class="form-control" id="message" rows="4"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Chatbot and FAQ Section -->
-        <div class="col-md-6">
-            <!-- FAQ Section -->
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Frequently Asked Questions</h5>
-                    <div id="faqAccordion">
-                        <!-- FAQ Item 1 -->
-                        <div class="card mb-2">
-                            <div class="card-header" id="headingOne">
-                                <h6 class="mb-0">
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        How do I register for activities?
-                                    </button>
-                                </h6>
-                            </div>
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    You can register for activities through the "My Activities" section. Simply browse available activities and click "Join" to register.
+                <!-- FAQ Section -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Frequently Asked Questions</h5>
+                            <div id="faqAccordion">
+                                <!-- FAQ Item 1 -->
+                                <div class="card mb-2">
+                                    <div class="card-header" id="headingOne">
+                                        <h6 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse"
+                                                    data-target="#collapseOne" aria-expanded="true"
+                                                    aria-controls="collapseOne">
+                                                How do I register for activities?
+                                            </button>
+                                        </h6>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                         data-parent="#faqAccordion">
+                                        <div class="card-body">
+                                            You can register for activities through the "My Activities" section.
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- FAQ Item 2 -->
-                        <div class="card mb-2">
-                            <div class="card-header" id="headingTwo">
-                                <h6 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        What facilities are available near the centers?
-                                    </button>
-                                </h6>
-                            </div>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    You can find nearby facilities using the "Our Outlets & Map" section. Filter by facility type and distance to see what's available.
+                                <!-- FAQ Item 2 -->
+                                <div class="card mb-2">
+                                    <div class="card-header" id="headingTwo">
+                                        <h6 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                    data-target="#collapseTwo" aria-expanded="false"
+                                                    aria-controls="collapseTwo">
+                                                What facilities are available near the centers?
+                                            </button>
+                                        </h6>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                         data-parent="#faqAccordion">
+                                        <div class="card-body">
+                                            You can find nearby facilities using the "Our Outlets & Map" section. Filter
+                                            by facility type and distance to see what's available.
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- FAQ Item 3 -->
-                        <div class="card">
-                            <div class="card-header" id="headingThree">
-                                <h6 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        How can I get technical support?
-                                    </button>
-                                </h6>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    For technical support, please use the contact form or chatbot on this page. Our team will respond within 24 hours.
+                                <!-- FAQ Item 3 -->
+                                <div class="card">
+                                    <div class="card-header" id="headingThree">
+                                        <h6 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                    data-target="#collapseThree" aria-expanded="false"
+                                                    aria-controls="collapseThree">
+                                                How can I get technical support?
+                                            </button>
+                                        </h6>
+                                    </div>
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                         data-parent="#faqAccordion">
+                                        <div class="card-body">
+                                            For technical support, please use the contact form on this page.
+                                            Our team will respond within 24 hours.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -94,6 +129,204 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Tab 2: My Enquiries -->
+        <div class="tab-pane fade {% if show_enquiries %}show active{% endif %}" id="enquiries" role="tabpanel"
+             aria-labelledby="enquiries-tab">
+            <div>
+                {% if count == 0 %}
+                <h1>There are no enquiries available.</h1>
+                {% elif count == 1 %}
+                <h2>There is 1 enquiry.</h2>
+                {% else %}
+                <h2>There are {{ count }} enquiries.</h2>
+                {% endif %}
+            </div>
+            <div class="mt-3">
+                <!-- Filter Form -->
+
+                <form method="GET" action="{{ url_for('participant_help') }}">
+                    <input type="hidden" name="show_enquiries" value="1">
+
+                    <div class="row align-items-end mb-4">
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label for="subject">Subject</label>
+                                <select class="form-control" id="subject" name="subject">
+                                    <option value="">All Subjects</option>
+                                    {% for subject in subjects %}
+                                    <option value="{{ subject }}" {% if selected_subject== subject %}selected{% endif
+                                            %}>
+                                        {{ subject }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="">All Statuses</option>
+                                    {% for status in statuses %}
+                                    <option value="{{ status }}" {% if selected_status== status %}selected{% endif %}>
+                                        {{ status }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary" style="height: 38px; width: 120px;">
+                                <i class="fas fa-search mr-2"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Enquiry Cards -->
+                <div class="row">
+                    {% if enquiries %}
+                    {% for enquiry in enquiries %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <!-- Enquiry ID First -->
+                                <small class="text-muted">Enquiry ID: {{ enquiry.get_enquiry_id() }}</small>
+
+                                <!-- Message as Header -->
+                                <h5 class="card-title mt-2 mb-3">Message: {{ enquiry.get_message() }}</h5>
+
+                                <!-- Subject and Name Below -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="font-weight-bold">Subject:</span> {{ enquiry.get_subject() }}<br>
+                                        <span class="font-weight-bold">From:</span> {{ enquiry.get_name() }}
+                                    </div>
+                                    <span class="badge
+                                      {% if enquiry.get_status() == 'Pending' %}badge-warning
+                                      {% elif enquiry.get_status() == 'Replied' %}badge-info
+                                      {% else %}badge-success{% endif %}">
+                                {{ enquiry.get_status() }}
+                            </span>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex justify-content-end">
+                                    <a href="/update_participant_enquiry/{{enquiry.get_enquiry_id()}}"
+                                       class="btn btn-sm btn-warning mr-2">
+                                        <i class="fas fa-edit mr-1"></i> Edit
+                                    </a>
+                                    <form action="{{url_for('delete_participant_enquiry', id=enquiry.get_enquiry_id())}}"
+                                          method="POST">
+                                        <!-- Button to Open the Modal -->
+                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                                                data-target="#myModal_{{enquiry.get_enquiry_id()}}">
+                                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                                        </button>
+
+                                        <!-- The Modal -->
+                                        <div class="modal" id="myModal_{{enquiry.get_enquiry_id()}}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Delete Confirmation</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete {{enquiry.get_name()}}'s
+                                                        enquiry?
+                                                    </div>
+
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <input type="submit" value="Delete" class="btn btn-danger">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Cancel
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    {% if request.args.get('subject') or request.args.get('status') %}
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle mr-2"></i> No enquiries found matching your search criteria.
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Activate the correct tab based on URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('show_enquiries') === '1') {
+            $('#enquiries-tab').tab('show');
+        }
+
+        // Update URL when tabs are switched
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+            const target = $(e.target).attr('href');
+            const newUrl = new URL(window.location);
+
+            if (target === '#enquiries') {
+                newUrl.searchParams.set('show_enquiries', '1');
+            } else {
+                newUrl.searchParams.delete('show_enquiries');
+            }
+
+            window.history.replaceState({}, '', newUrl);
+        });
+    });
+</script>
+
+<style>
+    .nav-tabs .nav-link {
+        color: #495057;
+        font-weight: 500;
+    }
+    .nav-tabs .nav-link.active {
+        color: #007bff;
+        font-weight: bold;
+        border-bottom: 2px solid #007bff;
+    }
+    .tab-content {
+        padding: 20px 0;
+    }
+    .badge-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    .badge-info {
+        background-color: #17a2b8;
+    }
+    .badge-success {
+        background-color: #28a745;
+    }
+
+</style>
 {% endblock %}
