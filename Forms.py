@@ -25,12 +25,15 @@ class CreateEnquiryForm(Form):
     ])
 
     subject = SelectField('Subject', choices=[
-        ('', 'Select a subject'),  # Empty default option
+        ('', 'Select a subject'),  # Default empty option
         ('Activity', 'Activity'),
-        ('Account', 'Account'),
-        ('Technical Issue', 'Technical Issue'),
-        ('Other', 'Other')
+        ('Technical Issues', 'Technical Issues'),
+        ('Account Issues', 'Account Issues'),
+        ('General Feedback / Concerns', 'General Feedback / Concerns'),
+        ('Navigation Issues', 'Navigation Issues'),
+        ('Others', 'Others')
     ], validators=[validators.DataRequired()])
+    # ... other fields ...
 
     message = TextAreaField('Message', [
         validators.Length(min=1, max=1000),
