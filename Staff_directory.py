@@ -110,7 +110,7 @@ def activity_public():
 def manage_enquries():
     return render_template('Staff/enquiry_management.html', current_page='manage_enquires')
 
-
+# Retrieving Participants Enquiries as Staff
 @app.route('/enquiry-management/participants')
 def enquiry_participants():
     # Handle filter parameters
@@ -124,23 +124,26 @@ def enquiry_participants():
     try:
         # Open the shelve database in read-only mode
         with shelve.open('participant_enquiries_storage.db', 'r') as db:
-            # Retrieve all enquiries from the database
-            all_enquiries = list(db.get('Participant_Enquiries', {}).values())
+            # Retrieve all non-deleted enquiries
+            all_enquiries = [
+                e for e in db.get('Participant_Enquiries', {}).values()
+                if not e.get_deleted_for_staff()
+            ]
 
-            # Apply filters if any
-            for enquiry in all_enquiries:
-                subject_match = not selected_subject or enquiry.get_subject() == selected_subject
-                status_match = not selected_status or enquiry.get_status() == selected_status
-                if subject_match and status_match:
-                    enquiries.append(enquiry)
+        # Apply filters if any
+        for enquiry in all_enquiries:
+            subject_match = not selected_subject or enquiry.get_subject() == selected_subject
+            status_match = not selected_status or enquiry.get_status() == selected_status
+            if subject_match and status_match:
+                enquiries.append(enquiry)
 
-            # Sort enquiries by ID
-            enquiries.sort(key=lambda x: x.get_enquiry_id())
+        # Sort enquiries by ID
+        enquiries.sort(key=lambda x: x.get_enquiry_id())
 
     except Exception as e:
         print(f"Error loading enquiries: {str(e)}")
 
-    # Define subject and status options (same as in participant_help)
+    # Define subject and status options
     subjects = ['Activity', 'Technical Issues', 'Account Issues',
                 'General Feedback / Concerns', 'Navigation Issues', 'Others']
     statuses = ['Pending', 'Replied']
@@ -153,7 +156,6 @@ def enquiry_participants():
                            selected_status=selected_status,
                            subjects=subjects,
                            statuses=statuses)
-
 
 @app.route('/reply-participant-enquiry/<int:id>/', methods=['GET', 'POST'])
 def participant_enquiry_reply(id):
@@ -185,6 +187,21 @@ def participant_enquiry_reply(id):
     form.message.data = enquiry.get_message()
 
     return render_template('Staff/participant_enquiry_reply.html', form=form)
+
+
+@app.route('/staff-delete-enquiry/<int:id>', methods=['POST'])
+def staff_delete_participant_enquiry(id):
+    try:
+        with shelve.open('participant_enquiries_storage.db', 'w') as db:
+            enquiries_dict = db.get('Participant_Enquiries', {})
+            if id in enquiries_dict:
+                enquiries_dict[id].set_deleted_for_staff(True)
+                db['Participant_Enquiries'] = enquiries_dict
+    except Exception as e:
+        print(f"Error deleting enquiry: {str(e)}")
+
+    return redirect(url_for('enquiry_participants'))
+
 @app.route('/enquiry-management/public')
 def enquiry_public():
     return render_template('Staff/enquiry_public.html', current_page='enquiry_public')

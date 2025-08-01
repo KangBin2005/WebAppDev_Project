@@ -9,6 +9,7 @@ class ParticipantEnquiry:
         self.__message = message
         self.__status = status  # Pending, Replied
         self.__reply = ""
+        self.__deleted_for_staff = False  # Staff-side enquiries deletion
 
 
     # Getter methods
@@ -30,6 +31,9 @@ class ParticipantEnquiry:
     def get_reply(self):
         return self.__reply
 
+    def get_deleted_for_staff(self):
+        return self.__deleted_for_staff
+
     # Setter methods
     def set_enquiry_id(self, enquiry_id):
         self.__enquiry_id = enquiry_id
@@ -49,3 +53,6 @@ class ParticipantEnquiry:
     def set_reply(self, reply):
         self.__reply = reply
         self.__status = "Replied"
+
+    def set_deleted_for_staff(self, deleted):
+        self.__deleted_for_staff = deleted
