@@ -1,9 +1,58 @@
 {% extends "Public/base.html" %}
 {% block title %}SGEnable - Contact Us{% endblock %}
 
-{% block content %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+{% endblock %}
 
-<h1>Contact Us</h1>
-<h2>Links to dropdown pages</h2>
+{% block content %}
+<!-- Hero Section -->
+<div class="contact-hero">
+    <div class="hero-content">
+        <h1>Contact Us</h1>
+    </div>
+</div>
+
+<!-- Quick Links Section -->
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <!-- Enquiries Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-headset fa-3x mb-3 text-primary"></i>  <!-- Customer support icon -->
+                    <h4>Contact Support</h4>
+                    <p class="text-muted">Get answers to your questions</p>
+                    <a href="{{ url_for('public_enquiries') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outlets Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marked-alt fa-3x mb-3 text-success"></i>  <!-- Map marker icon -->
+                    <h4>Our Locations</h4>
+                    <p class="text-muted">Find our centers near you</p>
+                    <a href="{{ url_for('public_locations') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-comments fa-3x mb-3 text-info"></i>  <!-- Conversation bubbles icon -->
+                    <h4>FAQ</h4>
+                    <p class="text-muted">Common questions answered</p>
+                    <a href="{{ url_for('public_faq') }}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

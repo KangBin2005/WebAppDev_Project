@@ -114,7 +114,20 @@ def public_enquiries():
 
 @app.route('/contact/locations')
 def public_locations():
-    return render_template('Public/contact_locations.html', current_page='public_locations')
+    return render_template('Public/contact_locations.html',
+                           outlets=outlets,
+                           current_page='public_locations')
+
+@app.route('/contact/locations/<int:outlet_id>')
+def public_contact_outlet_map(outlet_id):
+    outlet = outlets.get(outlet_id)
+    if not outlet:
+        return redirect(url_for('public_locations'))
+
+
+    return render_template('Public/contact_location_map.html',
+                           outlet=outlet,
+                           current_page='public_contact_outlet_map')
 
 @app.route('/contact/faq')
 def public_faq():
@@ -216,10 +229,10 @@ def participant_activities():
         )
 
 @app.route('/participants/outlets')
-def participant_locations():  # Renamed to match navbar
+def participant_locations():
     return render_template('PWIDS/outlets.html',
                          outlets=outlets,
-                         current_page='our_outlets')  # Keep current_page consistent
+                         current_page='our_outlets')
 
 @app.route('/participants/outlet/<int:outlet_id>')
 def outlet_map(outlet_id):

@@ -1,5 +1,16 @@
 {% extends "Public/base.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+{% endblock %}
+
 {% block content %}
+<!-- Hero Section -->
+<div class="contact-hero">
+    <div class="hero-content">
+        <h1>Contact Us</h1>
+    </div>
+</div>
 <h1>Contact Enquiries</h1>
 <p>Contact form and enquiry submission goes here</p>
 {% endblock %}

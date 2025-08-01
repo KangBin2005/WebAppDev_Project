@@ -1,5 +1,210 @@
 {% extends "Public/base.html" %}
+{% block title %}SGEnable - Frequently Asked Questions {% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Frequently Asked Questions</h1>
-<p>List of common questions and answers goes here</p>
+<!-- Hero Section -->
+<div class="contact-hero">
+    <div class="hero-content">
+        <h1>Contact Us</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h1 class="mb-4">Frequently Asked Questions</h1>
+
+    <!-- Category Tabs -->
+    <ul class="nav nav-tabs" id="faqTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="activities-tab" data-toggle="tab" href="#activities" role="tab">
+                Activities
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="donations-tab" data-toggle="tab" href="#donations" role="tab">
+                Donation Gifts
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="account-tab" data-toggle="tab" href="#account" role="tab">
+                Account Support
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content py-4" id="faqContent">
+        <!-- Activities FAQ -->
+        <div class="tab-pane fade show active" id="activities" role="tabpanel">
+            <div class="accordion" id="activitiesAccordion">
+                <!-- Question 1 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="activityHeading1">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#activityCollapse1">
+                                How do I register for activities?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="activityCollapse1" class="collapse show" aria-labelledby="activityHeading1" data-parent="#activitiesAccordion">
+                        <div class="card-body">
+                            You can register for activities through our online portal or by visiting any of our centers.
+                            Online registration requires creating an account first.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="activityHeading2">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#activityCollapse2">
+                                What types of activities are available?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="activityCollapse2" class="collapse" aria-labelledby="activityHeading2" data-parent="#activitiesAccordion">
+                        <div class="card-body">
+                            We offer various activities including vocational training, skills workshops,
+                            recreational programs, and social integration events. Check our monthly calendar for updates.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="activityHeading3">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#activityCollapse3">
+                                Is there a fee for participating in activities?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="activityCollapse3" class="collapse" aria-labelledby="activityHeading3" data-parent="#activitiesAccordion">
+                        <div class="card-body">
+                            Most of our basic activities are free of charge. Some specialized workshops may have
+                            a nominal fee, which will be clearly indicated during registration.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donation Gifts FAQ -->
+        <div class="tab-pane fade" id="donations" role="tabpanel">
+            <div class="accordion" id="donationsAccordion">
+                <!-- Question 1 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="donationHeading1">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#donationCollapse1">
+                                What kind of donation gifts do you accept?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="donationCollapse1" class="collapse show" aria-labelledby="donationHeading1" data-parent="#donationsAccordion">
+                        <div class="card-body">
+                            We accept various in-kind donations including assistive devices, educational materials,
+                            and daily living aids. Monetary donations are also welcome.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="donationHeading2">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#donationCollapse2">
+                                How can I donate items?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="donationCollapse2" class="collapse" aria-labelledby="donationHeading2" data-parent="#donationsAccordion">
+                        <div class="card-body">
+                            You can drop off donations at any of our centers during operating hours.
+                            For large items, please contact us first to arrange for collection.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="donationHeading3">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#donationCollapse3">
+                                Will I get a receipt for my donation?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="donationCollapse3" class="collapse" aria-labelledby="donationHeading3" data-parent="#donationsAccordion">
+                        <div class="card-body">
+                            Yes, we provide official receipts for all donations. For in-kind donations,
+                            please provide your details at the time of donation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Support FAQ -->
+        <div class="tab-pane fade" id="account" role="tabpanel">
+            <div class="accordion" id="accountAccordion">
+                <!-- Question 1 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="accountHeading1">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accountCollapse1">
+                                How do I create an account?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="accountCollapse1" class="collapse show" aria-labelledby="accountHeading1" data-parent="#accountAccordion">
+                        <div class="card-body">
+                            Click on "Register" at the top right of any page and fill in the required details.
+                            You'll need a valid email address and mobile number for verification.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="accountHeading2">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#accountCollapse2">
+                                I forgot my password. What should I do?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="accountCollapse2" class="collapse" aria-labelledby="accountHeading2" data-parent="#accountAccordion">
+                        <div class="card-body">
+                            Click on "Forgot Password" on the login page and enter your registered email address.
+                            You'll receive a link to reset your password.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="card mb-3">
+                    <div class="card-header" id="accountHeading3">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#accountCollapse3">
+                                How can I update my personal details?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="accountCollapse3" class="collapse" aria-labelledby="accountHeading3" data-parent="#accountAccordion">
+                        <div class="card-body">
+                            After logging in, go to "My Profile" where you can edit your personal information.
+                            Some details may require verification before changes take effect.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
