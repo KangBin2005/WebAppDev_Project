@@ -1,4 +1,6 @@
-from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, validators
+import decimal
+
+from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, validators
 
 class CreateActivityForm(Form):
     name = StringField('Activity Name', [
@@ -54,3 +56,21 @@ class ReplyParticipantEnquiryForm(CreateEnquiryForm):
         self.name.render_kw = {'readonly': True}
         self.subject.render_kw = {'readonly': True}
         self.message.render_kw = {'readonly': True}
+
+class CreateProductForm(Form):
+    product = StringField('Product Name',[
+        validators.length(min=1, max=20),
+        validators.DataRequired()])
+    description = TextAreaField('Description', [
+        validators.Length(min=1, max=50),
+    ])
+    price = DecimalField('Price',
+        places=2,
+        rounding=decimal.ROUND_UP,
+        validators=[validators.DataRequired()])
+    image_url = StringField('Image URL', [
+        validators.DataRequired()
+    ])
+
+
+

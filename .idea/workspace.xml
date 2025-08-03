@@ -5,11 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ef11dc9-339c-44e8-92cb-3d788f60a35c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/Staff/store_management.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/Staff/template.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/Staff/transaction_management.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/participant_activity_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/participant_activity_storage.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/participant_enquiries_storage.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/includes/public_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/public_navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Staff_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Staff_directory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Public/donations.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/donations.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Public/test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/staff_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/staff_navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,21 +26,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "KangBin2005"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;KangBin2005&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/KangBin2005/WebAppDev_Project",
-    "accountId": "0c824a9b-fc4b-4f6d-8d9d-34b07240ec50"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/KangBin2005/WebAppDev_Project&quot;,
+    &quot;accountId&quot;: &quot;0c824a9b-fc4b-4f6d-8d9d-34b07240ec50&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="30mScv1adhCc3fpoRslojshaqF3" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -46,7 +53,8 @@
     "Python.Staff_directory.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master"
+    "git-widget-placeholder": "master",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -65,5 +73,9 @@
       <updated>1754231337480</updated>
     </task>
     <servers />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754227644528" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/WebAppDev_Project$PWID_Public_directory.coverage" NAME="PWID&amp;Public_directory Coverage Results" MODIFIED="1754235461197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

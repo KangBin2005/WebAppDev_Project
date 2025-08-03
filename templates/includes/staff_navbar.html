@@ -84,7 +84,22 @@
                        href="{{ url_for('enquiry_public') }}">Public</a>
                 </div>
             </li>
+
+        <!-- Store Management Dropdown-->
+        <li class="nav-item dropdown {% if current_page in ['store_management', 'transaction_management', 'product_management'] %}active{% endif %}">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="storeDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Store Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="storeDropdown">
+                    <a class="dropdown-item {% if current_page == 'product_management' %}active{% endif %}"
+                       href="{{ url_for('enquiry_participants') }}">Products</a>
+                    <a class="dropdown-item {% if current_page == 'transaction_management' %}active{% endif %}"
+                       href="{{ url_for('enquiry_public') }}">Transactions</a>
+                </div>
+            </li>
         </ul>
+
 
         <!-- Right: Notification + Dropdown -->
         <ul class="navbar-nav align-items-center">

@@ -206,6 +206,10 @@ def staff_delete_participant_enquiry(id):
 def enquiry_public():
     return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
 
+@app.route('/store_management')
+def manage_store():
+    return render_template('Staff/store_management.html', current_page='store_management')
+
 if __name__ == '__main__':
     app.run(debug=True)
 
