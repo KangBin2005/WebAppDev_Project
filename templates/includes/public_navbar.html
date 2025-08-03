@@ -1,12 +1,12 @@
 <style>
- /* Enhanced active state for navbar items */
+  /* Enhanced active state for navbar items */
   .navbar-nav .active > .nav-link {
     font-weight: bold;
     color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.3) !important;  /* More opaque */
+    background-color: rgba(255, 255, 255, 0.3) !important;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);  /* Added shadow */
-    text-shadow: 0 0 5px rgba(255,255,255,0.5);  /* Glow effect */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
   }
 
   /* Enhanced dropdown active items */
@@ -45,6 +45,49 @@
      padding: 3px;
      border-radius: 3px;
  }
+
+ /* Auth buttons (Login & Sign Up Styles) */
+  .auth-btn {
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      margin-left: 12px;
+      border: 2px solid;
+      font-size: 1.05rem;
+      display: inline-block;
+      min-width: 100px;
+      text-align: center;
+  }
+
+  /* Login Button */
+  .login-btn {
+      background-color: rgba(255,255,255,0.9);
+      color: #007BFF;
+      border-color: #007BFF;
+  }
+
+  .login-btn:hover {
+      background-color: white;
+      color: #0062cc;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+      transform: translateY(-2px);
+  }
+
+  /* Sign Up Button */
+  .signup-btn {
+      background-color: #007BFF;
+      color: white;
+      border-color: white;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  }
+
+  .signup-btn:hover {
+      background-color: #0069d9;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.5);
+      transform: translateY(-2px);
+  }
 </style>
 
 <nav class="navbar navbar-expand-lg"
@@ -100,10 +143,10 @@
         <!-- Right: Auth Links -->
         <ul class="navbar-nav align-items-center">
             <li class="nav-item">
-                <a class="nav-link text-white" href="{{ url_for('login') }}">Login</a>
+                <a class="auth-btn login-btn" href="{{ url_for('login') }}">Login</a>
             </li>
-            <li class="nav-item ml-2">
-                <a class="btn btn-outli ne-light" href="{{ url_for('signup') }}">Sign Up</a>
+            <li class="nav-item">
+                <a class="auth-btn signup-btn" href="{{ url_for('signup') }}">Sign Up</a>
             </li>
             {% if current_page == 'public_donations' %}
                 <li class="nav-item ml-2 mr-1">

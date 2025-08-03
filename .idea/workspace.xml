@@ -4,32 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1debe08d-bfb6-4d32-a7e2-2929440ea957" name="Changes" comment="Merge remote-tracking branch 'origin/master'">
-      <change afterPath="$PROJECT_DIR$/templates/Public/contact_location_map.html" afterDir="false" />
+    <list default="true" id="9ef11dc9-339c-44e8-92cb-3d788f60a35c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/participant_activity_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/participant_activity_storage.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/participant_enquiries_storage.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/public.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/public.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/PWIDS/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PWIDS/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/PWIDS/outlet_map.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PWIDS/outlet_map.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Public/contact_faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/contact_faq.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Public/contact_locations.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/contact_locations.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Public/contact_us.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/contact_us.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/public_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/public_navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="HTML File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory"><![CDATA[{
@@ -40,29 +27,26 @@
 }]]></component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
-    "url": "https://github.com/KangBin2005/WebAppDev_Project.git",
+    "url": "https://github.com/KangBin2005/WebAppDev_Project",
     "accountId": "0c824a9b-fc4b-4f6d-8d9d-34b07240ec50"
   }
 }]]></component>
   <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
+  "associatedIndex": 8
 }]]></component>
-  <component name="ProjectId" id="30g2XhxVhFvkvGmj8juYrK6J8wR" />
+  <component name="ProjectId" id="30mScv1adhCc3fpoRslojshaqF3" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.PWID&Public_directory.executor": "Run",
-    "Python.Participant_Enquiry.executor": "Run",
     "Python.Staff_directory.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "git-widget-placeholder": "master"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -74,25 +58,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1debe08d-bfb6-4d32-a7e2-2929440ea957" name="Changes" comment="" />
-      <created>1754034936600</created>
+      <changelist id="9ef11dc9-339c-44e8-92cb-3d788f60a35c" name="Changes" comment="" />
+      <created>1754231337480</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1754034936600</updated>
+      <updated>1754231337480</updated>
     </task>
-    <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/master'">
-      <option name="closed" value="true" />
-      <created>1754037010382</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1754037010382</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'" />
   </component>
 </project>
