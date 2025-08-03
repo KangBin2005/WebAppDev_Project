@@ -135,7 +135,22 @@ def public_faq():
 
 @app.route('/donations')
 def public_donations():
-    return render_template('Public/donations.html', current_page='public_donations')
+    products = [
+        {
+            'name': 'Canvas Tote Bag',
+            'description': 'Eco-friendly bag handmade by volunteers.',
+            'price': 15.99,
+            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
+        },
+        {
+            'name': 'Handcrafted Mug',
+            'description': 'Ceramic mug with inspirational quote.',
+            'price': 12.50,
+            'image_url': 'https://example.com/mug.jpg'
+        },
+        # Add more products...
+    ]
+    return render_template('Public/donations.html', current_page='public_donations',products=products)
 
 # ========================
 # Participant Routes (under /participants/)
