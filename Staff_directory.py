@@ -60,6 +60,18 @@ def sync_public_activity_id():
     except Exception as e:
         print("Error syncing activity ID:", e)
 
+def sync_participant_activity_id():
+    try:
+        db = shelve.open('participant_activity_storage.db', 'r')
+        participants_activities_dict = db['Activities']
+        max_id = max(activity.get_activity_id() for activity in participants_activities_dict.values())
+        Participant_Activity.ParticipantActivity.count_id = max_id
+        db.close()
+    except KeyError:
+        # 'Activities' key doesn't exist in the shelve yet / No activities exist
+        Participant_Activity.ParticipantActivity.count_id = 0
+    except Exception as e:
+        print("Error syncing activity ID:", e)
 
 # <-------- Routes -------->
 
@@ -329,6 +341,7 @@ def activity_participants():
 @app.route('/create-participant-activity', methods=['GET', 'POST'])
 @login_required
 def create_participant_activity():
+    sync_participant_activity_id()
     create_participant_activity_form = CreateParticipantActivityForm(request.form)
     if request.method == 'POST' and create_participant_activity_form.validate():
         participants_activities_dict = {}

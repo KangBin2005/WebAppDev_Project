@@ -89,6 +89,18 @@ outlets = {
     }
 }
 
+def sync_participant_enquiry_id():
+    try:
+        db = shelve.open('participant_enquiries_storage.db', 'r')
+        enquiries_dict = db['Participant_Enquiries']
+        max_id = max(enquiry.get_enquiry_id() for enquiry in enquiries_dict.values())
+        Participant_Enquiry.ParticipantEnquiry.count_id = max_id
+        db.close()
+    except KeyError:
+        # 'Participant_Enquiries' key doesn't exist in the shelve yet / No enquiries exist
+        Participant_Enquiry.ParticipantEnquiry.count_id = 0
+    except Exception as e:
+        print("Error syncing enquiry ID:", e)
 # ========================
 # Public Routes (main site)
 # ========================
@@ -263,6 +275,7 @@ def outlet_map(outlet_id):
 
 @app.route('/participants/help', methods=['GET', 'POST'])
 def participant_help():
+    sync_participant_enquiry_id()
     create_enquiry_form = CreateEnquiryForm(request.form)
 
     # Handle form submission
