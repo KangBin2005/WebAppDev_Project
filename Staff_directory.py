@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Forms import CreateActivityForm, ReplyParticipantEnquiryForm
 from Form_admin_accounts import CreateAccountForm
+from Form_activity_public import CreateActivityForm
 import shelve, Participant_Activity, Account, Activity_public
 
 from math import ceil
@@ -64,6 +65,7 @@ def sync_public_activity_id():
 
 
 @app.route('/')
+@login_required
 def dashboard():
     return render_template('Staff/dashboard.html', current_page='dashboard')
 
@@ -215,6 +217,12 @@ def activity_public():
         pages=pages,
         search_query=search_query)
 
+@app.route('/activity-management')
+@login_required
+def manage_activities():
+    return render_template('Staff/activity_management.html', current_page='manage_activities')
+
+
 @app.route('/activity-management/public/create', methods=['GET','POST'])
 @login_required
 def activity_public_create():
@@ -304,6 +312,7 @@ def profile():
 
 
 @app.route('/activity-management/participants')
+@login_required
 def activity_participants():
     participants_activities_dict = {}
     db = shelve.open('participant_activity_storage.db', 'r')
@@ -318,6 +327,7 @@ def activity_participants():
    current_page='activity_participants', count = len(activities_list), activities_list = activities_list)
 
 @app.route('/create-participant-activity', methods=['GET', 'POST'])
+@login_required
 def create_participant_activity():
     create_participant_activity_form = CreateActivityForm(request.form)
     if request.method == 'POST' and create_participant_activity_form.validate():
@@ -340,6 +350,7 @@ def create_participant_activity():
     return render_template('Staff/create_participant_activity.html', form=create_participant_activity_form)
 
 @app.route('/update-participant-activity/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def update_participant_activity(id):
     update_participant_activity_form = CreateActivityForm(request.form)
     if request.method == 'POST' and update_participant_activity_form.validate():
@@ -376,6 +387,7 @@ def update_participant_activity(id):
                                form = update_participant_activity_form)
 
 @app.route('/delete-participant-activity/<int:id>', methods=['POST'])
+@login_required
 def delete_participant_activity(id):
     activities_dict = {}
     db = shelve.open('participant_activity_storage.db', 'w')
@@ -389,11 +401,13 @@ def delete_participant_activity(id):
     return redirect(url_for('activity_participants'))
 
 @app.route('/enquiry-management')
+@login_required
 def manage_enquries():
     return render_template('Staff/enquiry_management.html', current_page='manage_enquires')
 
 # Retrieving Participants Enquiries as Staff
 @app.route('/enquiry-management/participants')
+@login_required
 def enquiry_participants():
     # Handle filter parameters
     selected_subject = request.args.get('subject', '')
@@ -440,6 +454,7 @@ def enquiry_participants():
                            statuses=statuses)
 
 @app.route('/reply-participant-enquiry/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def participant_enquiry_reply(id):
     form = ReplyParticipantEnquiryForm(request.form)
 
@@ -472,6 +487,7 @@ def participant_enquiry_reply(id):
 
 
 @app.route('/staff-delete-enquiry/<int:id>', methods=['POST'])
+@login_required
 def staff_delete_participant_enquiry(id):
     try:
         with shelve.open('participant_enquiries_storage.db', 'w') as db:
@@ -485,10 +501,12 @@ def staff_delete_participant_enquiry(id):
     return redirect(url_for('enquiry_participants'))
 
 @app.route('/enquiry-management/public')
+@login_required
 def enquiry_public():
     return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
 
 @app.route('/store_management')
+@login_required
 def manage_store():
     return render_template('Staff/store_management.html', current_page='store_management')
 
