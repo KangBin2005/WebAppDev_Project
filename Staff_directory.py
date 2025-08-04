@@ -388,10 +388,6 @@ def delete_participant_activity(id):
 
     return redirect(url_for('activity_participants'))
 
-@app.route('/activity-management/public')
-def activity_public():
-    return render_template('Staff/activity_public.html', current_page='activity_public')
-
 @app.route('/enquiry-management')
 def manage_enquries():
     return render_template('Staff/enquiry_management.html', current_page='manage_enquires')
