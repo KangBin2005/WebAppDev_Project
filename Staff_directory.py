@@ -1,21 +1,306 @@
 from flask import Flask, render_template, request, redirect, url_for
 from Forms import CreateActivityForm, ReplyParticipantEnquiryForm
-import shelve, Participant_Activity
+import shelve, Participant_Activity, Account, Activity_public
+
+from math import ceil
+from datetime import timedelta
+from functools import wraps
 
 app = Flask(__name__)
+
+app.secret_key = '8f5b21e9-9a55-4879-9218-57c9e81c01e1'           # Random UUIDv4 value
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # 10 minutes inactivity before timeout
+
+
+users = {
+    "Bob": "password",      # Example Staff
+    "Mary": "password123"
+}
+
+
+# <-------- Misc management -------->
+
+def login_required(f):
+    @wraps(f)                                       # Prevent access if not logged in
+    def custom_login(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return custom_login
+
+
+
+def sync_account_id():
+    try:
+        db = shelve.open('storage_accounts.db', 'r')
+        accounts_dict = db['Accounts']
+        max_id = max(account.get_user_id() for account in accounts_dict.values())
+        Account.Account.count_id = max_id
+        db.close()
+    except KeyError:
+        # 'Accounts' key doesn't exist in the shelve yet / No accounts exist
+        Account.Account.count_id = 0
+    except Exception as e:
+        print("Error syncing account ID:", e)
+
+
+
+def sync_public_activity_id():
+    try:
+        db = shelve.open('storage_activities.db', 'r')
+        activities_dict = db['Activities']
+        max_id = max(activity.get_activity_id() for activity in activities_dict.values())
+        Activity_public.ActivityPublic.count_id = max_id
+        db.close()
+    except KeyError:
+        # 'Activities' key doesn't exist in the shelve yet / No activities exist
+        Activity_public.ActivityPublic.count_id = 0
+    except Exception as e:
+        print("Error syncing activity ID:", e)
+
+
+# <-------- Routes -------->
 
 
 @app.route('/')
 def dashboard():
     return render_template('Staff/dashboard.html', current_page='dashboard')
 
-@app.route('/account-management')
+@app.route('/account-management', methods=['GET', 'POST'])
+@login_required
 def manage_accounts():
-    return render_template('Staff/account_management.html', current_page='account_management')
+    search_query = request.args.get('search', '').lower()
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
 
-@app.route('/activity-management')
-def manage_activities():
-    return render_template('Staff/activity_management.html', current_page='manage_activities')
+
+    db = shelve.open('storage_accounts.db', 'r')
+    accounts_dict = db.get('Accounts', {})
+    db.close()
+
+    accounts_list = list(accounts_dict.values())
+
+    if search_query:
+        accounts_list = [
+            account for account in accounts_list
+            if search_query in account.get_first_name().lower() or search_query in account.get_last_name().lower()
+        ]
+
+
+    total = len(accounts_list)
+    pages = ceil(total / per_page)
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_activities = accounts_list[start:end]
+    return render_template('Staff/account_management.html',
+                           current_page='account_management',
+                           count=total,
+                           page=page,
+                           pages=pages,
+                           accounts_list=paginated_activities,
+                           search_query=search_query)
+
+@app.route('/account-management/create', methods=['GET', 'POST'])
+@login_required
+def create_account():
+    sync_account_id()
+
+    create_account_form = CreateAccountForm(request.form)
+    if request.method == 'POST' and create_account_form.validate():
+        accounts_dict = {}
+        db = shelve.open('storage_accounts.db', 'c')
+
+        try:
+            accounts_dict = db['Accounts']
+        except Exception as e:
+            print("Error in retrieving Users from storage_accounts.db.:", e)
+
+        account = Account.Account(create_account_form.first_name.data,
+                         create_account_form.last_name.data,
+                         create_account_form.gender.data,
+                         create_account_form.role.data,
+                         create_account_form.email.data)
+        accounts_dict[account.get_user_id()] = account
+        db['Accounts'] = accounts_dict
+
+        db.close()
+
+        return redirect(url_for('manage_accounts'))
+    return render_template('/Staff/account_create.html',
+                           form=create_account_form,
+                           current_page='account_create')
+
+@app.route('/account-management/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def update_account(id):
+    update_account_form = CreateAccountForm(request.form)
+    if request.method == 'POST' and update_account_form.validate():
+        accounts_dict = {}
+        db = shelve.open('storage_accounts.db', 'w')
+        accounts_dict = db['Accounts']
+
+        account = accounts_dict.get(id)
+        account.set_first_name(update_account_form.first_name.data)
+        account.set_last_name(update_account_form.last_name.data)
+        account.set_gender(update_account_form.gender.data)
+        account.set_role(update_account_form.role.data)
+        account.set_email(update_account_form.email.data)
+
+        db['Accounts'] = accounts_dict
+        db.close()
+
+        return redirect(url_for('manage_accounts'))
+    else:
+        accounts_dict = {}
+        db = shelve.open('storage_accounts.db', 'r')
+        accounts_dict = db['Accounts']
+        db.close()
+
+        account = accounts_dict.get(id)
+        update_account_form.first_name.data = account.get_first_name()
+        update_account_form.last_name.data = account.get_last_name()
+        update_account_form.gender.data = account.get_gender()
+        update_account_form.role.data = account.get_role()
+        update_account_form.email.data = account.get_email()
+
+        return render_template('/Staff/account_update.html',
+                               form=update_account_form,
+                               current_page='account_update')
+
+@app.route('/account-management/delete/<int:id>/', methods=['POST'])
+@login_required
+def delete_account(id):
+    accounts_dict = {}
+    db = shelve.open('storage_accounts.db', 'w')
+    accounts_dict = db['Accounts']
+
+    accounts_dict.pop(id)
+
+    db['Accounts'] = accounts_dict
+    db.close()
+    return redirect(url_for('manage_accounts'))
+
+@app.route('/activity-management/public', methods=['GET', 'POST'])
+@login_required
+def activity_public():
+    search_query = request.args.get('search', '').lower()
+    page = request.args.get('page', 1, type=int)
+    per_page = 5  # Number of activities per page
+
+    db = shelve.open('storage_activities.db', 'r')
+    activities_dict = db.get('Activities', {})
+    db.close()
+
+    activities_list = list(activities_dict.values())
+
+    if search_query:                # for search filtering
+        activities_list = [
+            activity for activity in activities_list
+            if search_query in activity.get_activity_name().lower()
+        ]
+
+    total = len(activities_list)
+    pages = ceil(total / per_page) # round up to nearest integer
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_activities = activities_list[start:end]
+
+    return render_template(
+        'Staff/activity_public.html',
+        current_page='activity_public',
+        count=total,
+        activities=paginated_activities,
+        page=page,
+        pages=pages,
+        search_query=search_query)
+
+@app.route('/activity-management/public/create', methods=['GET','POST'])
+@login_required
+def activity_public_create():
+    sync_public_activity_id()
+
+    create_activity_form = CreateActivityForm(request.form)
+    if request.method == 'POST' and create_activity_form.validate():
+        activities_dict = {}
+        db = shelve.open('storage_activities.db', 'c')
+
+        try:
+            activities_dict = db['Activities']
+        except Exception as e:
+            print("Error in retrieving Users from storage_activities.db.:", e)
+
+        activity = Activity_public.ActivityPublic(create_activity_form.activity_name.data,
+                                                  create_activity_form.activity_details.data,
+                                                  create_activity_form.activity_start_datetime.data,
+                                                  create_activity_form.activity_end_datetime.data)
+
+        activities_dict[activity.get_activity_id()] = activity
+        db['Activities'] = activities_dict
+
+        db.close()
+
+        return redirect(url_for('activity_public'))
+    return render_template('/Staff/activity_public_create.html',
+                           form=create_activity_form,
+                           current_page='activity_public_create')
+
+@app.route('/activity-management/public/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def activity_public_update(id):
+    activity_form = CreateActivityForm(request.form)
+
+    if request.method == 'POST' and activity_form.validate():
+        db = shelve.open('storage_activities.db', 'w')
+        activities_dict = db.get('Activities', {})
+
+        activity = activities_dict.get(id)
+        activity.set_activity_name(activity_form.activity_name.data)
+        activity.set_activity_details(activity_form.activity_details.data)
+        activity.set_activity_start_datetime(activity_form.activity_start_datetime.data)
+        activity.set_activity_end_datetime(activity_form.activity_end_datetime.data)
+
+        db['Activities'] = activities_dict
+        db.close()
+
+        return redirect(url_for('activity_public'))  # Change to your actual display function name
+
+    else:
+        db = shelve.open('storage_activities.db', 'r')
+        activities_dict = db.get('Activities', {})
+        db.close()
+
+        activity = activities_dict.get(id)
+        # if not activity:
+        #     return "Activity not found", 404
+
+        activity_form.activity_name.data = activity.get_activity_name()
+        activity_form.activity_details.data = activity.get_activity_details()
+        activity_form.activity_start_datetime.data = activity.get_activity_start_datetime()
+        activity_form.activity_end_datetime.data = activity.get_activity_end_datetime()
+
+        return render_template('/Staff/activity_public_update.html',
+                               form=activity_form,
+                               current_page='activity_public_update')
+
+@app.route('/activity-management/delete/<int:id>/', methods=['POST'])
+@login_required
+def activity_public_delete(id):
+    activities_dict = {}
+    db = shelve.open('storage_activities.db', 'w')
+    activities_dict = db['Activities']
+
+    activities_dict.pop(id)
+
+    db['Activities'] = activities_dict
+    db.close()
+    return redirect(url_for('activity_public'))
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('Staff/profile.html', current_page='profile')
+
 
 @app.route('/activity-management/participants')
 def activity_participants():
@@ -209,6 +494,49 @@ def enquiry_public():
 @app.route('/store_management')
 def manage_store():
     return render_template('Staff/store_management.html', current_page='store_management')
+
+
+# <-------- Login Routes -------->
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']         # Login details submitted to server
+        password = request.form['password']
+
+        if username in users and users[username] == password:
+            session.permanent = True    # Start inactivity tracking
+            session['user'] = username
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid username or password.', 'error')
+    return render_template('Login_SignUp/staff_login.html', current_page='login')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    username = session['user']
+
+    if request.method == 'POST':
+        current_pw = request.form['current_password']       # Retrieve form inputs
+        new_pw = request.form['new_password']
+        confirm_pw = request.form['confirm_password']
+
+        if users[username] != current_pw:
+            flash("Current password is incorrect.", "error")
+        elif new_pw != confirm_pw:
+            flash("New passwords do not match.", "error")
+        else:
+            users[username] = new_pw                        # updated password
+            flash("Password updated successfully!", "success")
+            return redirect(url_for('dashboard'))
+    return render_template('Staff/change_password.html', current_page='change_password')
 
 if __name__ == '__main__':
     app.run(debug=True)
