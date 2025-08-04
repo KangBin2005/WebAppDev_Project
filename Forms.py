@@ -2,7 +2,7 @@ import decimal
 
 from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, validators
 
-class CreateActivityForm(Form):
+class CreateParticipantActivityForm(Form):
     name = StringField('Activity Name', [
         validators.Length(min=1, max=150),
         validators.DataRequired()

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from Forms import CreateActivityForm, ReplyParticipantEnquiryForm
+from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm
 from Form_admin_accounts import CreateAccountForm
 from Form_activity_public import CreateActivityForm
 import shelve, Participant_Activity, Account, Activity_public
@@ -329,7 +329,7 @@ def activity_participants():
 @app.route('/create-participant-activity', methods=['GET', 'POST'])
 @login_required
 def create_participant_activity():
-    create_participant_activity_form = CreateActivityForm(request.form)
+    create_participant_activity_form = CreateParticipantActivityForm(request.form)
     if request.method == 'POST' and create_participant_activity_form.validate():
         participants_activities_dict = {}
         db = shelve.open('participant_activity_storage.db', 'c')
@@ -352,7 +352,7 @@ def create_participant_activity():
 @app.route('/update-participant-activity/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def update_participant_activity(id):
-    update_participant_activity_form = CreateActivityForm(request.form)
+    update_participant_activity_form = CreateParticipantActivityForm(request.form)
     if request.method == 'POST' and update_participant_activity_form.validate():
         activities_dict = {}
         db = shelve.open('participant_activity_storage.db', 'w')
