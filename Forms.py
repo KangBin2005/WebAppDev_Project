@@ -22,7 +22,7 @@ class CreateParticipantActivityForm(Form):
     end_time = TimeField('End Time', validators=[validators.DataRequired()])
 
 
-class CreateEnquiryForm(Form):
+class CreateParticipantEnquiryForm(Form):
     name = StringField('Your Name', [
         validators.Length(min=1, max=100),
         validators.DataRequired()
@@ -45,7 +45,7 @@ class CreateEnquiryForm(Form):
     ])
 
 
-class ReplyParticipantEnquiryForm(CreateEnquiryForm):
+class ReplyParticipantEnquiryForm(CreateParticipantEnquiryForm):
     # Class-level field definition (required by WTForms)
     reply_text = TextAreaField('Staff Reply', [
         validators.Length(min=1, max=1000),
@@ -92,6 +92,33 @@ class CreateActivityForm(Form):
 
 
 #  <---    Install wtforms email validation: pip install wtforms[email]    --->
+class CreatePublicEnquiryForm(Form):
+    name = StringField('Your Name', [
+        validators.Length(min=1, max=100),
+        validators.DataRequired()
+    ])
+    email = StringField('Your Email', [
+        validators.Length(min=1, max=100),
+        validators.DataRequired(),
+        validators.Email(message='Please enter a valid email address')
+    ])
+
+    subject = SelectField('Subject', choices=[
+        ('', 'Select a subject'),  # Default empty option
+        ('Activity', 'Activity'),
+        ('Payment Issues', 'Payment Issues'),
+        ('Donations Matters', 'Donations Matters'),
+        ('General Enquiry', 'General Enquiry'),
+        ('Navigation Issues', 'Navigation Issues'),
+        ('Others', 'Others')
+    ], validators=[validators.DataRequired()])
+    # ... other fields ...
+
+    message = TextAreaField('Message', [
+        validators.Length(min=1, max=1000),
+        validators.DataRequired()
+    ])
+
 class CreateAccountForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])

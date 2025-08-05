@@ -1,0 +1,481 @@
+Index: Forms.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import decimal\r\n\r\nfrom wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, DateTimeLocalField, RadioField, validators\r\nfrom datetime import datetime, timedelta\r\nfrom wtforms.validators import Email\r\n\r\nclass CreateParticipantActivityForm(Form):\r\n    name = StringField('Activity Name', [\r\n        validators.Length(min=1, max=150),\r\n        validators.DataRequired()\r\n    ])\r\n    description = TextAreaField('Description', [\r\n        validators.Length(min=1, max=500),\r\n        validators.DataRequired()\r\n    ])\r\n    venue = StringField('Venue', [\r\n        validators.Length(min=1, max=150),\r\n        validators.DataRequired()\r\n    ])\r\n    date = DateField('Date', format='%Y-%m-%d', validators=[validators.DataRequired()])\r\n    start_time = TimeField('Start Time', validators=[validators.DataRequired()])\r\n    end_time = TimeField('End Time', validators=[validators.DataRequired()])\r\n\r\n\r\nclass CreateEnquiryForm(Form):\r\n    name = StringField('Your Name', [\r\n        validators.Length(min=1, max=100),\r\n        validators.DataRequired()\r\n    ])\r\n\r\n    subject = SelectField('Subject', choices=[\r\n        ('', 'Select a subject'),  # Default empty option\r\n        ('Activity', 'Activity'),\r\n        ('Technical Issues', 'Technical Issues'),\r\n        ('Account Issues', 'Account Issues'),\r\n        ('General Feedback / Concerns', 'General Feedback / Concerns'),\r\n        ('Navigation Issues', 'Navigation Issues'),\r\n        ('Others', 'Others')\r\n    ], validators=[validators.DataRequired()])\r\n    # ... other fields ...\r\n\r\n    message = TextAreaField('Message', [\r\n        validators.Length(min=1, max=1000),\r\n        validators.DataRequired()\r\n    ])\r\n\r\n\r\nclass ReplyParticipantEnquiryForm(CreateEnquiryForm):\r\n    # Class-level field definition (required by WTForms)\r\n    reply_text = TextAreaField('Staff Reply', [\r\n        validators.Length(min=1, max=1000),\r\n        validators.DataRequired()\r\n    ])\r\n\r\n    def __init__(self, *args, **kwargs):\r\n        super().__init__(*args, **kwargs)\r\n        # Modify existing fields\r\n        self.name.render_kw = {'readonly': True}\r\n        self.subject.render_kw = {'readonly': True}\r\n        self.message.render_kw = {'readonly': True}\r\n\r\n\r\nclass CreateProductForm(Form):\r\n    product = StringField('Product Name',[\r\n        validators.length(min=1, max=20),\r\n        validators.DataRequired()])\r\n    description = TextAreaField('Description', [\r\n        validators.Length(min=1, max=50),\r\n    ])\r\n    price = DecimalField('Price',\r\n        places=2,\r\n        rounding=decimal.ROUND_UP,\r\n        validators=[validators.DataRequired()])\r\n    image_url = StringField('Image URL', [\r\n        validators.DataRequired()\r\n    ])\r\n\r\n\r\n\r\n\r\nclass CreateActivityForm(Form):\r\n    activity_name = StringField('Activity Name', [validators.Length(min=1, max=100), validators.DataRequired()])\r\n    activity_details = TextAreaField('Activity Details', [validators.Length(min=1, max=400), validators.DataRequired()])\r\n    activity_start_datetime = DateTimeLocalField(\r\n        'Activity Start',\r\n        format='%Y-%m-%dT%H:%M',\r\n        default=datetime.now,\r\n        validators=[validators.DataRequired()]\r\n    )\r\n    activity_end_datetime = DateTimeLocalField(\r\n        'Activity End',\r\n        format='%Y-%m-%dT%H:%M',\r\n        default=lambda: datetime.now() + timedelta(hours=1),    # <--- Adds 1 hour to current system time --->\r\n        validators=[validators.DataRequired()]\r\n    )\r\n\r\n\r\n#  <---    Install wtforms email validation: pip install wtforms[email]    --->\r\nclass CreateAccountForm(Form):\r\n    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])\r\n    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])\r\n    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')\r\n    role = RadioField('Role', choices=[('M', 'Member'), ('P', 'PWID'), ('C', 'Caregiver')], default='M')\r\n    email = TextAreaField('Email (Optional)', [validators.Optional(), Email(message='Invalid email address')])\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Forms.py b/Forms.py
+--- a/Forms.py	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/Forms.py	(date 1754389305094)
+@@ -22,7 +22,7 @@
+     end_time = TimeField('End Time', validators=[validators.DataRequired()])
+ 
+ 
+-class CreateEnquiryForm(Form):
++class CreateParticipantEnquiryForm(Form):
+     name = StringField('Your Name', [
+         validators.Length(min=1, max=100),
+         validators.DataRequired()
+@@ -45,7 +45,7 @@
+     ])
+ 
+ 
+-class ReplyParticipantEnquiryForm(CreateEnquiryForm):
++class ReplyParticipantEnquiryForm(CreateParticipantEnquiryForm):
+     # Class-level field definition (required by WTForms)
+     reply_text = TextAreaField('Staff Reply', [
+         validators.Length(min=1, max=1000),
+@@ -59,7 +59,6 @@
+         self.subject.render_kw = {'readonly': True}
+         self.message.render_kw = {'readonly': True}
+ 
+-
+ class CreateProductForm(Form):
+     product = StringField('Product Name',[
+         validators.length(min=1, max=20),
+@@ -96,6 +95,33 @@
+ 
+ 
+ #  <---    Install wtforms email validation: pip install wtforms[email]    --->
++class CreatePublicEnquiryForm(Form):
++    name = StringField('Your Name', [
++        validators.Length(min=1, max=100),
++        validators.DataRequired()
++    ])
++    email = StringField('Your Email', [
++        validators.Length(min=1, max=100),
++        validators.DataRequired(),
++        validators.Email(message='Please enter a valid email address')
++    ])
++
++    subject = SelectField('Subject', choices=[
++        ('', 'Select a subject'),  # Default empty option
++        ('Activity', 'Activity'),
++        ('Technical Issues', 'Technical Issues'),
++        ('Account Issues', 'Account Issues'),
++        ('General Feedback / Concerns', 'General Feedback / Concerns'),
++        ('Navigation Issues', 'Navigation Issues'),
++        ('Others', 'Others')
++    ], validators=[validators.DataRequired()])
++    # ... other fields ...
++
++    message = TextAreaField('Message', [
++        validators.Length(min=1, max=1000),
++        validators.DataRequired()
++    ])
++
+ class CreateAccountForm(Form):
+     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+Index: templates/PWIDS/help.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"PWIDS/base.html\" %}\r\n{% block title %}SGEnable - Help Center{% endblock %}\r\n\r\n{% block content %}\r\n{% from \"includes/_formHelper.html\" import render_field %}\r\n\r\n<div class=\"container mt-4\">\r\n    <h1 class=\"mb-4\">Help Center</h1>\r\n\r\n    <!-- Tab Navigation -->\r\n    <ul class=\"nav nav-tabs\" id=\"helpTabs\" role=\"tablist\">\r\n        <li class=\"nav-item\">\r\n            <a class=\"nav-link {% if not show_enquiries %}active{% endif %}\" id=\"help-tab\" data-toggle=\"tab\"\r\n               href=\"#help\" role=\"tab\"\r\n               aria-controls=\"help\" aria-selected=\"{% if not show_enquiries %}true{% else %}false{% endif %}\">\r\n                Help & Support\r\n            </a>\r\n        </li>\r\n        <li class=\"nav-item\">\r\n            <a class=\"nav-link {% if show_enquiries %}active{% endif %}\" id=\"enquiries-tab\" data-toggle=\"tab\"\r\n               href=\"#enquiries\" role=\"tab\"\r\n               aria-controls=\"enquiries\" aria-selected=\"{% if show_enquiries %}true{% else %}false{% endif %}\">\r\n                My Enquiries\r\n            </a>\r\n        </li>\r\n    </ul>\r\n\r\n    <!-- Tab Content -->\r\n    <div class=\"tab-content\" id=\"helpTabsContent\">\r\n        <!-- Tab 1: Contact Form -->\r\n        <div class=\"tab-pane fade {% if not show_enquiries %}show active{% endif %}\" id=\"help\" role=\"tabpanel\"\r\n             aria-labelledby=\"help-tab\">\r\n            <div class=\"row mt-3\">\r\n                <!-- Contact Form Section -->\r\n                <div class=\"col-md-6\">\r\n                    <div class=\"card shadow-sm mb-4\">\r\n                        <div class=\"card-body\">\r\n                            <h5 class=\"card-title\">Contact Support</h5>\r\n                            <p>Any matters to address fill up this form below.</p>\r\n\r\n                            <form method=\"POST\" action=\"\" class=\"mt-4\">\r\n                                <div class=\"form-group\">\r\n                                    {{ render_field(form.name, class=\"form-control\", placeholder=\"Enter your name\") }}\r\n                                </div>\r\n                                <div class=\"form-group\">\r\n                                    {{ render_field(form.subject, class=\"form-control\") }}\r\n                                </div>\r\n                                <div class=\"form-group\">\r\n                                    {{ render_field(form.message, class=\"form-control\", rows=4,\r\n                                    placeholder=\"Enter your message details\") }}\r\n                                </div>\r\n                                <div class=\"form-group text-right\">\r\n                                    <button type=\"submit\" class=\"btn btn-primary px-4\">\r\n                                        <i class=\"fas fa-paper-plane\"></i> Submit Enquiry\r\n                                    </button>\r\n                                </div>\r\n                            </form>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n\r\n                <!-- FAQ Section -->\r\n                <div class=\"col-md-6\">\r\n                    <div class=\"card shadow-sm\">\r\n                        <div class=\"card-body\">\r\n                            <h5 class=\"card-title\">Frequently Asked Questions</h5>\r\n                            <div id=\"faqAccordion\">\r\n                                <!-- FAQ Item 1 -->\r\n                                <div class=\"card mb-2\">\r\n                                    <div class=\"card-header\" id=\"headingOne\">\r\n                                        <h6 class=\"mb-0\">\r\n                                            <button class=\"btn btn-link\" data-toggle=\"collapse\"\r\n                                                    data-target=\"#collapseOne\" aria-expanded=\"true\"\r\n                                                    aria-controls=\"collapseOne\">\r\n                                                How do I register for activities?\r\n                                            </button>\r\n                                        </h6>\r\n                                    </div>\r\n                                    <div id=\"collapseOne\" class=\"collapse show\" aria-labelledby=\"headingOne\"\r\n                                         data-parent=\"#faqAccordion\">\r\n                                        <div class=\"card-body\">\r\n                                            You can register for activities through the \"My Activities\" section.\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n\r\n                                <!-- FAQ Item 2 -->\r\n                                <div class=\"card mb-2\">\r\n                                    <div class=\"card-header\" id=\"headingTwo\">\r\n                                        <h6 class=\"mb-0\">\r\n                                            <button class=\"btn btn-link collapsed\" data-toggle=\"collapse\"\r\n                                                    data-target=\"#collapseTwo\" aria-expanded=\"false\"\r\n                                                    aria-controls=\"collapseTwo\">\r\n                                                What facilities are available near the centers?\r\n                                            </button>\r\n                                        </h6>\r\n                                    </div>\r\n                                    <div id=\"collapseTwo\" class=\"collapse\" aria-labelledby=\"headingTwo\"\r\n                                         data-parent=\"#faqAccordion\">\r\n                                        <div class=\"card-body\">\r\n                                            You can find nearby facilities using the \"Our Outlets & Map\" section. Filter\r\n                                            by facility type and distance to see what's available.\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n\r\n                                <!-- FAQ Item 3 -->\r\n                                <div class=\"card\">\r\n                                    <div class=\"card-header\" id=\"headingThree\">\r\n                                        <h6 class=\"mb-0\">\r\n                                            <button class=\"btn btn-link collapsed\" data-toggle=\"collapse\"\r\n                                                    data-target=\"#collapseThree\" aria-expanded=\"false\"\r\n                                                    aria-controls=\"collapseThree\">\r\n                                                How can I get technical support?\r\n                                            </button>\r\n                                        </h6>\r\n                                    </div>\r\n                                    <div id=\"collapseThree\" class=\"collapse\" aria-labelledby=\"headingThree\"\r\n                                         data-parent=\"#faqAccordion\">\r\n                                        <div class=\"card-body\">\r\n                                            For technical support, please use the contact form on this page.\r\n                                            Our team will respond within 24 hours.\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n\r\n        <!-- Tab 2: My Enquiries -->\r\n        <div class=\"tab-pane fade {% if show_enquiries %}show active{% endif %}\" id=\"enquiries\" role=\"tabpanel\"\r\n             aria-labelledby=\"enquiries-tab\">\r\n            <div>\r\n                {% if count == 0 %}\r\n                <h1>There are no enquiries available.</h1>\r\n                {% elif count == 1 %}\r\n                <h2>There is 1 enquiry.</h2>\r\n                {% else %}\r\n                <h2>There are {{ count }} enquiries.</h2>\r\n                {% endif %}\r\n            </div>\r\n            <div class=\"mt-3\">\r\n                <!-- Filter Form -->\r\n                <form method=\"GET\" action=\"{{ url_for('participant_help') }}\">\r\n                    <input type=\"hidden\" name=\"show_enquiries\" value=\"1\">\r\n\r\n                    <div class=\"row align-items-end mb-4\">\r\n                        <div class=\"col-md-4\">\r\n                            <div class=\"form-group mb-0\">\r\n                                <label for=\"subject\">Subject</label>\r\n                                <select class=\"form-control\" id=\"subject\" name=\"subject\">\r\n                                    <option value=\"\">All Subjects</option>\r\n                                    {% for subject in subjects %}\r\n                                    <option value=\"{{ subject }}\" {% if selected_subject== subject %}selected{% endif %}>\r\n                                        {{ subject }}\r\n                                    </option>\r\n                                    {% endfor %}\r\n                                </select>\r\n                            </div>\r\n                        </div>\r\n\r\n                        <div class=\"col-md-4\">\r\n                            <div class=\"form-group mb-0\">\r\n                                <label for=\"status\">Status</label>\r\n                                <select class=\"form-control\" id=\"status\" name=\"status\">\r\n                                    <option value=\"\">All Statuses</option>\r\n                                    {% for status in statuses %}\r\n                                    <option value=\"{{ status }}\" {% if selected_status== status %}selected{% endif %}>\r\n                                        {{ status }}\r\n                                    </option>\r\n                                    {% endfor %}\r\n                                </select>\r\n                            </div>\r\n                        </div>\r\n\r\n                        <div class=\"col-md-4\">\r\n                            <button type=\"submit\" class=\"btn btn-primary\" style=\"height: 38px; width: 120px;\">\r\n                                <i class=\"fas fa-search mr-2\"></i> Search\r\n                            </button>\r\n                        </div>\r\n                    </div>\r\n                </form>\r\n\r\n                <!-- Enquiry Cards -->\r\n                <div class=\"row\">\r\n                    {% if enquiries %}\r\n                    {% for enquiry in enquiries %}\r\n                    <div class=\"col-md-6 mb-4\">\r\n                        <div class=\"card shadow-sm h-100\">\r\n                            <div class=\"card-body\">\r\n                                <!-- Enquiry ID First -->\r\n                                <small class=\"text-muted\">Enquiry ID: {{ enquiry.get_enquiry_id() }}</small>\r\n\r\n                                <!-- Message as Header -->\r\n                                <h5 class=\"card-title mt-2 mb-3\">Message: {{ enquiry.get_message() }}</h5>\r\n\r\n                                <!-- Subject and Name Below -->\r\n                                <div class=\"d-flex justify-content-between align-items-center mb-3\">\r\n                                    <div>\r\n                                        <span class=\"font-weight-bold\">Subject:</span> {{ enquiry.get_subject() }}<br>\r\n                                        <span class=\"font-weight-bold\">From:</span> {{ enquiry.get_name() }}\r\n                                    </div>\r\n                                    <span class=\"badge\r\n                                      {% if enquiry.get_status() == 'Pending' %}badge-warning\r\n                                      {% elif enquiry.get_status() == 'Replied' %}badge-success\r\n                                      {% else %}badge-info{% endif %}\">\r\n                                        {{ enquiry.get_status() }}\r\n                                    </span>\r\n                                </div>\r\n\r\n                                <!-- Staff Reply Section (Only show if status is Replied) -->\r\n                                {% if enquiry.get_status() == 'Replied' %}\r\n                                <div class=\"mt-3 p-3 bg-light rounded\">\r\n                                    <h6 class=\"font-weight-bold\">Staff Reply:</h6>\r\n                                    <p>{{ enquiry.get_reply() }}</p>\r\n                                </div>\r\n                                {% endif %}\r\n\r\n                                <!-- Action Buttons -->\r\n                                <div class=\"d-flex justify-content-end\">\r\n                                    {% if enquiry.get_status() == 'Pending' %}\r\n                                    <!-- Show Edit button only for Pending status -->\r\n                                    <a href=\"/update_participant_enquiry/{{enquiry.get_enquiry_id()}}\"\r\n                                       class=\"btn btn-sm btn-warning mr-2\">\r\n                                        <i class=\"fas fa-edit mr-1\"></i> Edit\r\n                                    </a>\r\n                                    {% endif %}\r\n\r\n                                    <!-- Always show Delete button -->\r\n                                    <form action=\"{{url_for('delete_participant_enquiry', id=enquiry.get_enquiry_id())}}\"\r\n                                          method=\"POST\">\r\n                                        <!-- Button to Open the Modal -->\r\n                                        <button type=\"button\" class=\"btn btn-sm btn-danger\" data-toggle=\"modal\"\r\n                                                data-target=\"#myModal_{{enquiry.get_enquiry_id()}}\">\r\n                                            <i class=\"fas fa-trash-alt mr-1\"></i> Delete\r\n                                        </button>\r\n\r\n                                        <!-- The Modal -->\r\n                                        <div class=\"modal\" id=\"myModal_{{enquiry.get_enquiry_id()}}\">\r\n                                            <div class=\"modal-dialog\">\r\n                                                <div class=\"modal-content\">\r\n                                                    <!-- Modal Header -->\r\n                                                    <div class=\"modal-header\">\r\n                                                        <h4 class=\"modal-title\">Delete Confirmation</h4>\r\n                                                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\">\r\n                                                            &times;\r\n                                                        </button>\r\n                                                    </div>\r\n\r\n                                                    <!-- Modal body -->\r\n                                                    <div class=\"modal-body\">\r\n                                                        Are you sure you want to delete your enquiry?\r\n                                                    </div>\r\n\r\n                                                    <!-- Modal footer -->\r\n                                                    <div class=\"modal-footer\">\r\n                                                        <input type=\"submit\" value=\"Delete\" class=\"btn btn-danger\">\r\n                                                        <button type=\"button\" class=\"btn btn-secondary\"\r\n                                                                data-dismiss=\"modal\">Cancel\r\n                                                        </button>\r\n                                                    </div>\r\n                                                </div>\r\n                                            </div>\r\n                                        </div>\r\n                                    </form>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    {% endfor %}\r\n                    {% else %}\r\n                    {% if request.args.get('subject') or request.args.get('status') %}\r\n                    <div class=\"col-12\">\r\n                        <div class=\"alert alert-info\">\r\n                            <i class=\"fas fa-info-circle mr-2\"></i> No enquiries found matching your search criteria.\r\n                        </div>\r\n                    </div>\r\n                    {% endif %}\r\n                    {% endif %}\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<script>\r\n    $(document).ready(function() {\r\n        // Activate the correct tab based on URL parameter\r\n        const urlParams = new URLSearchParams(window.location.search);\r\n        if (urlParams.get('show_enquiries') === '1') {\r\n            $('#enquiries-tab').tab('show');\r\n        }\r\n\r\n        // Update URL when tabs are switched\r\n        $('a[data-toggle=\"tab\"]').on('shown.bs.tab', function(e) {\r\n            const target = $(e.target).attr('href');\r\n            const newUrl = new URL(window.location);\r\n\r\n            if (target === '#enquiries') {\r\n                newUrl.searchParams.set('show_enquiries', '1');\r\n            } else {\r\n                newUrl.searchParams.delete('show_enquiries');\r\n            }\r\n\r\n            window.history.replaceState({}, '', newUrl);\r\n        });\r\n    });\r\n</script>\r\n\r\n<style>\r\n    .nav-tabs .nav-link {\r\n        color: #495057;\r\n        font-weight: 500;\r\n    }\r\n    .nav-tabs .nav-link.active {\r\n        color: #007bff;\r\n        font-weight: bold;\r\n        border-bottom: 2px solid #007bff;\r\n    }\r\n    .tab-content {\r\n        padding: 20px 0;\r\n    }\r\n    .badge-warning {\r\n        background-color: #ffc107;\r\n        color: #212529;\r\n    }\r\n    .badge-info {\r\n        background-color: #17a2b8;\r\n    }\r\n    .badge-success {\r\n        background-color: #28a745;\r\n    }\r\n\r\n</style>\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/PWIDS/help.html b/templates/PWIDS/help.html
+--- a/templates/PWIDS/help.html	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/templates/PWIDS/help.html	(date 1754388470944)
+@@ -191,8 +191,6 @@
+                     <div class="col-md-6 mb-4">
+                         <div class="card shadow-sm h-100">
+                             <div class="card-body">
+-                                <!-- Enquiry ID First -->
+-                                <small class="text-muted">Enquiry ID: {{ enquiry.get_enquiry_id() }}</small>
+ 
+                                 <!-- Message as Header -->
+                                 <h5 class="card-title mt-2 mb-3">Message: {{ enquiry.get_message() }}</h5>
+Index: PWID&Public_directory.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from flask import Flask, render_template, request, redirect, url_for\r\nimport shelve, Participant_Enquiry\r\nfrom datetime import date\r\nfrom Forms import CreateEnquiryForm\r\n\r\napp = Flask(__name__)\r\n\r\n# ========================\r\n# Sample SG Enable Outlets Data\r\n# ========================\r\noutlets = {\r\n    1: {\r\n        'name': 'SG Enable Headquarters',\r\n        'address': '20 Lengkok Bahru (Enabling Village), #01-01, Singapore 159053',\r\n        'phone': '+65 6479 3700',\r\n        'hours': 'Mon-Fri: 9am to 5.30pm',\r\n        'wheelchair_accessible': True,\r\n        'lat': '1.2875454',\r\n        'lng': '103.8149975',\r\n        'map_zoom': '17',\r\n        'map_version': '1716905890037',\r\n        'map_url': 'https://www.google.com/maps/place/SG+Enable/@1.2875508,103.8124226,17z/data=!3m1!4b1!4m6!3m5!1s0x31da19792f952f6d:0xb7db38a7c6c26ba1!8m2!3d1.2875454!4d103.8149975!16s%2Fg%2F1vg_9cwl?entry=ttu',\r\n        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.669318672029!2d103.8124226!3d1.2875508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19792f952f6d%3A0xb7db38a7c6c26ba1!2sSG%20Enable!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'\r\n    },\r\n    2: {\r\n        'name': 'Toa Payoh Enable Hub',\r\n        'address': '190 Lorong 6 Toa Payoh, #02-510, Singapore 310190',\r\n        'phone': '+65 6123 4567',\r\n        'hours': 'Mon-Fri: 9am-6pm',\r\n        'wheelchair_accessible': True,\r\n        'lat': '1.3345',\r\n        'lng': '103.8568',\r\n        'map_zoom': '7977.322862803088',\r\n        'map_version': '1716905890037',\r\n        'map_url': 'https://www.google.com/maps/place/190+Lor+6+Toa+Payoh,+%2302-510,+Singapore+310190',\r\n        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.73834704838!2d103.854225!3d1.3345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjAnMDQuMiJOIDEwM8KwNTEnMjQuNSJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'\r\n    },\r\n    3: {\r\n        'name': 'Bishan Enable Support Centre',\r\n        'address': '51 Bishan Street 13, #01-01, Singapore 579799',\r\n        'phone': '+65 6234 5678',\r\n        'hours': 'Mon-Sat: 8am-7pm',\r\n        'wheelchair_accessible': True,\r\n        'lat': '1.3506',\r\n        'lng': '103.8484',\r\n        'map_zoom': '7977.322862803088',\r\n        'map_version': '1716905890037',\r\n        'map_url': 'https://www.google.com/maps/place/51+Bishan+St+13,+%2301-01,+Singapore+579799',\r\n        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.584402768847!2d103.846212!3d1.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMDIuMiJOIDEwM8KwNTAnNTQuMiJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'\r\n    },\r\n    4: {\r\n        'name': 'Yishun Enable Care Centre',\r\n        'address': '101 Yishun Ave 5, #03-01, Singapore 760101',\r\n        'phone': '+65 6345 6789',\r\n        'hours': 'Mon-Fri: 8:30am-5:30pm',\r\n        'wheelchair_accessible': True,\r\n        'lat': '1.4295',\r\n        'lng': '103.8350',\r\n        'map_zoom': '7977.322862803088',\r\n        'map_version': '1716905890037',\r\n        'map_url': 'https://www.google.com/maps/place/101+Yishun+Ave+5,+%2303-01,+Singapore+760101',\r\n        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.263601270874!2d103.832812!3d1.4295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjUnNDYuMiJOIDEwM8KwNTAnMDYuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'\r\n    },\r\n    5: {\r\n        'name': 'Tampines Enable Hub',\r\n        'address': '5 Tampines Central 6, #04-10, Singapore 529482',\r\n        'phone': '+65 6456 7890',\r\n        'hours': 'Mon-Sat: 9am-6pm',\r\n        'wheelchair_accessible': True,\r\n        'lat': '1.3536',\r\n        'lng': '103.9386',\r\n        'map_zoom': '7977.322862803088',\r\n        'map_version': '1716905890037',\r\n        'map_url': 'https://www.google.com/maps/place/5+Tampines+Central+6,+%2304-10,+Singapore+529482',\r\n        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.678350727765!2d103.936412!3d1.3536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMTMuMCJOIDEwM8KwNTYnMTkuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'\r\n    },\r\n    6: {\r\n        'name': 'Jurong East Enable Centre',\r\n        'address': '135 Jurong Gateway Rd, #02-317, Singapore 600135',\r\n        'phone': '+65 6567 8901',\r\n        'hours': 'Mon-Fri: 8am-5pm',\r\n        'wheelchair_accessible': True,\r\n        'lat': '1.3333',\r\n        'lng': '103.7426',\r\n        'map_zoom': '7977.322862803088',\r\n        'map_version': '1716905890037',\r\n        'map_url': 'https://www.google.com/maps/place/135+Jurong+Gateway+Rd,+%2302-317,+Singapore+600135',\r\n        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.917197049249!2d103.740412!3d1.3333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTknNTkuOSJOIDEwM8KwNDQnMzMuNCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'\r\n    }\r\n}\r\n\r\ndef sync_participant_enquiry_id():\r\n    try:\r\n        db = shelve.open('storage/participant_enquiries_storage.db', 'r')\r\n        enquiries_dict = db['Participant_Enquiries']\r\n        max_id = max(enquiry.get_enquiry_id() for enquiry in enquiries_dict.values())\r\n        Participant_Enquiry.ParticipantEnquiry.count_id = max_id\r\n        db.close()\r\n    except KeyError:\r\n        # 'Participant_Enquiries' key doesn't exist in the shelve yet / No enquiries exist\r\n        Participant_Enquiry.ParticipantEnquiry.count_id = 0\r\n    except Exception as e:\r\n        print(\"Error syncing enquiry ID:\", e)\r\n# ========================\r\n# Public Routes (main site)\r\n# ========================\r\n@app.route('/')\r\ndef public_home():\r\n    return render_template('Public/home.html', current_page='public_home')\r\n\r\n@app.route('/about')\r\ndef public_about():\r\n    return render_template('Public/about.html', current_page='public_about')\r\n\r\n@app.route('/activities')\r\ndef public_activities():\r\n    return render_template('Public/activities.html', current_page='public_activities')\r\n\r\n@app.route('/contact')\r\ndef public_contact():\r\n    return render_template('Public/contact_us.html', current_page='public_contact')\r\n\r\n@app.route('/contact/enquiries')\r\ndef public_enquiries():\r\n    return render_template('Public/contact_enquries.html', current_page='public_enquiries')\r\n\r\n@app.route('/contact/locations')\r\ndef public_locations():\r\n    return render_template('Public/contact_locations.html',\r\n                           outlets=outlets,\r\n                           current_page='public_locations')\r\n\r\n@app.route('/contact/locations/<int:outlet_id>')\r\ndef public_contact_outlet_map(outlet_id):\r\n    outlet = outlets.get(outlet_id)\r\n    if not outlet:\r\n        return redirect(url_for('public_locations'))\r\n\r\n\r\n    return render_template('Public/contact_location_map.html',\r\n                           outlet=outlet,\r\n                           current_page='public_contact_outlet_map')\r\n\r\n@app.route('/contact/faq')\r\ndef public_faq():\r\n    return render_template('Public/contact_faq.html', current_page='public_faq')\r\n\r\n@app.route('/donations')\r\ndef public_donations():\r\n    products = [\r\n        {\r\n            'product': 'Canvas Tote Bag',\r\n            'description': 'Eco-friendly bag handmade by volunteers.',\r\n            'price': 15.99,\r\n            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'\r\n        },\r\n        {\r\n            'product': 'Handcrafted Mug',\r\n            'description': 'Ceramic mug with inspirational quote.',\r\n            'price': 12.50,\r\n            'image_url': 'https://example.com/mug.jpg'\r\n        },\r\n        # Add more products\r\n    ]\r\n    return render_template('Public/donations.html', current_page='public_donations',products=products)\r\n\r\n# ========================\r\n# Participant Routes (under /participants/)\r\n# ========================\r\n@app.route('/participants/home')\r\ndef participant_home():\r\n    try:\r\n        # Get today's date\r\n        today = date.today()\r\n\r\n        # Open the shelve database\r\n        with shelve.open('storage/participant_activity_storage.db', 'r') as db:\r\n            activities_dict = db.get('Activities', {})\r\n\r\n            # Filter upcoming activities (today or future)\r\n            upcoming = [\r\n                a for a in activities_dict.values()\r\n                if a.get_date() >= today\r\n            ]\r\n\r\n            # Sort by date (earliest first) and take first 3\r\n            upcoming_activities = sorted(\r\n                upcoming,\r\n                key=lambda x: x.get_date()\r\n            )[:3]\r\n\r\n            return render_template(\r\n                'PWIDS/home.html',\r\n                current_page='participant_home',\r\n                upcoming_activities=upcoming_activities\r\n            )\r\n\r\n    except Exception as e:\r\n        print(f\"Error accessing activity database: {str(e)}\")\r\n        return render_template(\r\n            'PWIDS/home.html',\r\n            current_page='participant_home',\r\n            upcoming_activities=[]\r\n        )\r\n\r\n\r\n@app.route('/participants/my-activities', methods=['GET'])\r\ndef participant_activities():\r\n    try:\r\n        # Get filter parameters\r\n        activity_name_filter = request.args.get('activity_name', '')\r\n        location_filter = request.args.get('location', '')\r\n\r\n        with shelve.open('storage/participant_activity_storage.db', 'r') as db:\r\n            activities_dict = db.get('Activities', {})\r\n\r\n            # Get all unique activity names and venues\r\n            all_activities = list(activities_dict.values())\r\n            activity_names = sorted({a.get_name() for a in all_activities})\r\n            venues = sorted({a.get_venue() for a in all_activities})\r\n\r\n            # Filter activities\r\n            filtered_activities = [\r\n                a for a in all_activities\r\n                if (not activity_name_filter or a.get_name() == activity_name_filter) and\r\n                   (not location_filter or a.get_venue() == location_filter)\r\n            ]\r\n\r\n            # Sort by date (newest first)\r\n            activities_list = sorted(\r\n                filtered_activities,\r\n                key=lambda x: x.get_date(),\r\n                reverse=True\r\n            )\r\n\r\n            return render_template(\r\n                'PWIDS/my_activities.html',\r\n                current_page='participant_activities',\r\n                activities_list=activities_list,\r\n                activity_names=activity_names,\r\n                venues=venues,\r\n                selected_activity=activity_name_filter,\r\n                selected_location=location_filter\r\n            )\r\n\r\n    except Exception as e:\r\n        print(f\"Error: {str(e)}\")\r\n        return render_template(\r\n            'PWIDS/my_activities.html',\r\n            current_page='participant_activities',\r\n            activities_list=[],\r\n            activity_names=[],\r\n            venues=[],\r\n            selected_activity='',\r\n            selected_location=''\r\n        )\r\n\r\n@app.route('/participants/outlets')\r\ndef participant_locations():\r\n    return render_template('PWIDS/outlets.html',\r\n                         outlets=outlets,\r\n                         current_page='our_outlets')\r\n\r\n@app.route('/participants/outlet/<int:outlet_id>')\r\ndef outlet_map(outlet_id):\r\n    outlet = outlets.get(outlet_id)\r\n    if not outlet:\r\n        return redirect(url_for('participant_locations'))\r\n\r\n\r\n    return render_template('PWIDS/outlet_map.html',\r\n                           outlet=outlet,\r\n\r\n                           current_page='outlet_map')\r\n\r\n@app.route('/participants/help', methods=['GET', 'POST'])\r\ndef participant_help():\r\n    sync_participant_enquiry_id()\r\n    create_enquiry_form = CreateEnquiryForm(request.form)\r\n\r\n    # Handle form submission\r\n    if request.method == 'POST' and create_enquiry_form.validate():\r\n        enquiries_dict = {}\r\n        db = shelve.open('storage/participant_enquiries_storage.db', 'c')\r\n        try:\r\n            enquiries_dict = db.get('Participant_Enquiries', {})\r\n        except:\r\n            print(\"Error in retrieving Participant_Enquiries from shelve.\")\r\n\r\n        new_enquiry = Participant_Enquiry.ParticipantEnquiry(\r\n            name=create_enquiry_form.name.data,\r\n            subject=create_enquiry_form.subject.data,\r\n            message=create_enquiry_form.message.data,\r\n            status=\"Pending\"\r\n        )\r\n\r\n        enquiries_dict[new_enquiry.get_enquiry_id()] = new_enquiry\r\n        db['Participant_Enquiries'] = enquiries_dict\r\n        db.close()\r\n        return redirect(url_for('participant_help', show_enquiries=1))\r\n\r\n    # Handle GET requests\r\n    selected_subject = request.args.get('subject', '')\r\n    selected_status = request.args.get('status', '')\r\n    show_enquiries = request.args.get('show_enquiries', default=0, type=int)\r\n\r\n    enquiries = []\r\n    try:\r\n        with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:\r\n            all_enquiries = list(db.get('Participant_Enquiries', {}).values())\r\n\r\n            for enquiry in all_enquiries:\r\n                subject_match = not selected_subject or enquiry.get_subject() == selected_subject\r\n                status_match = not selected_status or enquiry.get_status() == selected_status\r\n                if subject_match and status_match:\r\n                    enquiries.append(enquiry)\r\n\r\n            enquiries.sort(key=lambda x: x.get_enquiry_id())\r\n    except Exception as e:\r\n        print(f\"Error loading enquiries: {str(e)}\")\r\n\r\n    # Defined subject and status field data\r\n    subjects = ['Activity', 'Technical Issues', 'Account Issues',\r\n                'General Feedback / Concerns', 'Navigation Issues', 'Others']\r\n    statuses = ['Pending', 'Replied']\r\n\r\n    return render_template('PWIDS/help.html',\r\n                           form=create_enquiry_form,\r\n                           enquiries=enquiries,\r\n                           count=len(all_enquiries),\r\n                           selected_subject=selected_subject,\r\n                           selected_status=selected_status,\r\n                           show_enquiries=show_enquiries,\r\n                           subjects=subjects,\r\n                           statuses=statuses,\r\n                           current_page='participant_help'\r\n                           )\r\n\r\n@app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])\r\ndef update_participant_enquiry(id):\r\n    update_participant_enquiry_form = CreateEnquiryForm(request.form)\r\n    if request.method == \"POST\" and update_participant_enquiry_form.validate():\r\n        db = shelve.open('storage/participant_enquiries_storage.db', 'w')\r\n        enquiries_dict = db['Participant_Enquiries']\r\n\r\n        enquiry = enquiries_dict.get(id)\r\n        enquiry.set_name(update_participant_enquiry_form.name.data)\r\n        enquiry.set_subject(update_participant_enquiry_form.subject.data)\r\n        enquiry.set_message(update_participant_enquiry_form.message.data)\r\n\r\n        db['Participant_Enquiries'] = enquiries_dict\r\n        db.close()\r\n        return redirect(url_for('participant_help', show_enquiries=1))\r\n    else:\r\n        db = shelve.open('storage/participant_enquiries_storage.db', 'r')\r\n        enquiries_dict = db['Participant_Enquiries']\r\n        db.close()\r\n\r\n        enquiry = enquiries_dict.get(id)\r\n        update_participant_enquiry_form.name.data = enquiry.get_name()\r\n        update_participant_enquiry_form.subject.data = enquiry.get_subject()\r\n        update_participant_enquiry_form.message.data = enquiry.get_message()\r\n        return render_template('PWIDS/update_enquiry.html', form=update_participant_enquiry_form)\r\n\r\n@app.route('/delete_participant_enquiry/<int:id>', methods=['POST'])\r\ndef delete_participant_enquiry(id):\r\n    enquiries_dict = {}\r\n    db = shelve.open('storage/participant_enquiries_storage.db', 'w')\r\n    enquiries_dict = db['Participant_Enquiries']\r\n\r\n    enquiries_dict.pop(id)\r\n    db['Participant_Enquiries'] = enquiries_dict\r\n    db.close()\r\n    return redirect(url_for('participant_help', show_enquiries=1))\r\n\r\n# ========================\r\n# Login_Sign Up Routes\r\n# ========================\r\n@app.route('/login')\r\ndef login():\r\n    return render_template('Login_SignUp/login.html', current_page='login')\r\n\r\n@app.route('/signup')\r\ndef signup():\r\n    return render_template('Login_SignUp/signup.html', current_page='signup')\r\n\r\nif __name__ == '__main__':\r\n    app.run(debug=True)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/PWID&Public_directory.py b/PWID&Public_directory.py
+--- a/PWID&Public_directory.py	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/PWID&Public_directory.py	(date 1754388287942)
+@@ -1,7 +1,7 @@
+ from flask import Flask, render_template, request, redirect, url_for
+ import shelve, Participant_Enquiry
+ from datetime import date
+-from Forms import CreateEnquiryForm
++from Forms import CreateParticipantEnquiryForm
+ 
+ app = Flask(__name__)
+ 
+@@ -276,7 +276,7 @@
+ @app.route('/participants/help', methods=['GET', 'POST'])
+ def participant_help():
+     sync_participant_enquiry_id()
+-    create_enquiry_form = CreateEnquiryForm(request.form)
++    create_enquiry_form = CreateParticipantEnquiryForm(request.form)
+ 
+     # Handle form submission
+     if request.method == 'POST' and create_enquiry_form.validate():
+@@ -338,7 +338,7 @@
+ 
+ @app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])
+ def update_participant_enquiry(id):
+-    update_participant_enquiry_form = CreateEnquiryForm(request.form)
++    update_participant_enquiry_form = CreateParticipantEnquiryForm(request.form)
+     if request.method == "POST" and update_participant_enquiry_form.validate():
+         db = shelve.open('storage/participant_enquiries_storage.db', 'w')
+         enquiries_dict = db['Participant_Enquiries']
+Index: templates/Public/contact_enquries.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"Public/base.html\" %}\r\n{% block head %}\r\n{{ super() }}\r\n<link rel=\"stylesheet\" href=\"{{ url_for('static', filename='css/public.css') }}\">\r\n{% endblock %}\r\n\r\n{% block content %}\r\n<!-- Hero Section -->\r\n<div class=\"contact-hero\">\r\n    <div class=\"hero-content\">\r\n        <h1>Contact Us</h1>\r\n    </div>\r\n</div>\r\n<h1>Contact Enquiries</h1>\r\n<p>Contact form and enquiry submission goes here</p>\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/Public/contact_enquries.html b/templates/Public/contact_enquries.html
+--- a/templates/Public/contact_enquries.html	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/templates/Public/contact_enquries.html	(date 1754389144134)
+@@ -5,6 +5,7 @@
+ {% endblock %}
+ 
+ {% block content %}
++{% from "includes/_formHelper.html" import render_field %}
+ <!-- Hero Section -->
+ <div class="contact-hero">
+     <div class="hero-content">
+@@ -12,5 +13,33 @@
+     </div>
+ </div>
+ <h1>Contact Enquiries</h1>
+-<p>Contact form and enquiry submission goes here</p>
++<div class="col-md-6">
++    <div class="card shadow-sm mb-4">
++        <div class="card-body">
++            <h5 class="card-title">Contact Support</h5>
++            <p>Any matters to address fill up this form below.</p>
++
++            <form method="POST" action="" class="mt-4">
++                <div class="form-group">
++                    {{ render_field(form.name, class="form-control", placeholder="Enter your name") }}
++                </div>
++                 <div class="form-group">
++                    {{ render_field(form.email, class="form-control", placeholder="Enter your email") }}
++                </div>
++                <div class="form-group">
++                    {{ render_field(form.subject, class="form-control") }}
++                </div>
++                <div class="form-group">
++                    {{ render_field(form.message, class="form-control", rows=4,
++                    placeholder="Enter your message details") }}
++                </div>
++                <div class="form-group text-right">
++                    <button type="submit" class="btn btn-primary px-4">
++                        <i class="fas fa-paper-plane"></i> Submit Enquiry
++                    </button>
++                </div>
++            </form>
++        </div>
++    </div>
++</div>
+ {% endblock %}
+\ No newline at end of file
+Index: templates/Staff/enquiry_participants.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"Staff/Staff_base.html\" %}\r\n{% block title %}SGEnable - Enquiry Management (Participants){% endblock %}\r\n\r\n{% block content %}\r\n<div class=\"container mt-4\">\r\n    <h1>Enquiry Management - Participants</h1>\r\n\r\n    <div class=\"mt-4\">\r\n        <!-- Count Display -->\r\n        <div>\r\n            {% if count == 0 %}\r\n            <h1>There are no enquiries available.</h1>\r\n            {% elif count == 1 %}\r\n            <h2>There is 1 enquiry.</h2>\r\n            {% else %}\r\n            <h2>There are {{ count }} enquiries.</h2>\r\n            {% endif %}\r\n        </div>\r\n\r\n        <!-- Filter Form -->\r\n        <div class=\"mt-3\">\r\n            <form method=\"GET\" action=\"\">\r\n                <div class=\"row align-items-end mb-4\">\r\n                    <div class=\"col-md-4\">\r\n                        <div class=\"form-group mb-0\">\r\n                            <label for=\"subject\">Subject</label>\r\n                            <select class=\"form-control\" id=\"subject\" name=\"subject\">\r\n                                <option value=\"\">All Subjects</option>\r\n                                {% for subject in subjects %}\r\n                                <option value=\"{{ subject }}\" {% if selected_subject== subject %}selected{% endif %}>\r\n                                    {{ subject }}\r\n                                </option>\r\n                                {% endfor %}\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n\r\n                    <div class=\"col-md-4\">\r\n                        <div class=\"form-group mb-0\">\r\n                            <label for=\"status\">Status</label>\r\n                            <select class=\"form-control\" id=\"status\" name=\"status\">\r\n                                <option value=\"\">All Statuses</option>\r\n                                {% for status in statuses %}\r\n                                <option value=\"{{ status }}\" {% if selected_status== status %}selected{% endif %}>\r\n                                    {{ status }}\r\n                                </option>\r\n                                {% endfor %}\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n\r\n                    <div class=\"col-md-4\">\r\n                        <button type=\"submit\" class=\"btn btn-primary\" style=\"height: 38px; width: 120px;\">\r\n                            <i class=\"fas fa-search mr-2\"></i> Search\r\n                        </button>\r\n                    </div>\r\n                </div>\r\n            </form>\r\n        </div>\r\n\r\n        <!-- Enquiry Cards -->\r\n        <div class=\"row\">\r\n            {% if enquiries %}\r\n            {% for enquiry in enquiries %}\r\n            <div class=\"col-md-6 mb-4\">\r\n                <div class=\"card shadow-sm h-100\">\r\n                    <div class=\"card-body\">\r\n                        <small class=\"text-muted\">Enquiry ID: {{ enquiry.get_enquiry_id() }}</small>\r\n                        <h5 class=\"card-title mt-2 mb-3\">Message: {{ enquiry.get_message() }}</h5>\r\n\r\n                        <div class=\"d-flex justify-content-between align-items-center mb-3\">\r\n                            <div>\r\n                                <span class=\"font-weight-bold\">Subject:</span> {{ enquiry.get_subject() }}<br>\r\n                                <span class=\"font-weight-bold\">From:</span> {{ enquiry.get_name() }}\r\n                            </div>\r\n                            <span class=\"badge\r\n                {% if enquiry.get_status() == 'Pending' %}badge-warning\r\n                {% elif enquiry.get_status() == 'Replied' %}badge-success\r\n                {% else %}badge-secondary{% endif %}\">\r\n                {{ enquiry.get_status() }}\r\n            </span>\r\n                        </div>\r\n\r\n                        <!-- Staff Reply Section -->\r\n                        {% if enquiry.get_status() == 'Replied' %}\r\n                        <div class=\"mt-3 p-3 bg-light rounded\">\r\n                            <h6 class=\"font-weight-bold\">Staff Reply:</h6>\r\n                            <p>{{ enquiry.get_reply() }}</p>\r\n                        </div>\r\n                        {% endif %}\r\n\r\n                        <!-- Action Buttons -->\r\n                        <div class=\"d-flex justify-content-end\">\r\n                            {% if enquiry.get_status() == 'Pending' %}\r\n                            <a href=\"{{ url_for('participant_enquiry_reply', id=enquiry.get_enquiry_id()) }}\"\r\n                               class=\"btn btn-sm btn-primary mr-2\">\r\n                                <i class=\"fas fa-reply mr-1\"></i> Reply\r\n                            </a>\r\n                            {% endif %}\r\n\r\n                            {% if enquiry.get_status() == 'Replied' %}\r\n                            <form action=\"{{ url_for('staff_delete_participant_enquiry', id=enquiry.get_enquiry_id()) }}\"\r\n                                  method=\"POST\">\r\n                                <button type=\"submit\" class=\"btn btn-sm btn-danger\"\r\n                                        onclick=\"return confirm('Permanently delete this enquiry? This action cannot be undone.');\">\r\n                                    <i class=\"fas fa-trash-alt mr-1\"></i> Delete\r\n                                </button>\r\n                            </form>\r\n                            {% endif %}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            {% endfor %}\r\n            {% else %}\r\n            {% if request.args.get('subject') or request.args.get('status') %}\r\n            <div class=\"col-12\">\r\n                <div class=\"alert alert-info\">\r\n                    <i class=\"fas fa-info-circle mr-2\"></i> No enquiries found matching your search criteria.\r\n                </div>\r\n            </div>\r\n            {% endif %}\r\n            {% endif %}\r\n        </div>\r\n    </div>\r\n</div>\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/Staff/enquiry_participants.html b/templates/Staff/enquiry_participants.html
+--- a/templates/Staff/enquiry_participants.html	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/templates/Staff/enquiry_participants.html	(date 1754388552455)
+@@ -65,7 +65,7 @@
+             <div class="col-md-6 mb-4">
+                 <div class="card shadow-sm h-100">
+                     <div class="card-body">
+-                        <small class="text-muted">Enquiry ID: {{ enquiry.get_enquiry_id() }}</small>
++
+                         <h5 class="card-title mt-2 mb-3">Message: {{ enquiry.get_message() }}</h5>
+ 
+                         <div class="d-flex justify-content-between align-items-center mb-3">
+Index: Public_Enquiry.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Public_Enquiry.py b/Public_Enquiry.py
+new file mode 100644
+--- /dev/null	(date 1754389144129)
++++ b/Public_Enquiry.py	(date 1754389144129)
+@@ -0,0 +1,65 @@
++class PublicEnquiry:
++    count_id = 0
++
++    def __init__(self, name, email, subject, message, status="Pending"):
++        PublicEnquiry.count_id += 1
++        self.__enquiry_id = PublicEnquiry.count_id
++        self.__name = name
++        self.__email = email
++        self.__subject = subject
++        self.__message = message
++        self.__status = status  # Pending, Replied
++        self.__reply = ""
++        self.__deleted_for_staff = False  # Staff-side enquiries deletion
++
++
++    # Getter methods
++    def get_enquiry_id(self):
++        return self.__enquiry_id
++
++    def get_name(self):
++        return self.__name
++
++    def get_email(self):
++        return self.__email
++
++    def get_subject(self):
++        return self.__subject
++
++    def get_message(self):
++        return self.__message
++
++    def get_status(self):
++        return self.__status
++
++    def get_reply(self):
++        return self.__reply
++
++    def get_deleted_for_staff(self):
++        return self.__deleted_for_staff
++
++    # Setter methods
++    def set_enquiry_id(self, enquiry_id):
++        self.__enquiry_id = enquiry_id
++
++    def set_name(self, name):
++        self.__name = name
++
++    def set_email(self, email):
++        self.__email = email
++
++    def set_subject(self, subject):
++        self.__subject = subject
++
++    def set_message(self, message):
++        self.__message = message
++
++    def set_status(self, status):
++        self.__status = status
++
++    def set_reply(self, reply):
++        self.__reply = reply
++        self.__status = "Replied"
++
++    def set_deleted_for_staff(self, deleted):
++        self.__deleted_for_staff = deleted
+\ No newline at end of file
+Index: .idea/WebAppDev_Project.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\" />\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.13 virtualenv at C:\\Users\\Kang Bin\\OneDrive\\Desktop\\WebAppDev_Project\\.venv\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/WebAppDev_Project.iml b/.idea/WebAppDev_Project.iml
+--- a/.idea/WebAppDev_Project.iml	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/.idea/WebAppDev_Project.iml	(date 1754387786043)
+@@ -1,8 +1,10 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <module type="PYTHON_MODULE" version="4">
+   <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$" />
+-    <orderEntry type="jdk" jdkName="Python 3.13 virtualenv at C:\Users\Kang Bin\OneDrive\Desktop\WebAppDev_Project\.venv" jdkType="Python SDK" />
++    <content url="file://$MODULE_DIR$">
++      <excludeFolder url="file://$MODULE_DIR$/.venv" />
++    </content>
++    <orderEntry type="jdk" jdkName="Python 3.13 (WebAppDev_Project)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Black\">\r\n    <option name=\"sdkName\" value=\"Python 3.13 virtualenv at C:\\Users\\Kang Bin\\OneDrive\\Desktop\\WebAppDev_Project\\.venv\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/.idea/misc.xml	(date 1754388289681)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="Black">
+-    <option name="sdkName" value="Python 3.13 virtualenv at C:\Users\Kang Bin\OneDrive\Desktop\WebAppDev_Project\.venv" />
++    <option name="sdkName" value="Python 3.13 (WebAppDev_Project)" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"81fbf4a9-63f7-457c-80c0-3153f0a83d12\" name=\"Changes\" comment=\"Merge remote-tracking branch 'origin/master'\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/participant_activity_storage.db\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/participant_activity_storage.db\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/storage_accounts.db\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/storage_accounts.db\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PREVIOUS_COMMIT_AUTHORS\">\r\n      <list>\r\n        <option value=\"kiythes &lt;gabyeo06@gmail.com&gt;\" />\r\n      </list>\r\n    </option>\r\n    <option name=\"PUSH_AUTO_UPDATE\" value=\"true\" />\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;KangBin2005&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/KangBin2005/WebAppDev_Project&quot;,\r\n    &quot;accountId&quot;: &quot;0c824a9b-fc4b-4f6d-8d9d-34b07240ec50&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"30o36V3yb3knQ0oSRIQoTA5PYBD\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;Python.PWID&amp;Public_directory.executor&quot;: &quot;Run&quot;,\r\n    &quot;Python.Staff_directory.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;\r\n  }\r\n}</component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-python-sdk-348a24fa61fa-5312c7369657-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.23774.444\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"81fbf4a9-63f7-457c-80c0-3153f0a83d12\" name=\"Changes\" comment=\"\" />\r\n      <created>1754279922480</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1754279922480</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Update Staff_directory.py\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1754280240912</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1754280240912</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Merge remote-tracking branch 'origin/master'\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1754282022953</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1754282022953</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Merge remote-tracking branch 'origin/master'\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1754283679079</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1754283679079</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Update Staff_directory.py\" />\r\n    <MESSAGE value=\"Merge remote-tracking branch 'origin/master'\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Merge remote-tracking branch 'origin/master'\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 5943eab2d30a9d7a2b784e3967a3855353719fb8)
++++ b/.idea/workspace.xml	(date 1754389144461)
+@@ -4,55 +4,64 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="81fbf4a9-63f7-457c-80c0-3153f0a83d12" name="Changes" comment="Merge remote-tracking branch 'origin/master'">
++    <list default="true" id="07308cc5-131b-4e59-a7e5-23fd99f51047" name="Changes" comment="">
++      <change afterPath="$PROJECT_DIR$/Public_Enquiry.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/participant_activity_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/participant_activity_storage.db" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/storage_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage_accounts.db" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Forms.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/templates/PWIDS/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PWIDS/help.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/templates/Public/contact_enquries.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/contact_enquries.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/templates/Staff/enquiry_participants.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/enquiry_participants.html" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+-  <component name="Git.Settings">
+-    <option name="PREVIOUS_COMMIT_AUTHORS">
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
+       <list>
+-        <option value="kiythes &lt;gabyeo06@gmail.com&gt;" />
++        <option value="Python Script" />
+       </list>
+     </option>
+-    <option name="PUSH_AUTO_UPDATE" value="true" />
++  </component>
++  <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory">{
+-  &quot;lastFilter&quot;: {
+-    &quot;state&quot;: &quot;OPEN&quot;,
+-    &quot;assignee&quot;: &quot;KangBin2005&quot;
++  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++  "lastFilter": {
++    "state": "OPEN",
++    "assignee": "KangBin2005"
+   }
+-}</component>
+-  <component name="GithubPullRequestsUISettings">{
+-  &quot;selectedUrlAndAccountId&quot;: {
+-    &quot;url&quot;: &quot;https://github.com/KangBin2005/WebAppDev_Project&quot;,
+-    &quot;accountId&quot;: &quot;0c824a9b-fc4b-4f6d-8d9d-34b07240ec50&quot;
++}]]></component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/KangBin2005/WebAppDev_Project.git",
++    "accountId": "0c824a9b-fc4b-4f6d-8d9d-34b07240ec50"
+   }
+-}</component>
+-  <component name="ProjectColorInfo">{
+-  &quot;associatedIndex&quot;: 3
+-}</component>
+-  <component name="ProjectId" id="30o36V3yb3knQ0oSRIQoTA5PYBD" />
++}]]></component>
++  <component name="ProjectColorInfo"><![CDATA[{
++  "associatedIndex": 3
++}]]></component>
++  <component name="ProjectId" id="30rZcPjYkdM7f7SM2VJt2tqMIwo" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+-    &quot;Python.PWID&amp;Public_directory.executor&quot;: &quot;Run&quot;,
+-    &quot;Python.Staff_directory.executor&quot;: &quot;Run&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;master&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "ModuleVcsDetector.initialDetectionPerformed": "true",
++    "Python.PWID&Public_directory.executor": "Run",
++    "Python.Staff_directory.executor": "Run",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.git.unshallow": "true",
++    "git-widget-placeholder": "master"
+   }
+-}</component>
++}]]></component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+@@ -62,53 +71,12 @@
+   </component>
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+-      <changelist id="81fbf4a9-63f7-457c-80c0-3153f0a83d12" name="Changes" comment="" />
+-      <created>1754279922480</created>
++      <changelist id="07308cc5-131b-4e59-a7e5-23fd99f51047" name="Changes" comment="" />
++      <created>1754387730920</created>
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+-      <updated>1754279922480</updated>
++      <updated>1754387730920</updated>
+     </task>
+-    <task id="LOCAL-00001" summary="Update Staff_directory.py">
+-      <option name="closed" value="true" />
+-      <created>1754280240912</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1754280240912</updated>
+-    </task>
+-    <task id="LOCAL-00002" summary="Merge remote-tracking branch 'origin/master'">
+-      <option name="closed" value="true" />
+-      <created>1754282022953</created>
+-      <option name="number" value="00002" />
+-      <option name="presentableId" value="LOCAL-00002" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1754282022953</updated>
+-    </task>
+-    <task id="LOCAL-00003" summary="Merge remote-tracking branch 'origin/master'">
+-      <option name="closed" value="true" />
+-      <created>1754283679079</created>
+-      <option name="number" value="00003" />
+-      <option name="presentableId" value="LOCAL-00003" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1754283679079</updated>
+-    </task>
+-    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+-  <component name="Vcs.Log.Tabs.Properties">
+-    <option name="TAB_STATES">
+-      <map>
+-        <entry key="MAIN">
+-          <value>
+-            <State />
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
+-  </component>
+-  <component name="VcsManagerConfiguration">
+-    <MESSAGE value="Update Staff_directory.py" />
+-    <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'" />
+-  </component>
+ </project>
+\ No newline at end of file
