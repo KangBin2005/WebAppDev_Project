@@ -427,7 +427,7 @@ def delete_participant_activity(id):
     return redirect(url_for('activity_participants'))
 
 
-# Retrieving Participants Enquiries as Staff
+# Managing Participants Enquiries
 @app.route('/enquiry-management/participants')
 @login_required
 def enquiry_participants():
@@ -523,7 +523,7 @@ def staff_delete_participant_enquiry(id):
 
     return redirect(url_for('enquiry_participants'))
 
-
+# Managing Public Enquiries
 @app.route('/enquiry-management/public')
 @login_required
 def enquiry_public():
