@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm
-from Form_activity_public import CreateActivityForm
-from Form_admin_accounts import CreateAccountForm
+from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateActivityForm, CreateAccountForm
 import shelve, Participant_Activity, Account, Activity_public
 
 from math import ceil
