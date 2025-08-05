@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateProductForm
-from Form_activity_public import CreateActivityForm
-from Form_admin_accounts import CreateAccountForm
 import shelve, Participant_Activity, Account, Activity_public, Product
 
 from math import ceil
@@ -524,6 +522,20 @@ def staff_delete_participant_enquiry(id):
         print(f"Error deleting enquiry: {str(e)}")
 
     return redirect(url_for('enquiry_participants'))
+@app.route('/enquiry-management')
+def manage_enquiries():
+    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
+
+
+@app.route('/enquiry-management/public')
+def enquiry_public():
+    return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
+
+
+@app.route('/store_management')
+@login_required
+def manage_store():
+    return render_template('Staff/store_management.html', current_page='store_management')
 
 @app.route('/product/management')
 @login_required
@@ -543,7 +555,7 @@ def manage_product():
                            product_list = product_list)
 
 
-@app.route('/store_management/product_management/create-product', methods=['GET', 'POST'])
+@app.route('/store_management/product_management/product_create', methods=['GET', 'POST'])
 def create_product():
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
@@ -568,21 +580,6 @@ def create_product():
         return redirect(url_for('manage_product'))
     # If form unsuccessful / unfinished return user to form page
     return render_template('Staff/product_create.html', form=create_product_form)
-
-@app.route('/enquiry-management')
-def manage_enquiries():
-    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
-
-
-@app.route('/enquiry-management/public')
-def enquiry_public():
-    return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
-
-
-@app.route('/store_management')
-@login_required
-def manage_store():
-    return render_template('Staff/store_management.html', current_page='store_management')
 
 # <-------- Login Routes -------->
 
