@@ -91,7 +91,7 @@ outlets = {
 
 def sync_participant_enquiry_id():
     try:
-        db = shelve.open('participant_enquiries_storage.db', 'r')
+        db = shelve.open('storage/participant_enquiries_storage.db', 'r')
         enquiries_dict = db['Participant_Enquiries']
         max_id = max(enquiry.get_enquiry_id() for enquiry in enquiries_dict.values())
         Participant_Enquiry.ParticipantEnquiry.count_id = max_id
@@ -198,7 +198,7 @@ def participant_home():
         today = date.today()
 
         # Open the shelve database
-        with shelve.open('participant_activity_storage.db', 'r') as db:
+        with shelve.open('storage/participant_activity_storage.db', 'r') as db:
             activities_dict = db.get('Activities', {})
 
             # Filter upcoming activities (today or future)
@@ -235,7 +235,7 @@ def participant_activities():
         activity_name_filter = request.args.get('activity_name', '')
         location_filter = request.args.get('location', '')
 
-        with shelve.open('participant_activity_storage.db', 'r') as db:
+        with shelve.open('storage/participant_activity_storage.db', 'r') as db:
             activities_dict = db.get('Activities', {})
 
             # Get all unique activity names and venues
@@ -305,7 +305,7 @@ def participant_help():
     # Handle form submission
     if request.method == 'POST' and create_enquiry_form.validate():
         enquiries_dict = {}
-        db = shelve.open('participant_enquiries_storage.db', 'c')
+        db = shelve.open('storage/participant_enquiries_storage.db', 'c')
         try:
             enquiries_dict = db.get('Participant_Enquiries', {})
         except:
@@ -330,7 +330,7 @@ def participant_help():
 
     enquiries = []
     try:
-        with shelve.open('participant_enquiries_storage.db', 'r') as db:
+        with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:
             all_enquiries = list(db.get('Participant_Enquiries', {}).values())
 
             for enquiry in all_enquiries:
@@ -364,7 +364,7 @@ def participant_help():
 def update_participant_enquiry(id):
     update_participant_enquiry_form = CreateEnquiryForm(request.form)
     if request.method == "POST" and update_participant_enquiry_form.validate():
-        db = shelve.open('participant_enquiries_storage.db', 'w')
+        db = shelve.open('/storage/participant_enquiries_storage.db', 'w')
         enquiries_dict = db['Participant_Enquiries']
 
         enquiry = enquiries_dict.get(id)
@@ -389,7 +389,7 @@ def update_participant_enquiry(id):
 @app.route('/delete_participant_enquiry/<int:id>', methods=['POST'])
 def delete_participant_enquiry(id):
     enquiries_dict = {}
-    db = shelve.open('participant_enquiries_storage.db', 'w')
+    db = shelve.open('storage/participant_enquiries_storage.db', 'w')
     enquiries_dict = db['Participant_Enquiries']
 
     enquiries_dict.pop(id)

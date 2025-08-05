@@ -1,7 +1,9 @@
 import decimal
-
-from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, validators
-
+from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, DateTimeLocalField, RadioField, validators
+from datetime import datetime, timedelta
+from wtforms.validators import Email
+from datetime import datetime, timedelta
+from wtforms.validators import Email
 class CreateParticipantActivityForm(Form):
     name = StringField('Activity Name', [
         validators.Length(min=1, max=150),
@@ -72,4 +74,27 @@ class CreateProductForm(Form):
         validators.DataRequired()
     ])
 
-# class CreateTransactionForm(Form):
+class CreateActivityForm(Form):
+    activity_name = StringField('Activity Name', [validators.Length(min=1, max=100), validators.DataRequired()])
+    activity_details = TextAreaField('Activity Details', [validators.Length(min=1, max=400), validators.DataRequired()])
+    activity_start_datetime = DateTimeLocalField(
+        'Activity Start',
+        format='%Y-%m-%dT%H:%M',
+        default=datetime.now,
+        validators=[validators.DataRequired()]
+    )
+    activity_end_datetime = DateTimeLocalField(
+        'Activity End',
+        format='%Y-%m-%dT%H:%M',
+        default=lambda: datetime.now() + timedelta(hours=1),    # <--- Adds 1 hour to current system time --->
+        validators=[validators.DataRequired()]
+    )
+
+
+#  <---    Install wtforms email validation: pip install wtforms[email]    --->
+class CreateAccountForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
+    role = RadioField('Role', choices=[('M', 'Member'), ('P', 'PWID'), ('C', 'Caregiver')], default='M')
+    email = TextAreaField('Email (Optional)', [validators.Optional(), Email(message='Invalid email address')])
