@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm
-from Form_admin_accounts import CreateAccountForm
 from Form_activity_public import CreateActivityForm
+from Form_admin_accounts import CreateAccountForm
 import shelve, Participant_Activity, Account, Activity_public
 
 from math import ceil
@@ -9,7 +9,6 @@ from datetime import timedelta
 from functools import wraps
 
 app = Flask(__name__)
-
 app.secret_key = '8f5b21e9-9a55-4879-9218-57c9e81c01e1'           # Random UUIDv4 value
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # 10 minutes inactivity before timeout
 
@@ -60,6 +59,7 @@ def sync_public_activity_id():
     except Exception as e:
         print("Error syncing activity ID:", e)
 
+
 def sync_participant_activity_id():
     try:
         db = shelve.open('participant_activity_storage.db', 'r')
@@ -73,13 +73,16 @@ def sync_participant_activity_id():
     except Exception as e:
         print("Error syncing activity ID:", e)
 
+
 # <-------- Routes -------->
 
 
 @app.route('/')
 @login_required
 def dashboard():
-    return render_template('Staff/dashboard.html', current_page='dashboard')
+    return render_template('Staff/dashboard.html',
+                           current_page='dashboard')
+
 
 @app.route('/account-management', methods=['GET', 'POST'])
 @login_required
@@ -115,6 +118,7 @@ def manage_accounts():
                            accounts_list=paginated_activities,
                            search_query=search_query)
 
+
 @app.route('/account-management/create', methods=['GET', 'POST'])
 @login_required
 def create_account():
@@ -144,6 +148,7 @@ def create_account():
     return render_template('/Staff/account_create.html',
                            form=create_account_form,
                            current_page='account_create')
+
 
 @app.route('/account-management/<int:id>/', methods=['GET', 'POST'])
 @login_required
@@ -182,6 +187,7 @@ def update_account(id):
                                form=update_account_form,
                                current_page='account_update')
 
+
 @app.route('/account-management/delete/<int:id>/', methods=['POST'])
 @login_required
 def delete_account(id):
@@ -194,6 +200,7 @@ def delete_account(id):
     db['Accounts'] = accounts_dict
     db.close()
     return redirect(url_for('manage_accounts'))
+
 
 @app.route('/activity-management/public', methods=['GET', 'POST'])
 @login_required
@@ -229,11 +236,6 @@ def activity_public():
         pages=pages,
         search_query=search_query)
 
-@app.route('/activity-management')
-@login_required
-def manage_activities():
-    return render_template('Staff/activity_management.html', current_page='manage_activities')
-
 
 @app.route('/activity-management/public/create', methods=['GET','POST'])
 @login_required
@@ -264,6 +266,7 @@ def activity_public_create():
     return render_template('/Staff/activity_public_create.html',
                            form=create_activity_form,
                            current_page='activity_public_create')
+
 
 @app.route('/activity-management/public/<int:id>/', methods=['GET', 'POST'])
 @login_required
@@ -303,6 +306,7 @@ def activity_public_update(id):
                                form=activity_form,
                                current_page='activity_public_update')
 
+
 @app.route('/activity-management/delete/<int:id>/', methods=['POST'])
 @login_required
 def activity_public_delete(id):
@@ -323,6 +327,9 @@ def profile():
     return render_template('Staff/profile.html', current_page='profile')
 
 
+
+# <-------- Staff (Participants) Done by Kang Bin -------->
+
 @app.route('/activity-management/participants')
 @login_required
 def activity_participants():
@@ -336,7 +343,10 @@ def activity_participants():
         activity = participants_activities_dict.get(key)
         activities_list.append(activity)
     return render_template('Staff/activity_participants.html',
-   current_page='activity_participants', count = len(activities_list), activities_list = activities_list)
+   current_page='activity_participants',
+                           count = len(activities_list),
+                           activities_list = activities_list)
+
 
 @app.route('/create-participant-activity', methods=['GET', 'POST'])
 @login_required
@@ -360,7 +370,10 @@ def create_participant_activity():
         db['Activities'] = participants_activities_dict
         db.close()
         return redirect(url_for('activity_participants'))
-    return render_template('Staff/create_participant_activity.html', form=create_participant_activity_form)
+    return render_template('Staff/create_participant_activity.html',
+                           form=create_participant_activity_form,
+                           current_page='create_participant_activity')
+
 
 @app.route('/update-participant-activity/<int:id>/', methods=['GET', 'POST'])
 @login_required
@@ -397,7 +410,9 @@ def update_participant_activity(id):
         update_participant_activity_form.end_time.data = activity.get_end_time()
 
         return render_template('Staff/update_participant_activity.html',
-                               form = update_participant_activity_form)
+                               form = update_participant_activity_form,
+                               current_page='update_participant_activity')
+
 
 @app.route('/delete-participant-activity/<int:id>', methods=['POST'])
 @login_required
@@ -413,10 +428,6 @@ def delete_participant_activity(id):
 
     return redirect(url_for('activity_participants'))
 
-@app.route('/enquiry-management')
-@login_required
-def manage_enquries():
-    return render_template('Staff/enquiry_management.html', current_page='manage_enquires')
 
 # Retrieving Participants Enquiries as Staff
 @app.route('/enquiry-management/participants')
@@ -466,6 +477,7 @@ def enquiry_participants():
                            subjects=subjects,
                            statuses=statuses)
 
+
 @app.route('/reply-participant-enquiry/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def participant_enquiry_reply(id):
@@ -513,16 +525,21 @@ def staff_delete_participant_enquiry(id):
 
     return redirect(url_for('enquiry_participants'))
 
+
+@app.route('/enquiry-management')
+def manage_enquiries():
+    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
+
+
 @app.route('/enquiry-management/public')
-@login_required
 def enquiry_public():
     return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
+
 
 @app.route('/store_management')
 @login_required
 def manage_store():
     return render_template('Staff/store_management.html', current_page='store_management')
-
 
 # <-------- Login Routes -------->
 
@@ -566,6 +583,6 @@ def change_password():
             return redirect(url_for('dashboard'))
     return render_template('Staff/change_password.html', current_page='change_password')
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-
