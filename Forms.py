@@ -1,9 +1,9 @@
 import decimal
-
 from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, DateTimeLocalField, RadioField, validators
 from datetime import datetime, timedelta
 from wtforms.validators import Email
-
+from datetime import datetime, timedelta
+from wtforms.validators import Email
 class CreateParticipantActivityForm(Form):
     name = StringField('Activity Name', [
         validators.Length(min=1, max=150),
@@ -73,9 +73,6 @@ class CreateProductForm(Form):
     image_url = StringField('Image URL', [
         validators.DataRequired()
     ])
-
-
-
 
 class CreateActivityForm(Form):
     activity_name = StringField('Activity Name', [validators.Length(min=1, max=100), validators.DataRequired()])

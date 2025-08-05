@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from Forms import (CreateParticipantActivityForm, ReplyParticipantEnquiryForm,
-                   CreateProductForm, CreateActivityForm, CreateAccountForm)
+from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateActivityForm, CreateAccountForm, CreateProductForm
 import shelve, Participant_Activity, Account, Activity_public, Product
 
 from math import ceil
@@ -359,14 +358,12 @@ def create_participant_activity():
             participants_activities_dict = db['Activities']
         except:
             print("Error in retrieving Activities from storage.db.")
-
         activity = Participant_Activity.ParticipantActivity(create_participant_activity_form.name.data,
             create_participant_activity_form.description.data,
             create_participant_activity_form.venue.data,
             create_participant_activity_form.date.data,
             create_participant_activity_form.start_time.data,
             create_participant_activity_form.end_time.data)
-
         participants_activities_dict[activity.get_activity_id()] = activity
         db['Activities'] = participants_activities_dict
         db.close()
@@ -429,107 +426,8 @@ def delete_participant_activity(id):
 
     return redirect(url_for('activity_participants'))
 
-@app.route('/enquiry-management')
-@login_required
-def manage_enquiries():
-    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
 
-# <-------- Manage Public Enquiries -------->
-@app.route('/enquiry-management/public')
-@login_required
-def enquiry_public():
-    # Handle filter parameters
-    selected_subject = request.args.get('subject', '')
-    selected_status = request.args.get('status', '')
-
-    # Initialize variables
-    enquiries = []
-    all_enquiries = []
-
-    try:
-        # Open the shelve database in read-only mode
-        with shelve.open('storage/public_enquiries_storage.db', 'r') as db:
-            # Retrieve all non-deleted enquiries
-            all_enquiries = [
-                e for e in db.get('Public_Enquiries', {}).values()
-
-            ]
-
-        # Apply filters if any
-        for enquiry in all_enquiries:
-            subject_match = not selected_subject or enquiry.get_subject() == selected_subject
-            status_match = not selected_status or enquiry.get_status() == selected_status
-            if subject_match and status_match:
-                enquiries.append(enquiry)
-
-        # Sort enquiries by ID
-        enquiries.sort(key=lambda x: x.get_enquiry_id())
-
-    except Exception as e:
-        print(f"Error loading enquiries: {str(e)}")
-
-    # Define subject and status options
-    subjects = ['Activity', 'Payment Issues', 'Donations Matters',
-                'General Enquiry', 'Navigation Issues', 'Others']
-    statuses = ['Pending', 'Replied']
-
-    return render_template('Staff/enquiry_public.html',
-                           current_page='enquiry_public',
-                           enquiries=enquiries,
-                           count=len(all_enquiries),
-                           selected_subject=selected_subject,
-                           selected_status=selected_status,
-                           subjects=subjects,
-                           statuses=statuses
-                           )
-
-
-@app.route('/toggle-enquiry-status/<int:id>', methods=['POST'])
-@login_required
-def toggle_enquiry_status(id):
-    db = shelve.open('storage/public_enquiries_storage.db', 'w')
-    try:
-        enquiries_dict = db['Public_Enquiries']
-        enquiry = enquiries_dict.get(id)
-
-        if enquiry:
-            # Toggle status
-            if enquiry.get_status() == 'Pending':
-                enquiry.set_status('Replied')
-            else:
-                enquiry.set_status('Pending')
-
-            enquiries_dict[id] = enquiry
-            db['Public_Enquiries'] = enquiries_dict
-            flash('Enquiry status updated', 'success')
-        else:
-            flash('Enquiry not found', 'danger')
-
-    except Exception as e:
-        print(f"Error toggling status: {str(e)}")
-        flash('Error updating status', 'danger')
-    finally:
-        db.close()
-
-    return redirect(url_for('enquiry_public'))
-
-@app.route('/staff-delete-enquiry/<int:id>', methods=['POST'])
-@login_required
-def staff_delete_public_enquiry(id):
-
-    activities_dict = {}
-    db = shelve.open('storage/public_enquiries_storage.db', 'w')
-    enquiries_dict = db['Public_Enquiries']
-
-    enquiries_dict.pop(id)
-
-    db['Public_Enquiries'] = enquiries_dict
-    db.close()
-
-    return redirect(url_for('enquiry_public'))
-
-
-# <-------- Manage Participants Enquiries -------->
+# Retrieving Participants Enquiries as Staff
 @app.route('/enquiry-management/participants')
 @login_required
 def enquiry_participants():
@@ -610,6 +508,7 @@ def participant_enquiry_reply(id):
 
     return render_template('Staff/participant_enquiry_reply.html', form=form)
 
+
 @app.route('/staff-delete-enquiry/<int:id>', methods=['POST'])
 @login_required
 def staff_delete_participant_enquiry(id):
@@ -623,9 +522,21 @@ def staff_delete_participant_enquiry(id):
         print(f"Error deleting enquiry: {str(e)}")
 
     return redirect(url_for('enquiry_participants'))
+@app.route('/enquiry-management')
+def manage_enquiries():
+    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
 
-@app.route('/product/management')
-@login_required
+
+@app.route('/enquiry-management/public')
+def enquiry_public():
+    return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
+
+
+@app.route('/store_management')
+def manage_store():
+    return render_template('Staff/store_management.html', current_page='store_management')
+
+@app.route('/store_management/product_management')
 def manage_product():
     products_dict = {}
     productdb = shelve.open('storage_products.db', 'r')
@@ -642,7 +553,7 @@ def manage_product():
                            product_list = product_list)
 
 
-@app.route('/store_management/product_management/create-product', methods=['GET', 'POST'])
+@app.route('/store_management/product_management/product_create', methods=['GET', 'POST'])
 def create_product():
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
@@ -667,11 +578,6 @@ def create_product():
         return redirect(url_for('manage_product'))
     # If form unsuccessful / unfinished return user to form page
     return render_template('Staff/product_create.html', form=create_product_form)
-
-@app.route('/store_management')
-@login_required
-def manage_store():
-    return render_template('Staff/store_management.html', current_page='store_management')
 
 # <-------- Login Routes -------->
 
