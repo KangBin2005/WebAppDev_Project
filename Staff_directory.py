@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateProductForm
-from Form_activity_public import CreateActivityForm
-from Form_admin_accounts import CreateAccountForm
+from Forms import (CreateParticipantActivityForm, ReplyParticipantEnquiryForm,
+                   CreateProductForm, CreateActivityForm, CreateAccountForm)
 import shelve, Participant_Activity, Account, Activity_public, Product
 
 from math import ceil
@@ -33,7 +32,7 @@ def login_required(f):
 
 def sync_account_id():
     try:
-        db = shelve.open('storage_accounts.db', 'r')
+        db = shelve.open('storage/storage_accounts.db', 'r')
         accounts_dict = db['Accounts']
         max_id = max(account.get_user_id() for account in accounts_dict.values())
         Account.Account.count_id = max_id
@@ -48,7 +47,7 @@ def sync_account_id():
 
 def sync_public_activity_id():
     try:
-        db = shelve.open('storage_activities.db', 'r')
+        db = shelve.open('storage/storage_activities.db', 'r')
         activities_dict = db['Activities']
         max_id = max(activity.get_activity_id() for activity in activities_dict.values())
         Activity_public.ActivityPublic.count_id = max_id
@@ -62,7 +61,7 @@ def sync_public_activity_id():
 
 def sync_participant_activity_id():
     try:
-        db = shelve.open('participant_activity_storage.db', 'r')
+        db = shelve.open('storage/participant_activity_storage.db', 'r')
         participants_activities_dict = db['Activities']
         max_id = max(activity.get_activity_id() for activity in participants_activities_dict.values())
         Participant_Activity.ParticipantActivity.count_id = max_id
@@ -92,7 +91,7 @@ def manage_accounts():
     per_page = 10
 
 
-    db = shelve.open('storage_accounts.db', 'r')
+    db = shelve.open('storage/storage_accounts.db', 'r')
     accounts_dict = db.get('Accounts', {})
     db.close()
 
@@ -127,7 +126,7 @@ def create_account():
     create_account_form = CreateAccountForm(request.form)
     if request.method == 'POST' and create_account_form.validate():
         accounts_dict = {}
-        db = shelve.open('storage_accounts.db', 'c')
+        db = shelve.open('storage/storage_accounts.db', 'c')
 
         try:
             accounts_dict = db['Accounts']
@@ -156,7 +155,7 @@ def update_account(id):
     update_account_form = CreateAccountForm(request.form)
     if request.method == 'POST' and update_account_form.validate():
         accounts_dict = {}
-        db = shelve.open('storage_accounts.db', 'w')
+        db = shelve.open('storage/storage_accounts.db', 'w')
         accounts_dict = db['Accounts']
 
         account = accounts_dict.get(id)
@@ -172,7 +171,7 @@ def update_account(id):
         return redirect(url_for('manage_accounts'))
     else:
         accounts_dict = {}
-        db = shelve.open('storage_accounts.db', 'r')
+        db = shelve.open('storage/storage_accounts.db', 'r')
         accounts_dict = db['Accounts']
         db.close()
 
@@ -192,7 +191,7 @@ def update_account(id):
 @login_required
 def delete_account(id):
     accounts_dict = {}
-    db = shelve.open('storage_accounts.db', 'w')
+    db = shelve.open('storage/storage_accounts.db', 'w')
     accounts_dict = db['Accounts']
 
     accounts_dict.pop(id)
@@ -209,7 +208,7 @@ def activity_public():
     page = request.args.get('page', 1, type=int)
     per_page = 5  # Number of activities per page
 
-    db = shelve.open('storage_activities.db', 'r')
+    db = shelve.open('storage/storage_activities.db', 'r')
     activities_dict = db.get('Activities', {})
     db.close()
 
@@ -245,7 +244,7 @@ def activity_public_create():
     create_activity_form = CreateActivityForm(request.form)
     if request.method == 'POST' and create_activity_form.validate():
         activities_dict = {}
-        db = shelve.open('storage_activities.db', 'c')
+        db = shelve.open('storage/storage_activities.db', 'c')
 
         try:
             activities_dict = db['Activities']
@@ -274,7 +273,7 @@ def activity_public_update(id):
     activity_form = CreateActivityForm(request.form)
 
     if request.method == 'POST' and activity_form.validate():
-        db = shelve.open('storage_activities.db', 'w')
+        db = shelve.open('storage/storage_activities.db', 'w')
         activities_dict = db.get('Activities', {})
 
         activity = activities_dict.get(id)
@@ -289,7 +288,7 @@ def activity_public_update(id):
         return redirect(url_for('activity_public'))  # Change to your actual display function name
 
     else:
-        db = shelve.open('storage_activities.db', 'r')
+        db = shelve.open('storage/storage_activities.db', 'r')
         activities_dict = db.get('Activities', {})
         db.close()
 
@@ -311,7 +310,7 @@ def activity_public_update(id):
 @login_required
 def activity_public_delete(id):
     activities_dict = {}
-    db = shelve.open('storage_activities.db', 'w')
+    db = shelve.open('storage/storage_activities.db', 'w')
     activities_dict = db['Activities']
 
     activities_dict.pop(id)
@@ -334,7 +333,7 @@ def profile():
 @login_required
 def activity_participants():
     participants_activities_dict = {}
-    db = shelve.open('participant_activity_storage.db', 'r')
+    db = shelve.open('storage/participant_activity_storage.db', 'r')
     participants_activities_dict = db['Activities']
     db.close()
 
@@ -355,17 +354,19 @@ def create_participant_activity():
     create_participant_activity_form = CreateParticipantActivityForm(request.form)
     if request.method == 'POST' and create_participant_activity_form.validate():
         participants_activities_dict = {}
-        db = shelve.open('participant_activity_storage.db', 'c')
+        db = shelve.open('storage/participant_activity_storage.db', 'c')
         try:
             participants_activities_dict = db['Activities']
         except:
             print("Error in retrieving Activities from storage.db.")
+
         activity = Participant_Activity.ParticipantActivity(create_participant_activity_form.name.data,
             create_participant_activity_form.description.data,
             create_participant_activity_form.venue.data,
             create_participant_activity_form.date.data,
             create_participant_activity_form.start_time.data,
             create_participant_activity_form.end_time.data)
+
         participants_activities_dict[activity.get_activity_id()] = activity
         db['Activities'] = participants_activities_dict
         db.close()
@@ -381,7 +382,7 @@ def update_participant_activity(id):
     update_participant_activity_form = CreateParticipantActivityForm(request.form)
     if request.method == 'POST' and update_participant_activity_form.validate():
         activities_dict = {}
-        db = shelve.open('participant_activity_storage.db', 'w')
+        db = shelve.open('storage/participant_activity_storage.db', 'w')
         activities_dict = db['Activities']
 
         activity = activities_dict.get(id)
@@ -397,7 +398,7 @@ def update_participant_activity(id):
         return redirect(url_for('activity_participants'))
     else:
         participants_activities_dict = {}
-        db = shelve.open('participant_activity_storage.db', 'r')
+        db = shelve.open('storage/participant_activity_storage.db', 'r')
         participants_activities_dict = db['Activities']
         db.close()
 
@@ -418,7 +419,7 @@ def update_participant_activity(id):
 @login_required
 def delete_participant_activity(id):
     activities_dict = {}
-    db = shelve.open('participant_activity_storage.db', 'w')
+    db = shelve.open('storage/participant_activity_storage.db', 'w')
     activities_dict = db['Activities']
 
     activities_dict.pop(id)
@@ -428,8 +429,107 @@ def delete_participant_activity(id):
 
     return redirect(url_for('activity_participants'))
 
+@app.route('/enquiry-management')
+@login_required
+def manage_enquiries():
+    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
 
-# Retrieving Participants Enquiries as Staff
+# <-------- Manage Public Enquiries -------->
+@app.route('/enquiry-management/public')
+@login_required
+def enquiry_public():
+    # Handle filter parameters
+    selected_subject = request.args.get('subject', '')
+    selected_status = request.args.get('status', '')
+
+    # Initialize variables
+    enquiries = []
+    all_enquiries = []
+
+    try:
+        # Open the shelve database in read-only mode
+        with shelve.open('storage/public_enquiries_storage.db', 'r') as db:
+            # Retrieve all non-deleted enquiries
+            all_enquiries = [
+                e for e in db.get('Public_Enquiries', {}).values()
+
+            ]
+
+        # Apply filters if any
+        for enquiry in all_enquiries:
+            subject_match = not selected_subject or enquiry.get_subject() == selected_subject
+            status_match = not selected_status or enquiry.get_status() == selected_status
+            if subject_match and status_match:
+                enquiries.append(enquiry)
+
+        # Sort enquiries by ID
+        enquiries.sort(key=lambda x: x.get_enquiry_id())
+
+    except Exception as e:
+        print(f"Error loading enquiries: {str(e)}")
+
+    # Define subject and status options
+    subjects = ['Activity', 'Payment Issues', 'Donations Matters',
+                'General Enquiry', 'Navigation Issues', 'Others']
+    statuses = ['Pending', 'Replied']
+
+    return render_template('Staff/enquiry_public.html',
+                           current_page='enquiry_public',
+                           enquiries=enquiries,
+                           count=len(all_enquiries),
+                           selected_subject=selected_subject,
+                           selected_status=selected_status,
+                           subjects=subjects,
+                           statuses=statuses
+                           )
+
+
+@app.route('/toggle-enquiry-status/<int:id>', methods=['POST'])
+@login_required
+def toggle_enquiry_status(id):
+    db = shelve.open('storage/public_enquiries_storage.db', 'w')
+    try:
+        enquiries_dict = db['Public_Enquiries']
+        enquiry = enquiries_dict.get(id)
+
+        if enquiry:
+            # Toggle status
+            if enquiry.get_status() == 'Pending':
+                enquiry.set_status('Replied')
+            else:
+                enquiry.set_status('Pending')
+
+            enquiries_dict[id] = enquiry
+            db['Public_Enquiries'] = enquiries_dict
+            flash('Enquiry status updated', 'success')
+        else:
+            flash('Enquiry not found', 'danger')
+
+    except Exception as e:
+        print(f"Error toggling status: {str(e)}")
+        flash('Error updating status', 'danger')
+    finally:
+        db.close()
+
+    return redirect(url_for('enquiry_public'))
+
+@app.route('/staff-delete-enquiry/<int:id>', methods=['POST'])
+@login_required
+def staff_delete_public_enquiry(id):
+
+    activities_dict = {}
+    db = shelve.open('storage/public_enquiries_storage.db', 'w')
+    enquiries_dict = db['Public_Enquiries']
+
+    enquiries_dict.pop(id)
+
+    db['Public_Enquiries'] = enquiries_dict
+    db.close()
+
+    return redirect(url_for('enquiry_public'))
+
+
+# <-------- Manage Participants Enquiries -------->
 @app.route('/enquiry-management/participants')
 @login_required
 def enquiry_participants():
@@ -443,7 +543,7 @@ def enquiry_participants():
 
     try:
         # Open the shelve database in read-only mode
-        with shelve.open('participant_enquiries_storage.db', 'r') as db:
+        with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:
             # Retrieve all non-deleted enquiries
             all_enquiries = [
                 e for e in db.get('Participant_Enquiries', {}).values()
@@ -484,7 +584,7 @@ def participant_enquiry_reply(id):
     form = ReplyParticipantEnquiryForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        db = shelve.open('participant_enquiries_storage.db', 'w')
+        db = shelve.open('storage/participant_enquiries_storage.db', 'w')
         enquiries_dict = db['Participant_Enquiries']
         enquiry = enquiries_dict.get(id)
 
@@ -499,7 +599,7 @@ def participant_enquiry_reply(id):
         return redirect(url_for('enquiry_participants'))
 
     # GET request - load existing enquiry
-    db = shelve.open('participant_enquiries_storage.db', 'r')
+    db = shelve.open('storage/participant_enquiries_storage.db', 'r')
     enquiry = db['Participant_Enquiries'].get(id)
     db.close()
 
@@ -510,12 +610,11 @@ def participant_enquiry_reply(id):
 
     return render_template('Staff/participant_enquiry_reply.html', form=form)
 
-
 @app.route('/staff-delete-enquiry/<int:id>', methods=['POST'])
 @login_required
 def staff_delete_participant_enquiry(id):
     try:
-        with shelve.open('participant_enquiries_storage.db', 'w') as db:
+        with shelve.open('storage/participant_enquiries_storage.db', 'w') as db:
             enquiries_dict = db.get('Participant_Enquiries', {})
             if id in enquiries_dict:
                 enquiries_dict[id].set_deleted_for_staff(True)
@@ -568,16 +667,6 @@ def create_product():
         return redirect(url_for('manage_product'))
     # If form unsuccessful / unfinished return user to form page
     return render_template('Staff/product_create.html', form=create_product_form)
-
-@app.route('/enquiry-management')
-def manage_enquiries():
-    return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
-
-
-@app.route('/enquiry-management/public')
-def enquiry_public():
-    return render_template('Staff/enquiry_public.html', current_page='enquiry_public')
-
 
 @app.route('/store_management')
 @login_required
