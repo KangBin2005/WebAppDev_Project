@@ -401,7 +401,7 @@ def participant_help():
 def update_participant_enquiry(id):
     update_participant_enquiry_form = CreateParticipantEnquiryForm(request.form)
     if request.method == "POST" and update_participant_enquiry_form.validate():
-        db = shelve.open('storage/participant_enquiries_storage.db', 'w')
+        db = shelve.open('/storage/participant_enquiries_storage.db', 'w')
         enquiries_dict = db['Participant_Enquiries']
 
         enquiry = enquiries_dict.get(id)
@@ -413,7 +413,7 @@ def update_participant_enquiry(id):
         db.close()
         return redirect(url_for('participant_help', show_enquiries=1))
     else:
-        db = shelve.open('storage/participant_enquiries_storage.db', 'r')
+        db = shelve.open('participant_enquiries_storage.db', 'r')
         enquiries_dict = db['Participant_Enquiries']
         db.close()
 
