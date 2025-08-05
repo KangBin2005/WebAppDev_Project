@@ -1,62 +1,67 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Staff_style.css') }}">
+
 
 {% extends "Staff/Staff_base.html" %}
-{% block title %}SGEnable - Staff Dashboard{% endblock %}
+{% block title %}Staff - Home{% endblock %}
 
 {% block content %}
 
-<!-- Hero Section -->
-<div class="hero-section position-relative text-white p-5"
-     style="
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ url_for('static', filename='images/staff_dashboard_hero.jpg') }}');
-        background-attachment: fixed;
-        background-size: cover;           /* Show full image without cropping */
-        background-repeat: no-repeat;       /* Prevent tiling */
-        background-position: center;
-        height: 500px;                      /* Fixed height for consistent display */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-">
-    <!-- Text content -->
-    <div class="position-relative text-center" style="z-index: 1;">
-        <h1 class="display-4 text-shadow">Staff Dashboard</h1>
-        <h3 class="text-shadow">Welcome back, <strong>Staff Member</strong>!</h3>
-    </div>
-</div>
-
-
-<!-- Quick Links Section -->
-<div class="container mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-users fa-3x mb-3 text-primary"></i>
-                    <h4>Account Management</h4>
-                    <a href="{{ url_for('manage_accounts') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-tasks fa-3x mb-3 text-success"></i>
-                    <h4>Activity Management</h4>
-                    <a href="{{ url_for('manage_activities') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-question-circle fa-3x mb-3 text-info"></i>
-                    <h4>Enquiry Management</h4>
-                    <a href="{{ url_for('manage_enquries') }}" class="stretched-link"></a>
-                </div>
-            </div>
+    <!-- Hero Section -->
+    <div class="hero-section position-relative text-white p-5"
+         style="
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ url_for('static', filename='images/staff_dashboard_hero.jpg') }}');
+            background-attachment: fixed;
+            background-size: cover;           /* Show full image without cropping */
+            background-repeat: no-repeat;       /* Prevent tiling */
+            background-position: center;
+            height: 450px;                      /* Fixed height for consistent display */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+    ">
+        <!-- Text content -->
+        <div class="position-relative text-center" style="z-index: 1;">
+            <h1 class="display-4 text-shadow">Staff Dashboard</h1>
+            <h3 class="text-shadow">Welcome back, <strong>{{ session['user'] }}</strong>!</h3>
         </div>
     </div>
-</div>
+
+
+
+
+
+    <!-- Quick Links Section -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                        <h4>Account Management</h4>
+                        <a href="{{ url_for('manage_accounts') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tasks fa-3x mb-3 text-success"></i>
+                        <h4>Activity Management</h4>
+                        <a href="{{ url_for('activity_public') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-question-circle fa-3x mb-3 text-info"></i>
+                        <h4>Enquiry Management</h4>
+                        <a href="{{ url_for('enquiry_participants') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
-
