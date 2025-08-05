@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-import shelve, Participant_Enquiry, Public_Enquiry
+import shelve, Participant_Enquiry
 from datetime import date
-from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm
+from Forms import CreateEnquiryForm
 
 app = Flask(__name__)
 
@@ -88,18 +88,6 @@ outlets = {
         'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.917197049249!2d103.740412!3d1.3333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTknNTkuOSJOIDEwM8KwNDQnMzMuNCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
     }
 }
-def sync_public_enquiry_id():
-    try:
-        db = shelve.open('storage/public_enquiries_storage.db', 'r')
-        enquiries_dict = db['Public_Enquiries']
-        max_id = max(enquiry.get_enquiry_id() for enquiry in enquiries_dict.values())
-        Public_Enquiry.PublicEnquiry.count_id = max_id
-        db.close()
-    except KeyError:
-        # 'Participant_Enquiries' key doesn't exist in the shelve yet / No enquiries exist
-        Participant_Enquiry.ParticipantEnquiry.count_id = 0
-    except Exception as e:
-        print("Error syncing enquiry ID:", e)
 
 def sync_participant_enquiry_id():
     try:
@@ -132,35 +120,9 @@ def public_activities():
 def public_contact():
     return render_template('Public/contact_us.html', current_page='public_contact')
 
-@app.route('/contact/enquiries', methods=['GET', 'POST'])
+@app.route('/contact/enquiries')
 def public_enquiries():
-    sync_public_enquiry_id()
-    create_enquiry_form = CreatePublicEnquiryForm(request.form)
-
-    # Handle form submission
-    if request.method == 'POST' and create_enquiry_form.validate():
-        enquiries_dict = {}
-        db = shelve.open('storage/public_enquiries_storage.db', 'c')
-        try:
-            enquiries_dict = db['Public_Enquiries']
-        except:
-            print("Error in retrieving Participant_Enquiries from shelve.")
-
-        new_enquiry = Public_Enquiry.PublicEnquiry(
-            name=create_enquiry_form.name.data,
-            email=create_enquiry_form.email.data,
-            subject=create_enquiry_form.subject.data,
-            message=create_enquiry_form.message.data,
-            status="Pending"
-        )
-
-        enquiries_dict[new_enquiry.get_enquiry_id()] = new_enquiry
-        db['Public_Enquiries'] = enquiries_dict
-        db.close()
-        return redirect(url_for('public_enquiries'))
-    return render_template('Public/contact_enquries.html',
-                           current_page='public_enquiries',
-                           form=create_enquiry_form)
+    return render_template('Public/contact_enquries.html', current_page='public_enquiries')
 
 @app.route('/contact/locations')
 def public_locations():
@@ -332,12 +294,13 @@ def outlet_map(outlet_id):
 
     return render_template('PWIDS/outlet_map.html',
                            outlet=outlet,
+
                            current_page='outlet_map')
 
 @app.route('/participants/help', methods=['GET', 'POST'])
 def participant_help():
     sync_participant_enquiry_id()
-    create_enquiry_form = CreateParticipantEnquiryForm(request.form)
+    create_enquiry_form = CreateEnquiryForm(request.form)
 
     # Handle form submission
     if request.method == 'POST' and create_enquiry_form.validate():
@@ -399,9 +362,9 @@ def participant_help():
 
 @app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])
 def update_participant_enquiry(id):
-    update_participant_enquiry_form = CreateParticipantEnquiryForm(request.form)
+    update_participant_enquiry_form = CreateEnquiryForm(request.form)
     if request.method == "POST" and update_participant_enquiry_form.validate():
-        db = shelve.open('storage/participant_enquiries_storage.db', 'w')
+        db = shelve.open('/storage/participant_enquiries_storage.db', 'w')
         enquiries_dict = db['Participant_Enquiries']
 
         enquiry = enquiries_dict.get(id)
@@ -413,7 +376,7 @@ def update_participant_enquiry(id):
         db.close()
         return redirect(url_for('participant_help', show_enquiries=1))
     else:
-        db = shelve.open('storage/participant_enquiries_storage.db', 'r')
+        db = shelve.open('participant_enquiries_storage.db', 'r')
         enquiries_dict = db['Participant_Enquiries']
         db.close()
 

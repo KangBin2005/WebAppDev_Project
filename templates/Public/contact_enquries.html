@@ -5,113 +5,12 @@
 {% endblock %}
 
 {% block content %}
-{% from "includes/_formHelper.html" import render_field %}
 <!-- Hero Section -->
 <div class="contact-hero">
     <div class="hero-content">
         <h1>Contact Us</h1>
     </div>
 </div>
-
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="contact-form-container">
-                <h2 class="text-center mb-4">Contact Support</h2>
-                <p class="text-center mb-5">Any matters to address? Fill up this form below and we'll get back to you.</p>
-
-                <form method="POST" action="" class="form-spacing">
-                    <!-- Name Field -->
-                    <div class="form-group mb-4">
-
-                        {{ render_field(form.name, class="form-control", placeholder="Enter your name") }}
-                    </div>
-
-                    <!-- Email Field -->
-                    <div class="form-group mb-4">
-                        {{ render_field(form.email, class="form-control", placeholder="Enter your email") }}
-                    </div>
-
-                    <!-- Subject Field - Now with label above -->
-                    <div class="form-group mb-4">
-                        {{ render_field(form.subject, class="form-select") }}
-                    </div>
-
-                    <!-- Message Field -->
-                    <div class="form-group mb-5">
-                        {{ render_field(form.message, class="form-control", rows=5, placeholder="Enter your message details") }}
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary btn-submit">
-                            <i class="fas fa-paper-plane me-2"></i> Submit Enquiry
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .contact-form-container {
-        background: white;
-        padding: 2.5rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .form-label {
-        display: block;
-        font-weight: 500;
-        margin-bottom: 0.75rem;
-        color: #333;
-    }
-
-    .form-control, .form-select {
-        padding: 0.75rem 1rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 1rem;
-        width: 100%;
-        transition: all 0.3s ease;
-    }
-
-    .form-select {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        background-size: 16px 12px;
-    }
-
-    .form-control:focus, .form-select:focus {
-        border-color: #6e8efb;
-        box-shadow: 0 0 0 0.25rem rgba(110, 142, 251, 0.15);
-        outline: none;
-    }
-
-    .btn-submit {
-        background-color: #6e8efb;
-        border: none;
-        padding: 0.875rem 2.5rem;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-submit:hover {
-        background-color: #5a7df4;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(110, 142, 251, 0.25);
-    }
-
-    @media (max-width: 768px) {
-        .contact-form-container {
-            padding: 1.75rem;
-        }
-    }
-</style>
+<h1>Contact Enquiries</h1>
+<p>Contact form and enquiry submission goes here</p>
 {% endblock %}
