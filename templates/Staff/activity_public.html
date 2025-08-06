@@ -40,6 +40,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.get_activity_name() }}</h5>
                         <p class="card-text">{{ activity.get_activity_details() }}</p>
+                        <small><span class="text-muted">Venue: </span>{{ activity.get_activity_venue() }}</small>
                         <p class="card-text">
                             {% set start = activity.get_activity_start_datetime() %}
                             {% set end = activity.get_activity_end_datetime() %}
