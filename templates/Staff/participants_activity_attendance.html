@@ -35,7 +35,7 @@
             <tbody>
                 {% for participant in participants %}
                 <tr>
-                    <td>{{ participant.get_signup_id() }}</td>
+                    <td>{{ participant.display_number }}</td>
                     <td>{{ participant.get_name() }}</td>
                     <td>{{ participant.get_phone() }}</td>
                     <td>{{ participant.get_email() or '-' }}</td>
