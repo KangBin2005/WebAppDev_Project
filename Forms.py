@@ -2,8 +2,6 @@ import decimal
 from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, DateTimeLocalField, RadioField, validators
 from datetime import datetime, timedelta
 from wtforms.validators import Email
-from datetime import datetime, timedelta
-from wtforms.validators import Email
 class CreateParticipantActivityForm(Form):
     name = StringField('Activity Name', [
         validators.Length(min=1, max=150),
@@ -77,6 +75,7 @@ class CreateProductForm(Form):
 class CreateActivityForm(Form):
     activity_name = StringField('Activity Name', [validators.Length(min=1, max=100), validators.DataRequired()])
     activity_details = TextAreaField('Activity Details', [validators.Length(min=1, max=400), validators.DataRequired()])
+    activity_venue = StringField('Activity Venue', [validators.Length(min=1, max=100), validators.DataRequired()])
     activity_start_datetime = DateTimeLocalField(
         'Activity Start',
         format='%Y-%m-%dT%H:%M',

@@ -253,6 +253,7 @@ def activity_public_create():
 
         activity = Activity_public.ActivityPublic(create_activity_form.activity_name.data,
                                                   create_activity_form.activity_details.data,
+                                                  create_activity_form.activity_venue.data,
                                                   create_activity_form.activity_start_datetime.data,
                                                   create_activity_form.activity_end_datetime.data)
 
@@ -279,6 +280,7 @@ def activity_public_update(id):
         activity = activities_dict.get(id)
         activity.set_activity_name(activity_form.activity_name.data)
         activity.set_activity_details(activity_form.activity_details.data)
+        activity.set_activity_venue(activity_form.activity_venue.data)
         activity.set_activity_start_datetime(activity_form.activity_start_datetime.data)
         activity.set_activity_end_datetime(activity_form.activity_end_datetime.data)
 
@@ -298,6 +300,7 @@ def activity_public_update(id):
 
         activity_form.activity_name.data = activity.get_activity_name()
         activity_form.activity_details.data = activity.get_activity_details()
+        activity_form.activity_venue.data = activity.get_activity_venue()
         activity_form.activity_start_datetime.data = activity.get_activity_start_datetime()
         activity_form.activity_end_datetime.data = activity.get_activity_end_datetime()
 
