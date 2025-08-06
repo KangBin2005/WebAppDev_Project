@@ -1,0 +1,62 @@
+{% extends "PWIDS/base.html" %}
+{% block title %}SGEnable - Sign Up{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if activity %}
+    <h1>Sign Up for {{ activity.get_name() }}</h1>
+    <form method="POST" action="{{ url_for('activity_signup', activity_id=activity.get_activity_id()) }}">
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+            {% if form.name.errors %}
+            <small class="text-danger">{{ form.name.errors[0] }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.phone.label }}
+            {{ form.phone(class="form-control") }}
+            {% if form.phone.errors %}
+            <small class="text-danger">{{ form.phone.errors[0] }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control") }}
+            {% if form.email.errors %}
+            <small class="text-danger">{{ form.email.errors[0] }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.accessibility_needs.label }}
+            {{ form.accessibility_needs(class="form-control", rows=3) }}
+        </div>
+
+        <div class="form-group">
+            {{ form.emergency_contact_name.label }}
+            {{ form.emergency_contact_name(class="form-control") }}
+            {% if form.emergency_contact_name.errors %}
+            <small class="text-danger">{{ form.emergency_contact_name.errors[0] }}</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.emergency_phone.label }}
+            {{ form.emergency_phone(class="form-control") }}
+            {% if form.emergency_phone.errors %}
+            <small class="text-danger">{{ form.emergency_phone.errors[0] }}</small>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    <div class="alert alert-danger">
+        Activity not found. Please return to the activities list.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

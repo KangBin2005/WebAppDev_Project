@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-import shelve, Participant_Enquiry, Public_Enquiry
+import shelve, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
 from datetime import date
-from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm
+from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm
 
 app = Flask(__name__)
 
@@ -98,6 +98,19 @@ def sync_public_enquiry_id():
     except KeyError:
         # 'Participant_Enquiries' key doesn't exist in the shelve yet / No enquiries exist
         Participant_Enquiry.ParticipantEnquiry.count_id = 0
+    except Exception as e:
+        print("Error syncing enquiry ID:", e)
+
+def sync_participant_activity_signup_id():
+    try:
+        db = shelve.open('storage/activity_signups_storage.db', 'r')
+        signups_dict = db['Activity_Signups']
+        max_id = max(signup.get_signup_id for signup in signups_dict.values())
+        Participant_Activity_Sign_Up.ParticipantActivitySignUp.count_id = max_id
+        db.close()
+    except KeyError:
+        # 'Activity_Signups' key doesn't exist in the shelve yet / No sign ups exist
+        Participant_Activity_Sign_Up.ParticipantActivitySignUp.count_id = 0
     except Exception as e:
         print("Error syncing enquiry ID:", e)
 
@@ -316,6 +329,59 @@ def participant_activities():
             selected_activity='',
             selected_location=''
         )
+
+
+@app.route('/activity/<int:activity_id>/signup', methods=['GET', 'POST'])
+def activity_signup(activity_id):
+    # Sync ID counter
+    sync_participant_activity_signup_id()
+
+    # Initialize form
+    signup_form = CreateParticipantSignUpForm(request.form)
+
+    # Get activity
+    try:
+        with shelve.open('storage/participant_activity_storage.db', 'r') as db:
+            activities_dict = db.get('Activities', {})
+            activity = activities_dict.get(activity_id)
+            if not activity:
+                return redirect(url_for('participant_activities'))  # Silent redirect if activity not found
+    except Exception as e:
+        print(f"Error accessing activity data: {str(e)}")
+        return redirect(url_for('participant_activities'))
+
+    if request.method == 'POST' and signup_form.validate():
+        try:
+            with shelve.open('storage/activity_signups.db', 'c') as db:
+                signups_dict = db.get('Activity_Signups', {})
+
+                new_signup = Participant_Activity_Sign_Up.ParticipantActivitySignUp(
+                    name=signup_form.name.data,
+                    phone=signup_form.phone.data,
+                    email=signup_form.email.data,
+                    accessibility_needs=signup_form.accessibility_needs.data,
+                    emergency_contact_name=signup_form.emergency_contact_name.data,
+                    emergency_phone=signup_form.emergency_phone.data,
+                    activity_id=activity_id
+                )
+
+                signups_dict[new_signup.get_signup_id()] = new_signup
+                db['Activity_Signups'] = signups_dict
+
+                return redirect(url_for('participant_activities'))
+        except Exception as e:
+            print(f"Error saving signup: {str(e)}")
+            # You could pass an error message to template if needed
+            return render_template('PWIDS/activity_signup.html',
+                                   form=signup_form,
+                                   activity=activity,
+                                   error="Failed to save signup",
+                                   current_page='activity_signup')
+
+    return render_template('PWIDS/activity_signup.html',
+                           form=signup_form,
+                           activity=activity,
+                           current_page='activity_signup')
 
 @app.route('/participants/outlets')
 def participant_locations():

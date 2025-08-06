@@ -335,20 +335,94 @@ def profile():
 @app.route('/activity-management/participants')
 @login_required
 def activity_participants():
-    participants_activities_dict = {}
+    # Get filter parameters
+    selected_activity = request.args.get('activity', '')
+    selected_venue = request.args.get('venue', '')
+    page = request.args.get('page', 1, type=int)
+    per_page = 6  # Items per page
+
+    # Open database
     db = shelve.open('storage/participant_activity_storage.db', 'r')
-    participants_activities_dict = db['Activities']
+    activities_dict = db.get('Activities', {})
     db.close()
 
-    activities_list = []
-    for key in participants_activities_dict:
-        activity = participants_activities_dict.get(key)
-        activities_list.append(activity)
-    return render_template('Staff/activity_participants.html',
-   current_page='activity_participants',
-                           count = len(activities_list),
-                           activities_list = activities_list)
+    # Get all unique venues and activity names for dropdowns
+    all_activities = list(activities_dict.values())
+    venues = sorted({activity.get_venue() for activity in all_activities})
+    activity_names = sorted({activity.get_name() for activity in all_activities})
 
+    # Apply filters
+    filtered_activities = []
+    for activity in all_activities:
+        activity_match = not selected_activity or activity.get_name() == selected_activity
+        venue_match = not selected_venue or activity.get_venue() == selected_venue
+
+        if activity_match and venue_match:
+            filtered_activities.append(activity)
+
+    # Sort by date (newest first)
+    filtered_activities.sort(key=lambda x: x.get_date(), reverse=True)
+
+    # Pagination
+    total = len(filtered_activities)
+    pages = ceil(total / per_page)
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_activities = filtered_activities[start:end]
+
+    return render_template(
+        'Staff/activity_participants.html',
+        current_page='activity_participants',
+        count=total,
+        activities=paginated_activities,
+        page=page,
+        pages=pages,
+        selected_activity=selected_activity,
+        selected_venue=selected_venue,
+        venues=venues,
+        activity_names=activity_names
+    )
+
+@app.route('/activity-management/participants/<int:activity_id>/attendance')
+@login_required
+def view_attendance(activity_id):
+    # Get the activity
+    participants_activities_dict = {}
+    db = shelve.open('storage/participant_activity_storage.db', 'r')
+    try:
+        participants_activities_dict = db['Activities']
+    except KeyError:
+        flash('Activities database not found', 'error')
+    finally:
+        db.close()
+
+    activity = participants_activities_dict.get(activity_id)
+
+    if not activity:
+        flash('Activity not found', 'error')
+        return redirect(url_for('activity_participants'))
+
+    # Get all signups for this activity
+    activity_signups_dict = {}
+    db = shelve.open('storage/activity_signups.db', 'r')
+    try:
+        activity_signups_dict = db['Activity_Signups']
+    except KeyError:
+        flash('Signups database not found', 'error')
+    finally:
+        db.close()
+
+    participants = []
+    for signup in activity_signups_dict.values():
+        if hasattr(signup, 'get_activity_id') and signup.get_activity_id() == activity_id:
+            participants.append(signup)
+
+    return render_template(
+        'Staff/participants_activity_attendance.html',
+        current_page='activity_participants',
+        activity=activity,
+        participants=participants,
+        count=len(participants))
 
 @app.route('/create-participant-activity', methods=['GET', 'POST'])
 @login_required

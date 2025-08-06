@@ -1,83 +1,158 @@
 {% extends "Staff/Staff_base.html" %}
-{% block title %}SGEnable - Activity Management{% endblock %}
+{% block title %}SGEnable - Activity Management (Participants){% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="display-4 mb-0">Activity Management - Participants</h1>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Activity Management - Participants</h1>
         <a href="{{ url_for('create_participant_activity') }}" class="btn btn-success">
-            <i class="fas fa-plus"></i> Create Activity
+            <i class="fas fa-plus mr-1"></i> Create Activity
         </a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Activity ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Venue</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for activity in activities_list %}
-            <tr>
-                <td>{{ activity.get_activity_id() }}</td>
-                <td>{{ activity.get_name() }}</td>
-                <td>{{ activity.get_description() }}</td>
-                <td>{{ activity.get_venue() }}</td>
-                <td>{{ activity.get_date().strftime('%d/%m/%Y') }}</td>
-                <td>{{ activity.get_start_time().strftime('%H:%M') }} - {{ activity.get_end_time().strftime('%H:%M')
-                    }}
-                </td>
-                <td><a href="/update-participant-activity/{{activity.get_activity_id()}}"
-                       class="btn btn-warning">Update</a></td>
-                <td>
-                    <form action="{{url_for('delete_participant_activity',
-                    id=activity.get_activity_id())}}" method="POST">
-                        <!-- <input type="submit" value="Delete" class="btn btn-danger"> -->
-                        <!-- Button to Open the Modal -->
-                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                data-target="#myModal_{{activity.get_activity_id()}}">
-                            Delete
-                        </button>
-
-                        <!-- The Modal -->
-                        <div class="modal" id="myModal_{{activity.get_activity_id()}}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Delete Confrimation</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                         Are you sure you want to delete {{activity.get_name()}} ?
-                                    </div>
-
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <input type="submit" value="Delete" class="btn btn-danger">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div>
+        {% if count > 0 %}
+        <p>Showing <strong>{{ count }}</strong> participant {{ 'activity' if count == 1 else 'activities' }}.</p>
+        {% else %}
+        <p class="text-danger">No participant activities found.</p>
+        {% endif %}
     </div>
+
+    <!-- Search Filter Section -->
+    <div class="mt-3">
+        <form method="GET" action="{{ url_for('activity_participants') }}">
+            <input type="hidden" name="page" value="1">
+            <div class="row align-items-end mb-4">
+                <div class="col-md-5">
+                    <div class="form-group mb-0">
+                        <label for="activity">Activity Name</label>
+                        <select class="form-control" id="activity" name="activity">
+                            <option value="">All Activities</option>
+                            {% for name in activity_names %}
+                            <option value="{{ name }}" {% if selected_activity==name %}selected{% endif %}>
+                                {{ name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group mb-0">
+                        <label for="venue">Venue</label>
+                        <select class="form-control" id="venue" name="venue">
+                            <option value="">All Venues</option>
+                            {% for venue in venues %}
+                            <option value="{{ venue }}" {% if selected_venue==venue %}selected{% endif %}>
+                                {{ venue }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100" style="height: 38px;">
+                        <i class="fas fa-search mr-2"></i> Filter
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        {% for activity in activities %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ activity.get_name() }}</h5>
+                    <p class="card-text">{{ activity.get_description() }}</p>
+                    <div class="mb-2">
+                        <small class="text-muted">Venue:</small>
+                        <small>{{ activity.get_venue() }}</small>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Date:</small>
+                        <small>{{ activity.get_date().strftime('%d %b %Y') }}</small>
+                    </div>
+                    <div>
+                        <small class="text-muted">Time:</small>
+                        <small>{{ activity.get_start_time().strftime('%I:%M %p') }} - {{
+                            activity.get_end_time().strftime('%I:%M %p') }}</small>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-start">
+                    <a href="{{ url_for('view_attendance', activity_id=activity.get_activity_id()) }}"
+                       class="btn btn-sm btn-info mr-2">
+                        <i class="fas fa-users mr-1"></i> Attendance
+                    </a>
+                    <a href="/update-participant-activity/{{activity.get_activity_id()}}"
+                       class="btn btn-sm btn-warning mr-2">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </a>
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                            data-target="#deleteModal{{activity.get_activity_id()}}">
+                        <i class="fas fa-trash-alt mr-1"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal{{activity.get_activity_id()}}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete "{{ activity.get_name() }}"?
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{{ url_for('delete_participant_activity', id=activity.get_activity_id()) }}"
+                              method="POST">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if pages > 1 %}
+    <!-- Pagination -->
+    <nav aria-label="Activity pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <!-- Previous button -->
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for('participant_activities', page=page-1, search=request.args.get('search')) }}"
+                   aria-label="Previous">
+                    <span aria-hidden="true"></span>
+                </a>
+            </li>
+
+            <!-- Page numbers -->
+            {% for p in range(1, pages + 1) %}
+            <li class="page-item {% if page == p %}active{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for('participant_activities', page=p, search=request.args.get('search')) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+
+            <!-- Next button -->
+            <li class="page-item {% if page >= pages %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for('participant_activities', page=page+1, search=request.args.get('search')) }}"
+                   aria-label="Next">
+                    <span aria-hidden="true"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
 </div>
 {% endblock %}

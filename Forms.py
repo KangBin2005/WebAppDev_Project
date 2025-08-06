@@ -2,6 +2,7 @@ import decimal
 from wtforms import Form, StringField, DateField, TimeField, TextAreaField, SelectField, DecimalField, DateTimeLocalField, RadioField, validators
 from datetime import datetime, timedelta
 from wtforms.validators import Email
+
 class CreateParticipantActivityForm(Form):
     name = StringField('Activity Name', [
         validators.Length(min=1, max=150),
@@ -118,6 +119,37 @@ class CreatePublicEnquiryForm(Form):
         validators.DataRequired()
     ])
 
+
+class CreateParticipantSignUpForm(Form):
+    name = StringField('Full Name', [
+        validators.length(min=1, max=150),
+        validators.DataRequired(message="Full name is required.")
+    ])
+
+    phone = StringField('Phone Number', [
+        validators.length(min=8, max=15, message="Phone number must be 8-15 digits."),
+        validators.DataRequired()
+    ])
+
+    email = StringField('Email', [
+        validators.Email(message="Invalid email address."),
+        validators.Optional()
+    ])
+
+    accessibility_needs = TextAreaField('Optional: Accessibility Needs (e.g., wheelchair access)', [
+        validators.Length(max=500, message="Cannot exceed 500 characters."),
+        validators.Optional()
+    ])
+
+    emergency_contact_name = StringField('Emergency Contact Name', [
+        validators.Length(min=1, max=150),
+        validators.DataRequired(message="Emergency Contact's Full name is required.")
+    ])
+
+    emergency_phone = StringField('Emergency Contact Number', [
+        validators.Length(min=8, max=15, message="Phone number must be 8-15 digits."),
+        validators.DataRequired()
+    ])
 class CreateAccountForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])

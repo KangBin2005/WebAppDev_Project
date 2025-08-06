@@ -1,0 +1,58 @@
+{% extends "/Staff/Staff_base.html" %}
+{% block title %}SGEnable - Activity Attendance{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Attendance for {{ activity.get_name() }}</h1>
+        <a href="{{ url_for('activity_participants') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left mr-1"></i> Back to Activities
+        </a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Date:</strong> {{ activity.get_date().strftime('%d %B %Y') }}</p>
+            <p><strong>Time:</strong> {{ activity.get_start_time().strftime('%H:%M') }} - {{ activity.get_end_time().strftime('%H:%M') }}</p>
+            <p><strong>Venue:</strong> {{ activity.get_venue() }}</p>
+            <p><strong>Total Participants:</strong> {{ count }}</p>
+        </div>
+    </div>
+
+    {% if count > 0 %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Accessibility Needs</th>
+                    <th>Emergency Contact</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants %}
+                <tr>
+                    <td>{{ participant.get_signup_id() }}</td>
+                    <td>{{ participant.get_name() }}</td>
+                    <td>{{ participant.get_phone() }}</td>
+                    <td>{{ participant.get_email() or '-' }}</td>
+                    <td>{{ participant.get_accessibility_needs() or '-' }}</td>
+                    <td>
+                        {{ participant.get_emergency_contact_name() or '-' }}<br>
+                        {{ participant.get_emergency_phone() or '' }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No participants have signed up for this activity yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

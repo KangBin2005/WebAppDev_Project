@@ -56,7 +56,7 @@
                         <p class="text-muted">Location: {{ activity.get_venue() }}</p>
                         <div class="d-flex justify-content-between">
 
-                            <a href="#" class="btn btn-success">Join</a>
+                            <a href="{{ url_for('activity_signup', activity_id=activity.get_activity_id()) }}" class="btn btn-success">Join</a>
                         </div>
                     </div>
                 </div>
