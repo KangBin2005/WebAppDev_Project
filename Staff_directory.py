@@ -328,6 +328,58 @@ def activity_public_delete(id):
 def profile():
     return render_template('Staff/profile.html', current_page='profile')
 
+@app.route('/analytics')
+@login_required
+def analytics():
+    # Load activities
+    with shelve.open('storage/participant_activity_storage.db', 'r') as db:
+        activities = db.get('Activities', {})
+
+    # Load signups
+    with shelve.open('storage/activity_signups.db', 'r') as db:
+        signups = db.get('Activity_Signups', {})
+
+    # Count participants per activity
+    activity_counts = {}
+    for signup in signups.values():
+        activity_id = signup.get_activity_id()
+        if activity_id in activities:
+            name = activities[activity_id].get_name()
+            activity_counts[name] = activity_counts.get(name, 0) + 1
+
+    # Sort by count descending
+    sorted_activities = sorted(activity_counts.items(), key=lambda x: x[1], reverse=True)
+
+    activity_names = [name for name, _ in sorted_activities]
+    signup_counts = [count for _, count in sorted_activities]
+
+    # Load participant enquiries and count by subject
+    with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:
+        all_enquiries = db.get('Participant_Enquiries', {}).values()
+
+    # Define the subjects to count (same as in your other route)
+    subjects = ['Activity', 'Technical Issues', 'Account Issues',
+                'General Feedback / Concerns', 'Navigation Issues', 'Others']
+
+    subject_counts = {subject: 0 for subject in subjects}
+    for enquiry in all_enquiries:
+        # Make sure enquiry is valid and has get_subject method
+        try:
+            subj = enquiry.get_subject()
+            if subj in subject_counts:
+                subject_counts[subj] += 1
+        except Exception:
+            pass  # skip invalid entries
+
+    subject_labels = list(subject_counts.keys())
+    subject_values = list(subject_counts.values())
+
+    return render_template('Staff/analytics.html',
+                           current_page='analytics',
+                           activity_names=activity_names,
+                           signup_counts=signup_counts,
+                           subject_labels=subject_labels,
+                           subject_values=subject_values)
 
 
 # <-------- Staff (Participants) Done by Kang Bin -------->
@@ -383,58 +435,6 @@ def activity_participants():
         activity_names=activity_names
     )
 
-@app.route('/analytics')
-@login_required
-def analytics():
-    # Load activities
-    with shelve.open('storage/participant_activity_storage.db', 'r') as db:
-        activities = db.get('Activities', {})
-
-    # Load signups
-    with shelve.open('storage/activity_signups.db', 'r') as db:
-        signups = db.get('Activity_Signups', {})
-
-    # Count participants per activity
-    activity_counts = {}
-    for signup in signups.values():
-        activity_id = signup.get_activity_id()
-        if activity_id in activities:
-            name = activities[activity_id].get_name()
-            activity_counts[name] = activity_counts.get(name, 0) + 1
-
-    # Sort by count descending
-    sorted_activities = sorted(activity_counts.items(), key=lambda x: x[1], reverse=True)
-
-    activity_names = [name for name, _ in sorted_activities]
-    signup_counts = [count for _, count in sorted_activities]
-
-    # Load participant enquiries and count by subject
-    with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:
-        all_enquiries = db.get('Participant_Enquiries', {}).values()
-
-    # Define the subjects to count (same as in your other route)
-    subjects = ['Activity', 'Technical Issues', 'Account Issues',
-                'General Feedback / Concerns', 'Navigation Issues', 'Others']
-
-    subject_counts = {subject: 0 for subject in subjects}
-    for enquiry in all_enquiries:
-        # Make sure enquiry is valid and has get_subject method
-        try:
-            subj = enquiry.get_subject()
-            if subj in subject_counts:
-                subject_counts[subj] += 1
-        except Exception:
-            pass  # skip invalid entries
-
-    subject_labels = list(subject_counts.keys())
-    subject_values = list(subject_counts.values())
-
-    return render_template('Staff/analytics.html',
-                           current_page='analytics',
-                           activity_names=activity_names,
-                           signup_counts=signup_counts,
-                           subject_labels=subject_labels,
-                           subject_values=subject_values)
 
 
 @app.route('/activity-management/participants/<int:activity_id>/attendance')
@@ -467,13 +467,10 @@ def view_attendance(activity_id):
         db.close()
 
     participants = []
-    counter = 1
     for signup in activity_signups_dict.values():
         if hasattr(signup, 'get_activity_id') and signup.get_activity_id() == activity_id:
-            # Add display number to the signup object
-            signup.display_number = counter
             participants.append(signup)
-            counter += 1
+
 
     return render_template(
         'Staff/participants_activity_attendance.html',

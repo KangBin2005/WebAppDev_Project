@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2cda95aa-1157-4f10-8aab-ae081a975ce2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/Staff/analytics.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="2cda95aa-1157-4f10-8aab-ae081a975ce2" name="Changes" comment="Merge remote-tracking branch 'origin/master'">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Staff_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Staff_directory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/activity_signups.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/includes/staff_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/staff_navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db-shm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db-wal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Staff/participants_activity_attendance.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/participants_activity_attendance.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +27,12 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="OreoDevourer &lt;skylersiew@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -50,18 +55,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.PWID&Public_directory.executor": "Run",
-    "Python.Participant_Activity.executor": "Run",
-    "Python.Staff_directory.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.PWID&amp;Public_directory.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Participant_Activity.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Staff_directory.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -77,6 +82,29 @@
       <option name="presentableId" value="Default" />
       <updated>1754555001187</updated>
     </task>
+    <task id="LOCAL-00001" summary="Reapply &quot;Update activity_public.html&quot;&#10;&#10;This reverts commit cabe5cdef920e17171e72331709db5f782745163.">
+      <option name="closed" value="true" />
+      <created>1754561200130</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754561200130</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Merge remote-tracking branch 'origin/master'">
+      <option name="closed" value="true" />
+      <created>1754561219041</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1754561219041</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added Participants Analytics" />
+    <MESSAGE value="Reapply &quot;Update activity_public.html&quot;&#10;&#10;This reverts commit cabe5cdef920e17171e72331709db5f782745163." />
+    <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'" />
   </component>
 </project>
