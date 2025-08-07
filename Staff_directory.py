@@ -757,7 +757,7 @@ def staff_delete_public_enquiry(id):
 
     return redirect(url_for('enquiry_public'))
 
-@app.route('/product/management')
+@app.route('/store_management/product_management')
 @login_required
 def manage_product():
     product_list = []
@@ -783,47 +783,78 @@ def manage_product():
 def create_product():
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
-        # Save form data to shelf if successful
-        product_dict = {}
         productdb = shelve.open('storage/storage_products.db', 'c')
         try:
             product_dict = productdb['product']
         except:
+            product_dict = {}
             print("Error in retrieving products from storage_products.db.")
+
         new_product = Product.Product(
             create_product_form.product.data,
             create_product_form.description.data,
             create_product_form.price.data,
-            create_product_form.image_name.data)
+            create_product_form.image_name.data
+        )
+
         product_dict[new_product.get_product_id()] = new_product
         productdb['product'] = product_dict
-
         productdb.close()
-        print("Product created successfully")
         # Return user to management page
+        print("Product created successfully")
         return redirect(url_for('manage_product'))
-    # If form unsuccessful / unfinished return user to form page
+
     return render_template('Staff/product_create.html', form=create_product_form)
 
-@app.route('/store_management/product_management/update-product', methods=['GET', 'POST'])
-def update_product():
+@app.route('/store_management/product_management/<int:id>', methods=['GET', 'POST'])
+def update_product(id):
     update_product_form = CreateProductForm(request.form)
+
     if request.method == 'POST' and update_product_form.validate():
+        db = shelve.open('storage/storage_products.db', 'w')
+        try:
+            product_dict = db['product']
+        except:
+            db.close()
+            print("Error in retrieving product data for updating.")
+            return redirect(url_for('manage_product'))
+
+        product = product_dict.get(id)  # IDs stored as integers
+        if product:
+            product.set_product(update_product_form.product.data)
+            product.set_description(update_product_form.description.data)
+            product.set_price(update_product_form.price.data)
+            product.set_image_name(update_product_form.image_name.data)
+            db['product'] = product_dict
+        else:
+            print(f"Product with ID {id} not found during update.")
+
+        db.close()
         return redirect(url_for('manage_product'))
+
     else:
-        product_dict = {}
         db = shelve.open('storage/storage_products.db', 'r')
-        product_dict = db['Product_id   ']
+        try:
+            product_dict = db['product']
+        except:
+            db.close()
+            print("Error in retrieving product data for editing.")
+            return redirect(url_for('manage_product'))
+
+        product = product_dict.get(id)  # IDs stored as integers
         db.close()
 
-        product = product_dict.get(id)
-        update_product_form.product.data = product.get_product()
-        update_product_form.description.data = product.get_description()
-        update_product_form.price.data = product.get_price()
-        update_product_form.image_name.data = product.get_image_name()
+        if product:
+            update_product_form.product.data = product.get_product()
+            update_product_form.description.data = product.get_description()
+            update_product_form.price.data = product.get_price()
+            update_product_form.image_name.data = product.get_image_name()
+        else:
+            print(f"Product with ID {id} not found.")
+            return redirect(url_for('manage_product'))
 
-    return render_template('Staff/product_update.html',
-                               form=update_product_form)
+    return render_template('Staff/product_update.html', form=update_product_form)
+
 
 @app.route('/enquiry-management')
 def manage_enquiries():

@@ -35,5 +35,5 @@ class Product:
     def set_price(self, price):
         self.__price = price
 
-    def set_image_name(self, image_url):
-        self.__image_name = image_url
+    def set_image_name(self, image_name):
+        self.__image_name = image_name
