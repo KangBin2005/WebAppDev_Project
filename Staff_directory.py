@@ -467,9 +467,12 @@ def view_attendance(activity_id):
         db.close()
 
     participants = []
+    counter = 1  # For per-activity numbering
     for signup in activity_signups_dict.values():
         if hasattr(signup, 'get_activity_id') and signup.get_activity_id() == activity_id:
+            signup.display_number = counter
             participants.append(signup)
+            counter += 1
 
 
     return render_template(

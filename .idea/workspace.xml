@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2cda95aa-1157-4f10-8aab-ae081a975ce2" name="Changes" comment="Merge remote-tracking branch 'origin/master'">
+    <list default="true" id="2cda95aa-1157-4f10-8aab-ae081a975ce2" name="Changes" comment="ID Sync in Participants Activities Sign Up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Staff_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Staff_directory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db-shm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db-wal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/activity_signups.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/participant_activity_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_activity_storage.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Staff/participants_activity_attendance.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/participants_activity_attendance.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -98,13 +96,22 @@
       <option name="project" value="LOCAL" />
       <updated>1754561219041</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="ID Sync in Participants Activities Sign Up">
+      <option name="closed" value="true" />
+      <created>1754572787281</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1754572787281</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added Participants Analytics" />
     <MESSAGE value="Reapply &quot;Update activity_public.html&quot;&#10;&#10;This reverts commit cabe5cdef920e17171e72331709db5f782745163." />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'" />
+    <MESSAGE value="ID Sync in Participants Activities Sign Up" />
+    <option name="LAST_COMMIT_MESSAGE" value="ID Sync in Participants Activities Sign Up" />
   </component>
 </project>

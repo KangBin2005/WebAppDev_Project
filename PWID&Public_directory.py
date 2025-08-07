@@ -305,7 +305,7 @@ def participant_activities():
             activities_list = sorted(
                 filtered_activities,
                 key=lambda x: x.get_date(),
-                reverse=True
+
             )
 
             return render_template(
