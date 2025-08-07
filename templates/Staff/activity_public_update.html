@@ -25,9 +25,7 @@
                         {{ render_field(form.activity_end_datetime, class="form-control") }}
                     </div>
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Update
-                    </button>
+                    <input type="submit" value="Submit" class="btn btn-primary"/>
                     <a href="{{ url_for('activity_public') }}" class="btn btn-secondary ml-2">Cancel</a>
                 </form>
             </div>

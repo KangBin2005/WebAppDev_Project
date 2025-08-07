@@ -204,40 +204,27 @@ def delete_account(id):
 @app.route('/activity-management/public', methods=['GET', 'POST'])
 @login_required
 def activity_public():
-    # Get filter parameters
-    selected_activity = request.args.get('activity', '')
-    selected_venue = request.args.get('venue', '')
+    search_query = request.args.get('search', '').lower()
     page = request.args.get('page', 1, type=int)
-    per_page = 6  # Items per page
+    per_page = 5  # Number of activities per page
 
-    # Open database
     db = shelve.open('storage/storage_activities.db', 'r')
     activities_dict = db.get('Activities', {})
     db.close()
 
-    # Get all unique venues and activity names for dropdowns
-    all_activities = list(activities_dict.values())
-    venues = sorted({activity.get_activity_venue() for activity in all_activities})
-    activity_names = sorted({activity.get_activity_name() for activity in all_activities})
+    activities_list = list(activities_dict.values())
 
-    # Apply filters
-    filtered_activities = []
-    for activity in all_activities:
-        activity_match = not selected_activity or activity.get_activity_name() == selected_activity
-        venue_match = not selected_venue or activity.get_activity_venue() == selected_venue
+    if search_query:                # for search filtering
+        activities_list = [
+            activity for activity in activities_list
+            if search_query in activity.get_activity_name().lower()
+        ]
 
-        if activity_match and venue_match:
-            filtered_activities.append(activity)
-
-    # Sort by date (newest first)
-    filtered_activities.sort(key=lambda x: x.get_activity_start_datetime(), reverse=True)
-
-    # Pagination
-    total = len(filtered_activities)
-    pages = ceil(total / per_page)
+    total = len(activities_list)
+    pages = ceil(total / per_page) # round up to nearest integer
     start = (page - 1) * per_page
     end = start + per_page
-    paginated_activities = filtered_activities[start:end]
+    paginated_activities = activities_list[start:end]
 
     return render_template(
         'Staff/activity_public.html',
@@ -246,10 +233,7 @@ def activity_public():
         activities=paginated_activities,
         page=page,
         pages=pages,
-        selected_activity=selected_activity,
-        selected_venue=selected_venue,
-        venues=venues,
-        activity_names=activity_names)
+        search_query=search_query)
 
 
 @app.route('/activity-management/public/create', methods=['GET','POST'])
@@ -429,9 +413,13 @@ def view_attendance(activity_id):
         db.close()
 
     participants = []
+    counter = 1
     for signup in activity_signups_dict.values():
         if hasattr(signup, 'get_activity_id') and signup.get_activity_id() == activity_id:
+            # Add display number to the signup object
+            signup.display_number = counter
             participants.append(signup)
+            counter += 1
 
     return render_template(
         'Staff/participants_activity_attendance.html',

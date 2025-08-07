@@ -53,9 +53,7 @@
             <li class="nav-item {% if current_page == 'dashboard' %}active{% endif %}">
                 <a class="nav-link text-white" href="{{ url_for('dashboard') }}">Dashboard</a>
             </li>
-            <li class="nav-item dropdown {% if current_page in ['activity_public_update', 'activity_public_create', 'activity_public','activity_participants'] %}active{% endif %}">
-                <a class="nav-link text-white" href="{{ url_for('manage_accounts') }}">Account Management</a>
-            </li>
+            <li class="nav-item {% if current_page == 'account_management' %}active{% endif %}">
 
             <!-- Activity Management Dropdown -->
             <li class="nav-item dropdown {% if current_page in ['manage_activities', 'activity_participants', 'activity_public'] %}active{% endif %}">

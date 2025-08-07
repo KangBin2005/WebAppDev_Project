@@ -24,6 +24,7 @@
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Email</th>
@@ -34,6 +35,7 @@
             <tbody>
                 {% for participant in participants %}
                 <tr>
+                    <td>{{ participant.display_number }}</td>
                     <td>{{ participant.get_name() }}</td>
                     <td>{{ participant.get_phone() }}</td>
                     <td>{{ participant.get_email() or '-' }}</td>

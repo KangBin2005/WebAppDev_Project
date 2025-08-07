@@ -2,7 +2,6 @@
 {% block title %}SGEnable - Manage Activities (Public){% endblock %}
 
 {% block content %}
-<div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="display-4">Activity Management - Public</h1>
         <a href="/activity-management/public/create" class="btn btn-success mr-3">
@@ -18,39 +17,15 @@
         {% endif %}
     </div>
 
-    <div class="mt-3">
-        <form method="GET" action="{{ url_for('activity_public') }}">
-            <input type="hidden" name="page" value="1">
-            <div class="row align-items-end mb-4">
-                <div class="col-md-5">
-                    <div class="form-group mb-0">
-                        <label for="activity">Activity Name</label>
-                        <select class="form-control" id="activity" name="activity">
-                            <option value="">All Activities</option>
-                            {% for name in activity_names %}
-                            <option value="{{ name }}" {% if selected_activity==name %}selected{% endif %}>
-                                {{ name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="form-group mb-0">
-                        <label for="venue">Venue</label>
-                        <select class="form-control" id="venue" name="venue">
-                            <option value="">All Venues</option>
-                            {% for venue in venues %}
-                            <option value="{{ venue }}" {% if selected_venue==venue %}selected{% endif %}>
-                                {{ venue }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100" style="height: 38px;">
-                        <i class="fas fa-search mr-2"></i> Filter
+    <div>
+        <form class="form-inline mb-4 d-flex justify-content-center" method="GET" action="{{ url_for('activity_public') }}">
+            <input type="hidden" name="page" value="1">  <!-- Resets to page 1 on new search -->
+            <div class="input-group w-75">
+                <input type="text" name="search" class="form-control" placeholder="Search Activities..."
+                       value="{{ request.args.get('search', '') }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
@@ -60,19 +35,16 @@
     <div class="container mt-4">
         <div class="row">
             {% for activity in activities %}
-            <div class="col-md-6 mb-4">
+            <div class="col-10 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.get_activity_name() }}</h5>
                         <p class="card-text">{{ activity.get_activity_details() }}</p>
-                        <div class="mb-2">
-                            <small class="text-muted">Venue:</small>
-                            <small>{{ activity.get_activity_venue() }}</small>
-                        </div>
-                        <div class="mb-2">
+                        <small><span class="text-muted">Venue: </span>{{ activity.get_activity_venue() }}</small>
+                        <p class="card-text">
                             {% set start = activity.get_activity_start_datetime() %}
                             {% set end = activity.get_activity_end_datetime() %}
-                            <small><span class="text-muted">Date: </span>
+                            <small><span class="text-muted">Date & Time:</span>
                                 {{ start.strftime('%d %b %Y') }}, {{ start.hour % 12 if start.hour % 12 else 12 }}:{{ '%02d' % start.minute }} {{ start.strftime('%p') }}
                                 –
                                 {% if start.date() == end.date() %}
@@ -81,7 +53,7 @@
                                     {{ end.strftime('%d %b %Y') }}, {{ end.hour % 12 if end.hour % 12 else 12 }}:{{ '%02d' % end.minute }} {{ end.strftime('%p') }}
                                 {% endif %}
                             </small>
-                        </div>
+                        </p>
                     </div>
                     <div class="card-footer d-flex justify-content-start">
                         <a href="/activity-management/public/{{ activity.get_activity_id() }}" class="d-flex align-items-center btn btn-sm btn-warning px-3 mr-4 ">
@@ -154,5 +126,4 @@
         </nav>
         {% endif %}
     </div>
-</div>
 {% endblock %}
