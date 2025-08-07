@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateProductForm, CreateActivityForm, CreateAccountForm
 
-import shelve, Participant_Activity, Account, Activity_public, Product
+import shelve, os, Participant_Activity, Account, Activity_public, Product
 
 from math import ceil
 from datetime import timedelta
@@ -706,19 +706,23 @@ def staff_delete_public_enquiry(id):
 @app.route('/product/management')
 @login_required
 def manage_product():
-    products_dict = {}
-    productdb = shelve.open('storage_products.db', 'r')
-    products_dict = productdb['product']
-    productdb.close()
-
     product_list = []
-    for product in products_dict:
-        product = products_dict.get(product)
-        product_list.append(product)
+    count = 0
+
+    try:
+        if os.path.exists('storage/storage_products.db'):  # Check if .db actually exists
+            with shelve.open('storage/storage_products.db', flag='r') as productdb:
+                products_dict = productdb.get('product', {})
+                product_list = list(products_dict.values())
+                count = len(product_list)
+    except Exception as e:
+        print(f"Error reading product database: {e}")
+        # You can also log this error or flash a message
+
     return render_template('Staff/product_management.html',
                            current_page='store_management',
-                           count = len(products_dict),
-                           product_list = product_list)
+                           count=count,
+                           product_list=product_list)
 
 
 @app.route('/store_management/product_management/create-product', methods=['GET', 'POST'])
@@ -727,7 +731,7 @@ def create_product():
     if request.method == 'POST' and create_product_form.validate():
         # Save form data to shelf if successful
         product_dict = {}
-        productdb = shelve.open('storage_products.db', 'c')
+        productdb = shelve.open('storage/storage_products.db', 'c')
         try:
             product_dict = productdb['product']
         except:

@@ -203,7 +203,7 @@ def public_donations():
             'product': 'Canvas Tote Bag',
             'description': 'Eco-friendly bag handmade by volunteers.',
             'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
+            'image_url': 'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
         },
         {
             'product': 'Canvas Tote Bag',
