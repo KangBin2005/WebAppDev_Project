@@ -103,9 +103,9 @@ def sync_public_enquiry_id():
 
 def sync_participant_activity_signup_id():
     try:
-        db = shelve.open('storage/activity_signups_storage.db', 'r')
+        db = shelve.open('storage/activity_signups.db', 'r')
         signups_dict = db['Activity_Signups']
-        max_id = max(signup.get_signup_id for signup in signups_dict.values())
+        max_id = max(signup.get_signup_id() for signup in signups_dict.values())
         Participant_Activity_Sign_Up.ParticipantActivitySignUp.count_id = max_id
         db.close()
     except KeyError:
@@ -305,7 +305,7 @@ def participant_activities():
             activities_list = sorted(
                 filtered_activities,
                 key=lambda x: x.get_date(),
-                reverse=True
+
             )
 
             return render_template(
