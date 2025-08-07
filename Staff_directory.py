@@ -204,27 +204,40 @@ def delete_account(id):
 @app.route('/activity-management/public', methods=['GET', 'POST'])
 @login_required
 def activity_public():
-    search_query = request.args.get('search', '').lower()
+    # Get filter parameters
+    selected_activity = request.args.get('activity', '')
+    selected_venue = request.args.get('venue', '')
     page = request.args.get('page', 1, type=int)
-    per_page = 5  # Number of activities per page
+    per_page = 6  # Items per page
 
+    # Open database
     db = shelve.open('storage/storage_activities.db', 'r')
     activities_dict = db.get('Activities', {})
     db.close()
 
-    activities_list = list(activities_dict.values())
+    # Get all unique venues and activity names for dropdowns
+    all_activities = list(activities_dict.values())
+    venues = sorted({activity.get_activity_venue() for activity in all_activities})
+    activity_names = sorted({activity.get_activity_name() for activity in all_activities})
 
-    if search_query:                # for search filtering
-        activities_list = [
-            activity for activity in activities_list
-            if search_query in activity.get_activity_name().lower()
-        ]
+    # Apply filters
+    filtered_activities = []
+    for activity in all_activities:
+        activity_match = not selected_activity or activity.get_activity_name() == selected_activity
+        venue_match = not selected_venue or activity.get_activity_venue() == selected_venue
 
-    total = len(activities_list)
-    pages = ceil(total / per_page) # round up to nearest integer
+        if activity_match and venue_match:
+            filtered_activities.append(activity)
+
+    # Sort by date (newest first)
+    filtered_activities.sort(key=lambda x: x.get_activity_start_datetime(), reverse=True)
+
+    # Pagination
+    total = len(filtered_activities)
+    pages = ceil(total / per_page)
     start = (page - 1) * per_page
     end = start + per_page
-    paginated_activities = activities_list[start:end]
+    paginated_activities = filtered_activities[start:end]
 
     return render_template(
         'Staff/activity_public.html',
@@ -233,7 +246,10 @@ def activity_public():
         activities=paginated_activities,
         page=page,
         pages=pages,
-        search_query=search_query)
+        selected_activity=selected_activity,
+        selected_venue=selected_venue,
+        venues=venues,
+        activity_names=activity_names)
 
 
 @app.route('/activity-management/public/create', methods=['GET','POST'])
