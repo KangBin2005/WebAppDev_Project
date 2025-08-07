@@ -54,8 +54,7 @@
                 <a class="nav-link text-white" href="{{ url_for('dashboard') }}">Dashboard</a>
             </li>
             <li class="nav-item text-center {% if current_page == 'account_management' %}active{% endif %}">
-                <a class="nav-link text-white" href="{{ url_for('manage_accounts') }}">Account
-                    Management</a>
+                <a class="nav-link text-white" href="{{ url_for('manage_accounts') }}">Accounts</a>
             </li>
 
             <li class="nav-item {% if current_page == 'analytics' %}active{% endif %}">
@@ -68,7 +67,7 @@
             <li class="nav-item dropdown {% if current_page in ['manage_activities', 'activity_participants', 'activity_public'] %}active{% endif %}">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="activityDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Activity Management
+                    Activities
                 </a>
                 <div class="dropdown-menu" aria-labelledby="activityDropdown">
                     <a class="dropdown-item {% if current_page == 'activity_participants' %}active{% endif %}"
@@ -82,7 +81,7 @@
             <li class="nav-item dropdown {% if current_page in ['manage_enquires', 'enquiry_participants', 'enquiry_public'] %}active{% endif %}">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="enquiryDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Enquiry Management
+                    Enquiries
                 </a>
                 <div class="dropdown-menu" aria-labelledby="enquiryDropdown">
                     <a class="dropdown-item {% if current_page == 'enquiry_participants' %}active{% endif %}"
@@ -96,7 +95,7 @@
         <li class="nav-item dropdown {% if current_page in ['store_management', 'transaction_management', 'product_management'] %}active{% endif %}">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="storeDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Store Management
+                    Store
                 </a>
                 <div class="dropdown-menu" aria-labelledby="storeDropdown">
                     <a class="dropdown-item {% if current_page == 'product_management' %}active{% endif %}"
