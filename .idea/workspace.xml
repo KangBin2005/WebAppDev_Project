@@ -6,10 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2cda95aa-1157-4f10-8aab-ae081a975ce2" name="Changes" comment="Updated files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Product.py" beforeDir="false" afterPath="$PROJECT_DIR$/Product.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Staff_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Staff_directory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/storage_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/storage_accounts.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Staff/account_management.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/account_management.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Staff/product_management.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/product_management.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/includes/staff_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/staff_navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754582661919</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Updated files">
+      <option name="closed" value="true" />
+      <created>1754590453729</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1754590453730</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -162,7 +170,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="Updated files" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754590058663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754591504073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WebAppDev_Project$Test.coverage" NAME="Test Coverage Results" MODIFIED="1754590040345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WebAppDev_Project$PWID_Public_directory.coverage" NAME="PWID&amp;Public_directory Coverage Results" MODIFIED="1754557113296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
