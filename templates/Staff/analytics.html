@@ -1,0 +1,131 @@
+{% extends "Staff/Staff_base.html" %}
+{% block title %}Activity Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Participants Analytics Dashboard</h2>
+
+    <div class="row">
+        <!-- Left: Activity Participation Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Activity Participation Overview</h5>
+                    <canvas id="activityChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Enquiries by Subject Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Participants Enquiries by Subject</h5>
+                    <canvas id="enquiryChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const colors = [
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(153, 102, 255, 0.7)',
+            'rgba(255, 159, 64, 0.7)',
+            'rgba(201, 203, 207, 0.7)'
+        ];
+
+        // === Activity Participation Chart ===
+        const ctx1 = document.getElementById('activityChart').getContext('2d');
+        const activityNames = {{ activity_names | tojson }};
+        const signupCounts = {{ signup_counts | tojson }};
+
+        const datasets1 = activityNames.map((activity, i) => ({
+            label: activity,
+            data: [signupCounts[i]],
+            backgroundColor: colors[i % colors.length],
+            borderColor: colors[i % colors.length],
+            borderWidth: 1
+        }));
+
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: [''],  // dummy label for y-axis
+                datasets: datasets1
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'right' },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${ctx.dataset.data[0]}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Participants' },
+                        ticks: { stepSize: 1 }
+                    },
+                    y: {
+                        title: { display: true, text: 'Activity Name' },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        // === Enquiries by Subject Chart ===
+        const ctx2 = document.getElementById('enquiryChart').getContext('2d');
+        const enquirySubjects = {{ subject_labels | tojson }};
+        const enquiryCounts = {{ subject_values | tojson }};
+
+        const datasets2 = enquirySubjects.map((subject, i) => ({
+            label: subject,
+            data: [enquiryCounts[i]],
+            backgroundColor: colors[i % colors.length],
+            borderColor: colors[i % colors.length],
+            borderWidth: 1
+        }));
+
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: [''],  // dummy label for y-axis
+                datasets: datasets2
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'right' },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${ctx.dataset.data[0]}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Enquiries' },
+                        ticks: { stepSize: 1 }
+                    },
+                    y: {
+                        title: { display: true, text: 'Subject' },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+{% endblock %}
