@@ -7,7 +7,7 @@ class Product:
         self.__product = product
         self.__description = description
         self.__price = price
-        self.__image_url = image_url
+        self.__image_name = image_url
 
     # Accessors (Getters)
     def get_product_id(self):
@@ -23,7 +23,7 @@ class Product:
         return self.__price
 
     def get_image_name(self):
-        return self.__image_url
+        return self.__image_name
 
     # Mutators (Setters)
     def set_product(self, product):
@@ -35,5 +35,5 @@ class Product:
     def set_price(self, price):
         self.__price = price
 
-    def set_image_url(self, image_url):
-        self.__image_url = image_url
+    def set_image_name(self, image_url):
+        self.__image_name = image_url

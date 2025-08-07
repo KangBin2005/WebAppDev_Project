@@ -805,6 +805,26 @@ def create_product():
     # If form unsuccessful / unfinished return user to form page
     return render_template('Staff/product_create.html', form=create_product_form)
 
+@app.route('/store_management/product_management/update-product', methods=['GET', 'POST'])
+def update_product():
+    update_product_form = CreateProductForm(request.form)
+    if request.method == 'POST' and update_product_form.validate():
+        return redirect(url_for('manage_product'))
+    else:
+        product_dict = {}
+        db = shelve.open('storage/storage_products.db', 'r')
+        product_dict = db['Product_id   ']
+        db.close()
+
+        product = product_dict.get(id)
+        update_product_form.product.data = product.get_product()
+        update_product_form.description.data = product.get_description()
+        update_product_form.price.data = product.get_price()
+        update_product_form.image_name.data = product.get_image_name()
+
+    return render_template('Staff/product_update.html',
+                               form=update_product_form)
+
 @app.route('/enquiry-management')
 def manage_enquiries():
     return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
