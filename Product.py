@@ -22,7 +22,7 @@ class Product:
     def get_price(self):
         return self.__price
 
-    def get_image_url(self):
+    def get_image_name(self):
         return self.__image_url
 
     # Mutators (Setters)

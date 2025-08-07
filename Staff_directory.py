@@ -794,7 +794,7 @@ def create_product():
             create_product_form.product.data,
             create_product_form.description.data,
             create_product_form.price.data,
-            create_product_form.image_url.data)
+            create_product_form.image_name.data)
         product_dict[new_product.get_product_id()] = new_product
         productdb['product'] = product_dict
 

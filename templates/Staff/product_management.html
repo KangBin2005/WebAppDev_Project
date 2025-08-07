@@ -24,7 +24,7 @@
             <th>Product</th>
             <th>Description</th>
             <th>Price</th>
-            <th>Image URL</th>
+            <th>Image</th>
         </tr>
         </thead>
         <tbody>
@@ -35,11 +35,12 @@
                 <td>{{ product.get_description() }}</td>
                 <td>{{ product.get_price() }}</td>
                 <td>
-                    <a href="{{ url_for('static', filename='storage/products/' + product.name + '.jpg') }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                        View Image
-<                   /a>
+                    <a href="{{ url_for('static', filename='images/products/' + product.get_image_name()) }}" target="_blank" class="btn btn-warning px-3">
+                        <i class="fas fa-image mr-1"></i>View Image
+                    </a>
                 </td>
-                <td><a href="/product-management/{{product.get_product_id()}}" class="btn btn-warning px-3">
+                <td>
+                    <a href="/product-management/{{product.get_product_id()}}" class="btn btn-warning px-3">
                         <i class="fas fa-edit mr-1"></i>Edit
                     </a>
                 </td>

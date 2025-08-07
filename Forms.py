@@ -69,7 +69,7 @@ class CreateProductForm(Form):
         places=2,
         rounding=decimal.ROUND_UP,
         validators=[validators.DataRequired()])
-    image_url = StringField('Image URL', [
+    image_name = StringField('Image Name', [
         validators.DataRequired()
     ])
 
