@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46dc71d6-09cc-4223-9d87-e54b68f4422d" name="Changes" comment="Merge remote-tracking branch 'origin/master'">
+    <list default="true" id="8ce9458f-55f7-48b0-be54-992e51ccaf7a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Staff_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Staff_directory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/activity_signups.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Staff/participants_activity_attendance.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/participants_activity_attendance.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -14,53 +18,39 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-        <option value="HTML File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="kiythes &lt;gabyeo06@gmail.com&gt;" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;KangBin2005&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "KangBin2005"
   }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/KangBin2005/WebAppDev_Project.git&quot;,
-    &quot;accountId&quot;: &quot;0c824a9b-fc4b-4f6d-8d9d-34b07240ec50&quot;
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/KangBin2005/WebAppDev_Project.git",
+    "accountId": "0c824a9b-fc4b-4f6d-8d9d-34b07240ec50"
   }
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
-}</component>
-  <component name="ProjectId" id="30uFPIleZ8xmjwst7eR1c1C291f" />
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="30us5cX4lx9MCA85G3AblvxSWNX" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.PWID&amp;Public_directory.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Staff_directory.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.PWID&Public_directory.executor": "Run",
+    "Python.Staff_directory.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -70,45 +60,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="46dc71d6-09cc-4223-9d87-e54b68f4422d" name="Changes" comment="" />
-      <created>1754469525670</created>
+      <changelist id="8ce9458f-55f7-48b0-be54-992e51ccaf7a" name="Changes" comment="" />
+      <created>1754488609325</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1754469525670</updated>
+      <updated>1754488609325</updated>
     </task>
-    <task id="LOCAL-00001" summary="Added activity venue attribute in activty_public.py">
-      <option name="closed" value="true" />
-      <created>1754470435129</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1754470435129</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Merge remote-tracking branch 'origin/master'">
-      <option name="closed" value="true" />
-      <created>1754482284668</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1754482284668</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update Staff_directory.py" />
-    <MESSAGE value="Added activity venue attribute in activty_public.py" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Participant_Activity_Sign_Up.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
