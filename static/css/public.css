@@ -41,6 +41,7 @@
     color: white;
 }
 
-.product-listing {
-
+#product-listing img{
+    max-height: 300px;
+    object-fit: contain;
 }
