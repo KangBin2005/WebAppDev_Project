@@ -1,9 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import shelve, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
 from datetime import date
 from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm
+from functools import wraps
 
 app = Flask(__name__)
+app.secret_key = 'fb814d13-2f3e-48b1-937b-ef33a4d35c18'
+
+# PWID users:
+# Amy: password
+# Julie: password123
+
+def login_required(f):
+    @wraps(f)                                       # Prevent access if not logged in
+    def custom_login(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return custom_login
+
 
 # ========================
 # Sample SG Enable Outlets Data
@@ -243,6 +258,7 @@ def public_donations():
 # Participant Routes (under /participants/)
 # ========================
 @app.route('/participants/home')
+@login_required
 def participant_home():
     try:
         # Get today's date
@@ -280,6 +296,7 @@ def participant_home():
 
 
 @app.route('/participants/my-activities', methods=['GET'])
+@login_required
 def participant_activities():
     try:
         # Get filter parameters
@@ -332,6 +349,7 @@ def participant_activities():
 
 
 @app.route('/activity/<int:activity_id>/signup', methods=['GET', 'POST'])
+@login_required
 def activity_signup(activity_id):
     # Sync ID counter
     sync_participant_activity_signup_id()
@@ -384,12 +402,14 @@ def activity_signup(activity_id):
                            current_page='activity_signup')
 
 @app.route('/participants/outlets')
+@login_required
 def participant_locations():
     return render_template('PWIDS/outlets.html',
                          outlets=outlets,
                          current_page='our_outlets')
 
 @app.route('/participants/outlet/<int:outlet_id>')
+@login_required
 def outlet_map(outlet_id):
     outlet = outlets.get(outlet_id)
     if not outlet:
@@ -401,6 +421,7 @@ def outlet_map(outlet_id):
                            current_page='outlet_map')
 
 @app.route('/participants/help', methods=['GET', 'POST'])
+@login_required
 def participant_help():
     sync_participant_enquiry_id()
     create_enquiry_form = CreateParticipantEnquiryForm(request.form)
@@ -464,6 +485,7 @@ def participant_help():
                            )
 
 @app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def update_participant_enquiry(id):
     update_participant_enquiry_form = CreateParticipantEnquiryForm(request.form)
     if request.method == "POST" and update_participant_enquiry_form.validate():
@@ -490,6 +512,7 @@ def update_participant_enquiry(id):
         return render_template('PWIDS/update_enquiry.html', form=update_participant_enquiry_form)
 
 @app.route('/delete_participant_enquiry/<int:id>', methods=['POST'])
+@login_required
 def delete_participant_enquiry(id):
     enquiries_dict = {}
     db = shelve.open('storage/participant_enquiries_storage.db', 'w')
@@ -503,13 +526,53 @@ def delete_participant_enquiry(id):
 # ========================
 # Login_Sign Up Routes
 # ========================
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        db = shelve.open('storage/user_storage.db', 'c')
+        users = db.get('Users', {})
+        db.close()
+
+        if username in users and users[username] == password:
+            session['user'] = username
+            flash("Logged in successfully!", "success")
+            return redirect(url_for('participant_home'))
+        else:
+            flash("Invalid username or password", "error")
     return render_template('Login_SignUp/login.html', current_page='login')
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        confirm_pw = request.form['confirm_password']
+
+
+        db = shelve.open('storage/user_storage.db', writeback=True)
+        users = db.get('Users', {})
+
+        if username in users:
+            flash('Username already taken.', 'error')
+        elif password != confirm_pw:
+            flash('Passwords do not match.', 'error')
+        else:
+            users[username] = password
+            db['Users'] = users
+            db.close()
+            flash('Signup successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+
+        db.close()
     return render_template('Login_SignUp/signup.html', current_page='signup')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('public_home'))
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -864,7 +864,7 @@ def delete_product(id):
     products_dict.pop(id)
 
     productdb['product'] = products_dict
-    db.close()
+    productdb.close()
 
     return redirect(url_for('manage_product'))
 
