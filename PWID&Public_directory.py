@@ -10,6 +10,7 @@ app.secret_key = 'fb814d13-2f3e-48b1-937b-ef33a4d35c18'
 # PWID users:
 # Amy: password
 # Julie: password123
+# mary: mary123
 
 def login_required(f):
     @wraps(f)                                       # Prevent access if not logged in
@@ -267,7 +268,6 @@ def participant_home():
             upcoming_activities=[]
         )
 
-
 @app.route('/participants/my-activities', methods=['GET'])
 @login_required
 def participant_activities():
@@ -278,30 +278,49 @@ def participant_activities():
 
         with shelve.open('storage/participant_activity_storage.db', 'r') as db:
             activities_dict = db.get('Activities', {})
-
-            # Get all unique activity names and venues
             all_activities = list(activities_dict.values())
+
+            # Get user's registered activities
+            username = session.get('user')
+            registered_activity_ids = set()
+            with shelve.open('storage/activity_signups.db', 'r') as signups_db:
+                signups_dict = signups_db.get('Activity_Signups', {})
+                for signup in signups_dict.values():
+                    if signup.get_name() == username:
+                        registered_activity_ids.add(signup.get_activity_id())
+
+            # Split activities into upcoming and registered
+            upcoming_activities = []
+            registered_activities = []
+
+            today = date.today()
+
+            for activity in all_activities:
+                # Apply filters
+                if (activity_name_filter and activity.get_name() != activity_name_filter) or \
+                        (location_filter and activity.get_venue() != location_filter):
+                    continue
+
+                # Registered activities (regardless of date)
+                if activity.get_activity_id() in registered_activity_ids:
+                    registered_activities.append(activity)
+                # Upcoming activities (future only + not registered)
+                elif activity.get_date() >= today:
+                    upcoming_activities.append(activity)
+
+            # Sort activities by date
+            upcoming_activities.sort(key=lambda x: x.get_date())
+            registered_activities.sort(key=lambda x: x.get_date())
+
+            # Get all unique activity names and venues for filters
             activity_names = sorted({a.get_name() for a in all_activities})
             venues = sorted({a.get_venue() for a in all_activities})
-
-            # Filter activities
-            filtered_activities = [
-                a for a in all_activities
-                if (not activity_name_filter or a.get_name() == activity_name_filter) and
-                   (not location_filter or a.get_venue() == location_filter)
-            ]
-
-            # Sort by date (newest first)
-            activities_list = sorted(
-                filtered_activities,
-                key=lambda x: x.get_date(),
-
-            )
 
             return render_template(
                 'PWIDS/my_activities.html',
                 current_page='participant_activities',
-                activities_list=activities_list,
+                upcoming_activities=upcoming_activities,
+                registered_activities=registered_activities,
                 activity_names=activity_names,
                 venues=venues,
                 selected_activity=activity_name_filter,
@@ -313,7 +332,8 @@ def participant_activities():
         return render_template(
             'PWIDS/my_activities.html',
             current_page='participant_activities',
-            activities_list=[],
+            upcoming_activities=[],
+            registered_activities=[],
             activity_names=[],
             venues=[],
             selected_activity='',
@@ -340,6 +360,22 @@ def activity_signup(activity_id):
     except Exception as e:
         print(f"Error accessing activity data: {str(e)}")
         return redirect(url_for('participant_activities'))
+
+    # Prefill name from logged-in user's session if GET request
+    if request.method == 'GET':
+        # Get username from session
+        username = session.get('user', '')
+        # Open user storage to get user details
+        try:
+            with shelve.open('storage/user_storage.db', 'r') as db:
+                users_dict = db.get('Users', {})
+                # Here you would need to modify to store more user details
+                # Currently only stores username:password pairs
+                # For now, we'll just use the username as the name
+                signup_form.name.data = username
+        except Exception as e:
+            print(f"Error accessing user data: {str(e)}")
+            # Continue without prefilling if there's an error
 
     if request.method == 'POST' and signup_form.validate():
         try:
@@ -373,6 +409,29 @@ def activity_signup(activity_id):
                            form=signup_form,
                            activity=activity,
                            current_page='activity_signup')
+
+@app.route('/withdraw-participant-activity/<int:activity_id>', methods=['POST'])
+@login_required
+def withdraw_activity(activity_id):
+    db = shelve.open('storage/activity_signups.db', 'w')
+    signups_dict = db.get('Activity_Signups', {})
+
+    username = session.get('user')
+
+    # Find and remove the signup(s) for this user and activity
+    signup_ids_to_remove = [
+        signup_id for signup_id, signup in signups_dict.items()
+        if signup.get_name() == username and signup.get_activity_id() == activity_id
+    ]
+
+    for signup_id in signup_ids_to_remove:
+        signups_dict.pop(signup_id)
+
+    db['Activity_Signups'] = signups_dict
+    db.close()
+
+    return redirect(url_for('participant_activities'))
+
 
 @app.route('/participants/outlets')
 @login_required
