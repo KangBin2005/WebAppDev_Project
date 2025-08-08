@@ -11,7 +11,7 @@
     <h2 class="mb-4">Browse Our Gifts</h2>
     <div class="row g-4">
         {% for product in product_list %}
-        <div class="product-card col-md-4 ratio ratio-4x3" id="product-listing">
+        <div class="product-card col-md-4 mb-2 ratio ratio-4x2" id="product-listing">
             <div class="card h-100">
                 <img class="h-50" src="{{ url_for('static', filename='images/products/' + product.get_image_name()) }}">
                 <div class="card-body">
@@ -22,7 +22,12 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light">
-                    <button class="btn btn-primary btn-sm">Add to Cart</button>
+                    <button class="btn btn-primary btn-sm add-to-cart-btn"
+                        data-id="{{ product.get_product_id() }}"
+                        data-name="{{ product.get_product() }}"
+                        data-price="{{ product.get_price() }}">
+                            Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
