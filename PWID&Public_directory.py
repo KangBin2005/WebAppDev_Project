@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import shelve, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
+import shelve, os, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
 from datetime import date
 from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm
 from functools import wraps
@@ -213,46 +213,19 @@ def public_faq():
 
 @app.route('/donations')
 def public_donations():
-    products = [
-        {
-            'product': 'Canvas Tote Bag',
-            'description': 'Eco-friendly bag handmade by volunteers.',
-            'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-        },
-        {
-            'product': 'Canvas Tote Bag',
-            'description': 'Eco-friendly bag handmade by volunteers.',
-            'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
-        },
-        {
-            'product': 'Canvas Tote Bag',
-            'description': 'Eco-friendly bag handmade by volunteers.',
-            'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
-        },
-        {
-            'product': 'Canvas Tote Bag',
-            'description': 'Eco-friendly bag handmade by volunteers.',
-            'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
-        },
-        {
-            'product': 'Canvas Tote Bag',
-            'description': 'Eco-friendly bag handmade by volunteers.',
-            'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
-        },
-        {
-            'product': 'Canvas Tote Bag',
-            'description': 'Eco-friendly bag handmade by volunteers.',
-            'price': 15.99,
-            'image_url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080'
-        },
-        # Add more products
-    ]
-    return render_template('Public/donations.html', current_page='public_donations',products=products)
+    product_list = []
+    try:
+        if os.path.exists('storage/storage_products.db'):  # Check if .db actually exists
+            with shelve.open('storage/storage_products.db', flag='r') as productdb:
+                products_dict = productdb.get('product', {})
+                product_list = list(products_dict.values())
+
+
+    except Exception as e:
+        print(f"Error reading product database: {e}")
+        # You can also log this error or flash a message
+
+    return render_template('Public/donations.html', current_page='public_donations',product_list=product_list)
 
 # ========================
 # Participant Routes (under /participants/)

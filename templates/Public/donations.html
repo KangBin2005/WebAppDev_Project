@@ -10,15 +10,15 @@
 <div class="container mt-5">
     <h2 class="mb-4">Browse Our Gifts</h2>
     <div class="row g-4">
-        {% for product in products %}
+        {% for product in product_list %}
         <div class="col-md-4 ratio ratio-4x3" id="product-listing">
             <div class="card h-100">
-                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                <img class="h-50" src="{{ url_for('static', filename='images/products/' + product.get_image_name()) }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ product.product }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
+                    <h5 class="card-title">{{ product.get_product() }}</h5>
+                    <p class="card-text">{{ product.get_description() }}</p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="h5 mb-0">${{ '%.2f'|format(product.price) }}</span>
+                        <span class="h5 mb-0">${{ '%.2f'|format(product.get_price()) }}</span>
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light">
