@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Participants Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <style>
         body {
             background: linear-gradient(90deg, #007BFF, #28A745);
@@ -28,30 +31,31 @@
             text-align: center;
         }
     </style>
-    <title>Participants Login</title>
 </head>
 <body>
-    <h2>Login</h2>
     <div class="container text-center">
-        <form method="POST">
-            <div class="mb-3 text-start">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="username" required>
-            </div>
-            <div class="mb-4 text-start">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" required>
-            </div>
-            <button type="submit" class="btn btn-dark w-100">Login</button>
-        </form>
+        <h1>SGEnable</h1>
+        <h6 class="mb-4">Participants Login Portal</h6>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="{{ category }}">{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
+        <div class="login-box mx-auto">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="error-msg mb-3">{{ messages[0][1] }}</div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-3 text-start">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" required>
+                </div>
+                <div class="mb-4 text-start">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Login</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
