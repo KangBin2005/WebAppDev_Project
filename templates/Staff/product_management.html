@@ -20,11 +20,11 @@
     <table class="table table-bordered table-striped table-hover">
         <thead class="thead-dark">
         <tr>
-            <th>Product ID</th>
-            <th>Product</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Image</th>
+            <th class="align-middle">Product ID</th>
+            <th class="align-middle">Product</th>
+            <th class="align-middle">Description</th>
+            <th class="align-middle">Price</th>
+            <th class="align-middle">Image</th>
             <th></th>
             <th></th>
         </tr>
@@ -32,26 +32,53 @@
         <tbody>
             {% for product in product_list %}
             <tr>
-                <td>{{ product.get_product_id() }}</td>
-                <td>{{ product.get_product() }}</td>
-                <td>{{ product.get_description() }}</td>
-                <td>{{ product.get_price() }}</td>
-                <td>
+                <td class="align-middle">{{ product.get_product_id() }}</td>
+                <td class="align-middle">{{ product.get_product() }}</td>
+                <td class="align-middle">{{ product.get_description() }}</td>
+                <td class="align-middle">{{ product.get_price() }}</td>
+                <td class="align-middle">
                     <a href="{{ url_for('static', filename='images/products/' + product.get_image_name()) }}" target="_blank" class="btn btn-warning px-3">
                         <i class="fas fa-image mr-1"></i>View Image
                     </a>
                 </td>
-                <td>
+                <td class="align-middle">
                     <a href="{{ url_for('update_product', id=product.get_product_id()) }}" class="btn btn-warning px-3">
                         <i class="fas fa-edit mr-1"></i>Edit
                     </a>
                 </td>
-                <td>
-                    <form action="{{ url_for('delete_product',id=product.get_product_id())}}", method="POST">
-                    <button type="button" class="btn btn-danger">
+                <td class="align-middle">
+                    <form action="{{ url_for('delete_product', id=product.get_product_id()) }}" method="POST">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal_{{ product.get_product_id() }}">
                             <i class="fas fa-trash-alt mr-1"></i>
                             Delete
-                    </button>
+                        </button>
+
+                        <!-- Delete Confirmation Modal -->
+                        <div class="modal fade" id="deleteModal_{{ product.get_product_id() }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel_{{ product.get_product_id() }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel_{{ product.get_product_id() }}">Delete Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal Body -->
+                                    <div class="modal-body">
+                                        Are you sure you want to delete <strong>{{ product.get_product() }}</strong>?
+                                    </div>
+
+                                    <!-- Modal Footer -->
+                                    <div class="modal-footer">
+                                        <input type="submit" value="Delete" class="btn btn-danger">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </td>
             </tr>

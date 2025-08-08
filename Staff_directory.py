@@ -855,7 +855,7 @@ def update_product(id):
 
     return render_template('Staff/product_update.html', form=update_product_form)
 
-@app.route('/store_management/product_management/delete_product/<int:id>', methods=['GET', 'POST'])
+@app.route('/store_management/product_management/delete_product/<int:id>', methods=['POST'])
 def delete_product(id):
     products_dict = {}
     productdb = shelve.open('storage/storage_products.db', 'w')
