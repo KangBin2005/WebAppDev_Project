@@ -258,6 +258,7 @@ def public_donations():
 # Participant Routes (under /participants/)
 # ========================
 @app.route('/participants/home')
+@login_required
 def participant_home():
     try:
         # Get today's date
@@ -295,6 +296,7 @@ def participant_home():
 
 
 @app.route('/participants/my-activities', methods=['GET'])
+@login_required
 def participant_activities():
     try:
         # Get filter parameters
@@ -347,6 +349,7 @@ def participant_activities():
 
 
 @app.route('/activity/<int:activity_id>/signup', methods=['GET', 'POST'])
+@login_required
 def activity_signup(activity_id):
     # Sync ID counter
     sync_participant_activity_signup_id()
@@ -399,12 +402,14 @@ def activity_signup(activity_id):
                            current_page='activity_signup')
 
 @app.route('/participants/outlets')
+@login_required
 def participant_locations():
     return render_template('PWIDS/outlets.html',
                          outlets=outlets,
                          current_page='our_outlets')
 
 @app.route('/participants/outlet/<int:outlet_id>')
+@login_required
 def outlet_map(outlet_id):
     outlet = outlets.get(outlet_id)
     if not outlet:
@@ -416,6 +421,7 @@ def outlet_map(outlet_id):
                            current_page='outlet_map')
 
 @app.route('/participants/help', methods=['GET', 'POST'])
+@login_required
 def participant_help():
     sync_participant_enquiry_id()
     create_enquiry_form = CreateParticipantEnquiryForm(request.form)
@@ -479,6 +485,7 @@ def participant_help():
                            )
 
 @app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def update_participant_enquiry(id):
     update_participant_enquiry_form = CreateParticipantEnquiryForm(request.form)
     if request.method == "POST" and update_participant_enquiry_form.validate():
@@ -505,6 +512,7 @@ def update_participant_enquiry(id):
         return render_template('PWIDS/update_enquiry.html', form=update_participant_enquiry_form)
 
 @app.route('/delete_participant_enquiry/<int:id>', methods=['POST'])
+@login_required
 def delete_participant_enquiry(id):
     enquiries_dict = {}
     db = shelve.open('storage/participant_enquiries_storage.db', 'w')
