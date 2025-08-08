@@ -1,3 +1,4 @@
+import shelve
 class Product:
     count_id = 0
 
@@ -37,29 +38,3 @@ class Product:
 
     def set_image_name(self, image_name):
         self.__image_name = image_name
-
-    @classmethod
-    def reset_id_counter(cls):
-        cls.count_id = 0
-
-# Example Products
-# Products
-# Canvas Tote Bag
-# Eco-friendly bag handmade by volunteers
-# 15.99
-# Beige-eco-bag.jpg
-#
-# Recycled Notebook
-# Notebook made from recycled paper
-# 10.00
-# notebook.jpg
-#
-# Supporter Mug
-# Customizable with custom text
-# 19.99
-# Mug.jpg
-#
-# Calendar
-# Includes illustrations by our talented artists
-# 20.45
-# calendar.jpg

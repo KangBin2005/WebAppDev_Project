@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateProductForm, CreateActivityForm, CreateAccountForm
+from Product import Product
 
 import shelve, os, Participant_Activity, Account, Activity_public, Product
 
@@ -17,7 +18,6 @@ users = {
     "Mary": "password123"
 }
 
-
 # <-------- Misc management -------->
 
 def login_required(f):
@@ -27,7 +27,6 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return custom_login
-
 
 
 def sync_account_id():
@@ -42,7 +41,6 @@ def sync_account_id():
         Account.Account.count_id = 0
     except Exception as e:
         print("Error syncing account ID:", e)
-
 
 
 def sync_public_activity_id():
@@ -72,9 +70,17 @@ def sync_participant_activity_id():
     except Exception as e:
         print("Error syncing activity ID:", e)
 
-
+def sync_product_id():
+    try:
+        with shelve.open('storage/storage_products.db', 'r') as db:
+            products_dict = db.get('product', {})
+            max_id = max((p.get_product_id() for p in products_dict.values()), default=0)
+            Product.Product.count_id = max_id
+            print(f"Synced product count_id: {Product.count_id}")
+    except Exception as e:
+        print("Error syncing product ID:", e)
+        Product.count_id = 0
 # <-------- Routes -------->
-
 
 @app.route('/')
 @login_required
@@ -772,7 +778,9 @@ def manage_product():
     except Exception as e:
         print(f"Error reading product database: {e}")
         # You can also log this error or flash a message
-
+    print(f"Loaded {len(product_list)} products")
+    for p in product_list:
+        print(p.get_product_id(), p.get_product())
     return render_template('Staff/product_management.html',
                            current_page='store_management',
                            count=count,
@@ -781,6 +789,8 @@ def manage_product():
 
 @app.route('/store_management/product_management/create-product', methods=['GET', 'POST'])
 def create_product():
+    sync_product_id()
+
     create_product_form = CreateProductForm(request.form)
     if request.method == 'POST' and create_product_form.validate():
         productdb = shelve.open('storage/storage_products.db', 'c')
@@ -867,6 +877,7 @@ def delete_product(id):
     productdb.close()
 
     return redirect(url_for('manage_product'))
+
 
 @app.route('/enquiry-management')
 def manage_enquiries():
