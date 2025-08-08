@@ -7,10 +7,11 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = 'fb814d13-2f3e-48b1-937b-ef33a4d35c18'
 
-# PWID users:
+# PWID users details:
 # Amy: password
 # Julie: password123
 # mary: mary123
+# Karl: karl123
 
 def login_required(f):
     @wraps(f)                                       # Prevent access if not logged in
