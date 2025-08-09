@@ -1,4 +1,3 @@
-import shelve
 class Product:
     count_id = 0
 

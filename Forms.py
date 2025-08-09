@@ -156,3 +156,13 @@ class CreateAccountForm(Form):
     gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
     role = RadioField('Role', choices=[('M', 'Member'), ('P', 'PWID'), ('C', 'Caregiver')], default='M')
     email = TextAreaField('Email (Optional)', [validators.Optional(), Email(message='Invalid email address')])
+
+class CreateTransactionForm(Form):
+    customer_name = StringField('Customer Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    payment_type = SelectField('Payment Type',
+        choices=[
+        ('Debit Card', 'Debit Card'),
+        ('Credit Card', 'Credit Card'),
+        ('Apple Pay', 'Apple Pay'),
+        ('Google Pay', 'Google Pay')
+    ])

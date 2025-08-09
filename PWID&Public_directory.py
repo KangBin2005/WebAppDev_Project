@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import shelve, os, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
 from datetime import date
-from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm
+
+import Transaction
+from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm, \
+    CreateTransactionForm
 from math import ceil
 from functools import wraps
 
@@ -145,6 +148,17 @@ def sync_participant_enquiry_id():
     except Exception as e:
         print("Error syncing enquiry ID:", e)
 
+def sync_transaction_id():
+    try:
+        with shelve.open('storage/storage_transactions.db', 'r') as db:
+            transactions_dict = db.get('product', {})
+            max_id = max((transaction.get_transaction_id() for transaction in transactions_dict.values()), default=0)
+            Transaction.Transaction.count_id = max_id
+            print(f"Synced transaction count_id: {Transaction.count_id}")
+    except Exception as e:
+        print("Error syncing transaction ID:", e)
+        Transaction.count_id = 0
+
 @app.route('/donations/add_to_cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
     cart = session.get('cart', {})
@@ -171,8 +185,8 @@ def transaction_cart():
 @app.route('/donations/transaction_cart/update_quantity/<product_id>/<action>', methods=['POST'])
 def update_quantity(product_id, action):
     cart = session.get('cart', {})
+    pid = str(product_id)  # Make sure to use string keys
 
-    pid = int(product_id)
     if pid in cart:
         if action == 'increase':
             cart[pid]['quantity'] += 1
@@ -182,7 +196,14 @@ def update_quantity(product_id, action):
                 del cart[pid]
 
         session['cart'] = cart
-        return redirect(url_for('transaction_cart'))
+
+    return redirect(url_for('transaction_cart'))
+
+@app.route('/donations/transaction_cart/transaction_complete')
+def transaction_complete():
+
+    return redirect(url_for('transaction_completion'))
+
 
 @app.route('/donations/transaction_cart/remove_item/<product_id>', methods=['POST'])
 def remove_item(product_id):
@@ -663,6 +684,59 @@ def delete_participant_enquiry(id):
     db.close()
     return redirect(url_for('participant_help', show_enquiries=1))
 
+@app.route('/donations/transaction_payment')
+def create_transaction(product):
+    # sync_transaction_id()
+
+    create_transaction_form = CreateTransactionForm(request.form)
+    if request.method == 'POST' and create_transaction_form.validate():
+        productdb = shelve.open('storage/storage_transactions.db', 'c')
+        try:
+            product_dict = productdb['transaction']
+        except:
+            product_dict = {}
+            print("Error in retrieving products from storage_products.db.")
+
+        new_transaction = Transaction.Transaction(
+
+            create_transaction_form.product.data,
+            create_transaction_form.description.data,
+        )
+
+        # Set new transaction in transaction db
+        product_dict[new_transaction.get_product_id()] = new_transaction
+        productdb['product'] = product_dict
+        productdb.close()
+        # Return user to management page
+        print("Product created successfully")
+        return redirect(url_for('manage_product'))
+
+    return render_template('Staff/product_create.html', form=create_product_form)
+
+    create_transaction_form = CreateTransactionForm(request.form)
+    if request.method == 'POST' and create_product_form.validate():
+        productdb = shelve.open('storage/storage_products.db', 'c')
+        try:
+            product_dict = productdb['product']
+        except:
+            product_dict = {}
+            print("Error in retrieving products from storage_products.db.")
+
+        new_product = Product.Product(
+            create_product_form.product.data,
+            create_product_form.description.data,
+            create_product_form.price.data,
+            create_product_form.image_name.data
+        )
+
+        product_dict[new_product.get_product_id()] = new_product
+        productdb['product'] = product_dict
+        productdb.close()
+        # Return user to management page
+        print("Product created successfully")
+        return redirect(url_for('manage_product'))
+
+    return render_template('Staff/product_create.html', form=create_product_form)
 # ========================
 # Login_Sign Up Routes
 # ========================

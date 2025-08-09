@@ -1,5 +1,25 @@
-{% extends "Public/base.html" %}
+{% extends "Staff/Staff_base.html" %}
+{% block title %}SGEnable - Create Product Listing{% endblock %}
+
 {% block content %}
-<h1>Payment</h1>
-<p> Placeholder </p>
+{% from "includes/_formHelper.html" import render_field %}
+
+<div class="container mt-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">Payment</h2>
+                <form method="POST" action="">
+                    <div class="form-group">
+                        {{ render_field(form.customer_name, class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ render_field(form.payment_type, class="form-control", rows="3") }}
+                    </div>
+
+                    <input type="submit" value="Submit" class="btn btn-primary"/>
+                    <a href="{{ url_for('manage_product') }}" class="btn btn-secondary ml-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

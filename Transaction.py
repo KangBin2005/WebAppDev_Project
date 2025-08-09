@@ -1,15 +1,15 @@
 class Transaction:
     # Class-level variable for auto-incrementing IDs
-    _id_counter = 0
+    count_id = 0
 
-    def __init__(self, product_id, product_name, quantity, price, customer_name, date):
-        Transaction._id_counter += 1
-        self.__transaction_id = Transaction._id_counter
+    def __init__(self, product_id, product_name, quantity, price, customer_name, payment_type, date):
+        self.__transaction_id = Transaction.count_id
         self.__product_id = product_id
         self._product_name = product_name
         self.__quantity = quantity
         self.__price = price
         self.__customer_name = customer_name
+        self.__payment_type = payment_type
         self.__date = date
 
     # Accessor Methods
@@ -30,6 +30,9 @@ class Transaction:
 
     def get_customer_name(self):
         return self.__customer_name
+
+    def get_payment_type(self):
+        return self.__payment_type
 
     def get_date(self):
         return self.__date
@@ -53,6 +56,9 @@ class Transaction:
     def set_customer_name(self, customer_name):
         self.__customer_name = customer_name
 
+    def set_payment_type(self, payment_type):
+        self.__payment_type = payment_type
+
     def set_date(self, date):
         self.__date = date
 
@@ -60,3 +66,6 @@ class Transaction:
     def get_total_amount(self):
         """Returns the total cost for the transaction."""
         return self.__quantity * self.__price
+
+    def increment_transaction_id(self):
+        Transaction.count_id += 1
