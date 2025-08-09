@@ -145,32 +145,26 @@ def sync_participant_enquiry_id():
     except Exception as e:
         print("Error syncing enquiry ID:", e)
 
-@app.route('/donations/add_to_cart/<product_id>')
+@app.route('/donations/add_to_cart/<product_id>', methods=['POST'])
 def add_to_cart(product_id):
     cart = session.get('cart', {})
-    print("Current session data:", session)
-    # Retrieve product from DB as before
-    productdb = shelve.open('storage/storage_products.db', 'r')
-    products = productdb['product']
-    productdb.close()
-
-    product = products.get(product_id)
-    if not product:
-        return jsonify({'error': 'Product not found'}), 404
 
     if product_id in cart:
         cart[product_id]['quantity'] += 1
     else:
+        # Here, you’d typically expect product name & price from frontend or elsewhere,
+        # but for demo, just store the ID and a placeholder name/price:
         cart[product_id] = {
-            'name': product.get_product(),
-            'price': product.get_price(),
+            'name': f'Product {product_id}',  # placeholder name
+            'price': 0.00,                    # placeholder price
             'quantity': 1
         }
 
     session['cart'] = cart
+
     return jsonify({
         'message': 'Product added',
-        'productName': product.get_product(),
+        'productId': product_id,
         'cartItemCount': sum(item['quantity'] for item in cart.values())
     })
 
