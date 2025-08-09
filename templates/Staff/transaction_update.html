@@ -1,5 +1,5 @@
-{% extends "Public/base.html" %}
-{% block title %}SGEnable - Payment Details{% endblock %}
+{% extends "Staff/base.html" %}
+{% block title %}SGEnable - Update Transaction{% endblock %}
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
@@ -17,7 +17,7 @@
                     </div>
 
                     <input type="submit" value="Submit" class="btn btn-primary"/>
-                    <a href="{{ url_for('transaction_cart') }}" class="btn btn-secondary ml-2">Cancel</a>
+                    <a href="{{ url_for('manage_transactions') }}" class="btn btn-secondary ml-2">Cancel</a>
                 </form>
             </div>
         </div>

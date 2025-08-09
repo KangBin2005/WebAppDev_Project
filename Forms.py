@@ -161,8 +161,8 @@ class CreateTransactionForm(Form):
     customer_name = StringField('Customer Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     payment_type = SelectField('Payment Type',
         choices=[
-        ('Debit Card', 'Debit Card'),
-        ('Credit Card', 'Credit Card'),
-        ('Apple Pay', 'Apple Pay'),
-        ('Google Pay', 'Google Pay')
-    ])
+        ('debit_card', 'Debit Card'),
+        ('credit_card', 'Credit Card'),
+        ('apple_pay', 'Apple Pay'),
+        ('google_pay', 'Google Pay'),
+        ],validators=[validators.DataRequired()])

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateProductForm, CreateActivityForm, CreateAccountForm
-from Product import Product
+from Forms import CreateParticipantActivityForm, ReplyParticipantEnquiryForm, CreateProductForm, CreateActivityForm, CreateAccountForm, CreateTransactionForm
 
 import shelve, os, Participant_Activity, Account, Activity_public, Product
 
@@ -76,7 +75,7 @@ def sync_product_id():
             products_dict = db.get('product', {})
             max_id = max((p.get_product_id() for p in products_dict.values()), default=0)
             Product.Product.count_id = max_id
-            print(f"Synced product count_id: {Product.count_id}")
+            print(f"Synced product count_id: {Product.Product.count_id}")
     except Exception as e:
         print("Error syncing product ID:", e)
         Product.count_id = 0
@@ -913,12 +912,113 @@ def delete_product(id):
     return redirect(url_for('manage_product'))
 
 
+@app.route
 @app.route('/enquiry-management')
 def manage_enquiries():
     return render_template('Staff/enquiry_management.html', current_page='manage_enquiries')
 
 
+@app.route('/store_management/transaction_management')
+@login_required
+def manage_transactions():
+    transaction_list = []
+    count = 0
 
+    try:
+        if os.path.exists('storage/storage_transactions.db'):  # Check if .db actually exists
+            with shelve.open('storage/storage_transactions.db', flag='r') as transactiondb:
+                transaction_dict = transactiondb.get('transaction', {})
+                transaction_list = list(transaction_dict.values())
+                count = len(transaction_list)
+    except Exception as e:
+        print(f"Error reading transaction database: {e}")
+
+    print(f"Loaded {len(transaction_list)} transactions")
+    for transaction in transaction_list:
+        print(transaction.get_transaction_id(), transaction.get_customer_name())
+    return render_template('Staff/transaction_management.html',
+                           current_page='store_management',
+                           count=count,
+                           transaction_list=transaction_list)
+
+
+@app.route('/store_management/transaction_management/<int:transaction_id>', methods=['GET', 'POST'])
+def update_transaction(transaction_id):
+    update_transaction_form = CreateTransactionForm(request.form)
+
+    if request.method == 'POST' and update_transaction_form.validate():
+        db = shelve.open('storage/storage_transactions.db', 'w')
+        try:
+            transaction_dict = db['transaction']
+        except:
+            db.close()
+            print("Error retrieving transaction data for updating.")
+            return redirect(url_for('manage_transactions'))
+
+        # Since your shelve keys are likely composite like "transactionID-productID",
+        # you need to find all keys for this transaction_id and update them.
+        updated = False
+        for key, transaction in transaction_dict.items():
+            # transaction_id might be int or string, convert to int for comparison
+            if transaction.get_transaction_id() == transaction_id:
+                transaction.set_customer_name(update_transaction_form.customer_name.data)
+                transaction.set_payment_type(update_transaction_form.payment_type.data)
+                updated = True
+
+        if updated:
+            db['transaction'] = transaction_dict
+        else:
+            print(f"Transaction ID {transaction_id} not found during update.")
+
+        db.close()
+        return redirect(url_for('manage_transactions'))
+
+    else:
+        db = shelve.open('storage/storage_transactions.db', 'r')
+        try:
+            transaction_dict = db['transaction']
+        except:
+            db.close()
+            print("Error retrieving transaction data for editing.")
+            return redirect(url_for('manage_transactions'))
+
+        # Find first transaction with this transaction_id to populate the form
+        transaction = None
+        for t in transaction_dict.values():
+            if t.get_transaction_id() == transaction_id:
+                transaction = t
+                break
+
+        db.close()
+
+        if transaction:
+            update_transaction_form.customer_name.data = transaction.get_customer_name()
+            update_transaction_form.payment_type.data = transaction.get_payment_type()
+        else:
+            print(f"Transaction with ID {transaction_id} not found.")
+            return redirect(url_for('manage_transactions'))
+
+    return render_template('Staff/transaction_update.html', form=update_transaction_form)
+
+
+@app.route('/donations/transaction_management/delete_transaction/<int:transaction_id>', methods=['POST'])
+def delete_transaction(transaction_id):
+    transactions_dict = {}
+    with shelve.open('storage/storage_transactions.db', 'w') as transactiondb:
+        transactions_dict = transactiondb.get('transaction', {})
+
+        # Loop through keys and delete all with matching transaction_id
+        keys_to_delete = []
+        for key, transaction in transactions_dict.items():
+            if transaction.get_transaction_id() == transaction_id:
+                keys_to_delete.append(key)
+
+        for key in keys_to_delete:
+            transactions_dict.pop(key)
+
+        transactiondb['transaction'] = transactions_dict
+
+    return redirect(url_for('manage_transactions'))
 @app.route('/store_management')
 @login_required
 def manage_store():

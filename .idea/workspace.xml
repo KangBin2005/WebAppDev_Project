@@ -4,14 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Updated donations + cart">
-      <change afterPath="$PROJECT_DIR$/templates/Public/transaction_completion.html" afterDir="false" />
+    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Created Transaction Payment, Completion screen,&#10;routes for Transaction">
+      <change afterPath="$PROJECT_DIR$/templates/Staff/transaction_update.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Product.py" beforeDir="false" afterPath="$PROJECT_DIR$/Product.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Transaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/Transaction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Staff_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Staff_directory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Public/transaction_cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/transaction_cart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Public/transaction_completion.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/transaction_completion.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Public/transaction_payment.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/transaction_payment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Staff/transaction_management.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Staff/transaction_management.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/staff_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/staff_navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +65,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
+    "JavaScript Debug.product_management.html.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.PWID&Public_directory.executor": "Run",
     "Python.Staff_directory.executor": "Run",
@@ -93,7 +97,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754621639279</updated>
-      <workItem from="1754725588047" duration="25036000" />
+      <workItem from="1754725588047" duration="37211000" />
     </task>
     <task id="LOCAL-00001" summary="Update PWIDS_navbar.html">
       <option name="closed" value="true" />
@@ -191,7 +195,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754749384135</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Created Transaction Payment, Completion screen,&#10;routes for Transaction">
+      <option name="closed" value="true" />
+      <created>1754759481586</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1754759481586</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,13 +228,14 @@
     <MESSAGE value="Working on cart" />
     <MESSAGE value="Updated cart" />
     <MESSAGE value="Updated donations + cart" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated donations + cart" />
+    <MESSAGE value="Created Transaction Payment, Completion screen,&#10;routes for Transaction" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created Transaction Payment, Completion screen,&#10;routes for Transaction" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754677341965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WebAppDev_Project$app.coverage" NAME="app Coverage Results" MODIFIED="1754745802704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python313/Lib/site-packages/flask" />
+    <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754772392568" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WebAppDev_Project$Test.coverage" NAME="Test Coverage Results" MODIFIED="1754670333721" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/WebAppDev_Project$PWID_Public_directory.coverage" NAME="PWID&amp;Public_directory Coverage Results" MODIFIED="1754754066907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/WebAppDev_Project$PWID_Public_directory.coverage" NAME="PWID&amp;Public_directory Coverage Results" MODIFIED="1754772171241" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WebAppDev_Project$Transaction.coverage" NAME="Transaction Coverage Results" MODIFIED="1754662114215" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WebAppDev_Project$Activity_public.coverage" NAME="Activity_public Coverage Results" MODIFIED="1754677379427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

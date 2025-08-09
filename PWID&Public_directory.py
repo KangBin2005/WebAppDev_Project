@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import shelve, os, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
-from datetime import date
+from datetime import date, datetime
 
-import Transaction
-from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm, \
-    CreateTransactionForm
+
+from Transaction import Transaction
+from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm, CreateTransactionForm
 from math import ceil
 from functools import wraps
 
@@ -151,13 +151,14 @@ def sync_participant_enquiry_id():
 def sync_transaction_id():
     try:
         with shelve.open('storage/storage_transactions.db', 'r') as db:
-            transactions_dict = db.get('product', {})
+            transactions_dict = db.get('transaction', {})
             max_id = max((transaction.get_transaction_id() for transaction in transactions_dict.values()), default=0)
-            Transaction.Transaction.count_id = max_id
+            Transaction.count_id = max_id
             print(f"Synced transaction count_id: {Transaction.count_id}")
     except Exception as e:
         print("Error syncing transaction ID:", e)
         Transaction.count_id = 0
+
 
 @app.route('/donations/add_to_cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
@@ -199,11 +200,6 @@ def update_quantity(product_id, action):
 
     return redirect(url_for('transaction_cart'))
 
-@app.route('/donations/transaction_cart/transaction_complete')
-def transaction_complete():
-
-    return redirect(url_for('transaction_completion'))
-
 
 @app.route('/donations/transaction_cart/remove_item/<product_id>', methods=['POST'])
 def remove_item(product_id):
@@ -213,11 +209,6 @@ def remove_item(product_id):
     session['cart'] = cart
     return redirect(url_for('transaction_cart'))
 
-
-@app.route('/donations/transaction_cart/checkout', methods=['POST'])
-def checkout():
-    # Process payment logic here
-    return "Checkout complete!"
 # ========================
 # Public Routes (main site)
 # ========================
@@ -684,59 +675,54 @@ def delete_participant_enquiry(id):
     db.close()
     return redirect(url_for('participant_help', show_enquiries=1))
 
-@app.route('/donations/transaction_payment')
-def create_transaction(product):
-    # sync_transaction_id()
 
-    create_transaction_form = CreateTransactionForm(request.form)
-    if request.method == 'POST' and create_transaction_form.validate():
-        productdb = shelve.open('storage/storage_transactions.db', 'c')
-        try:
-            product_dict = productdb['transaction']
-        except:
-            product_dict = {}
-            print("Error in retrieving products from storage_products.db.")
+from datetime import datetime
 
-        new_transaction = Transaction.Transaction(
+from datetime import datetime
 
-            create_transaction_form.product.data,
-            create_transaction_form.description.data,
-        )
 
-        # Set new transaction in transaction db
-        product_dict[new_transaction.get_product_id()] = new_transaction
-        productdb['product'] = product_dict
-        productdb.close()
-        # Return user to management page
-        print("Product created successfully")
-        return redirect(url_for('manage_product'))
+@app.route('/donations/transaction_payment', methods=['GET', 'POST'])
+def create_transaction():
+    form = CreateTransactionForm(request.form)
 
-    return render_template('Staff/product_create.html', form=create_product_form)
+    if request.method == 'POST' and form.validate():
+        sync_transaction_id()
+        Transaction.count_id += 1
+        shared_transaction_id = Transaction.count_id
 
-    create_transaction_form = CreateTransactionForm(request.form)
-    if request.method == 'POST' and create_product_form.validate():
-        productdb = shelve.open('storage/storage_products.db', 'c')
-        try:
-            product_dict = productdb['product']
-        except:
-            product_dict = {}
-            print("Error in retrieving products from storage_products.db.")
+        cart = session.get('cart', {})
+        if not cart:
+            return "Cart is empty", 400
 
-        new_product = Product.Product(
-            create_product_form.product.data,
-            create_product_form.description.data,
-            create_product_form.price.data,
-            create_product_form.image_name.data
-        )
+        with shelve.open('storage/storage_transactions.db', 'c') as db:
+            transactions_dict = db.get('transaction', {})
 
-        product_dict[new_product.get_product_id()] = new_product
-        productdb['product'] = product_dict
-        productdb.close()
-        # Return user to management page
-        print("Product created successfully")
-        return redirect(url_for('manage_product'))
+            for pid, item in cart.items():
+                new_transaction = Transaction(
+                    product_id=pid,
+                    product_name=item["name"],
+                    quantity=item["quantity"],
+                    price=item["price"],
+                    customer_name=form.customer_name.data,
+                    payment_type=form.payment_type.data,
+                    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
+                # Set all transactions to share the same transaction id
+                new_transaction._Transaction__transaction_id = shared_transaction_id
+                transactions_dict[f"{shared_transaction_id}-{pid}"] = new_transaction
 
-    return render_template('Staff/product_create.html', form=create_product_form)
+            db['transaction'] = transactions_dict
+        return redirect(url_for('transaction_complete'))
+
+    # For GET requests or invalid form, render the payment page
+    return render_template('Public/transaction_payment.html', form=form)
+
+
+@app.route('/donations/transaction_cart/transaction_complete')
+def transaction_complete():
+    session['cart'] = {}
+    return render_template('Public/transaction_completion.html')
+
 # ========================
 # Login_Sign Up Routes
 # ========================

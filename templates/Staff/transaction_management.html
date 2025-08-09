@@ -1,5 +1,82 @@
 {% extends "Staff/Staff_base.html" %}
-{% block title %}SG Enable - Manage Products{% endblock %}
+{% block title %}SG Enable - Manage Transactions{% endblock %}
 {% block content %}
+<div class="d-flex flex-row justify-content-between mb-2 mt-3">
+    <h1>Manage Transactions</h1>
+</div>
 
+<div>
+    {% if count > 0 %}
+        <p>Displaying <strong>{{ count }}</strong> {{ 'transaction' if count == 1 else 'transactions' }}.</p>
+    {% else %}
+        <p class="text-danger">No transactions found.</p>
+    {% endif %}
+</div>
+
+<div>
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th class="align-middle">Transaction ID</th>
+            <th class="align-middle">Customer Name</th>
+            <th class="align-middle">Product Name</th>
+            <th class="align-middle">Total</th>
+            <th class="align-middle">Payment Type</th>
+            <th class="align-middle"></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transaction_list %}
+            <tr>
+                <td class="align-middle">{{ transaction.get_transaction_id() }}</td>
+                <td class="align-middle">{{ transaction.get_customer_name() }}</td>
+                <td class="align-middle">{{ transaction.get_product_name() }}</td>
+                <td class="align-middle">{{ transaction.get_total_amount() }}</td>
+                <td class="align-middle">{{ transaction.get_payment_type() }}</td>
+                <td class="align-middle">
+                    <a href="{{ url_for('update_transaction', transaction_id=transaction.get_transaction_id()) }}" class="btn btn-warning px-3">
+                        <i class="fas fa-edit mr-1"></i>Edit
+                    </a>
+                </td>
+                <td class="align-middle">
+                    <form action="{{ url_for('delete_transaction', transaction_id=transaction.get_transaction_id()) }}" method="POST">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal_{{ transaction.get_transaction_id() }}">
+                            <i class="fas fa-trash-alt mr-1"></i>
+                            Delete
+                        </button>
+
+                        <!-- Delete Confirmation Modal -->
+                        <div class="modal fade" id="deleteModal_{{ transaction.get_transaction_id() }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel_{{ transaction.get_transaction_id() }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel_{{ transaction.get_transaction_id() }}">Delete Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal Body -->
+                                    <div class="modal-body">
+                                        Are you sure you want to delete <strong>transaction</strong>?
+                                    </div>
+
+                                    <!-- Modal Footer -->
+                                    <div class="modal-footer">
+                                        <input type="submit" value="Delete" class="btn btn-danger">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
