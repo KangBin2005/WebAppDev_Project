@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import shelve, os, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
 from datetime import date
 from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm
@@ -148,15 +148,15 @@ def sync_participant_enquiry_id():
 @app.route('/donations/add_to_cart/<product_id>')
 def add_to_cart(product_id):
     cart = session.get('cart', {})
-
-    # Fetch product details from database
+    print("Current session data:", session)
+    # Retrieve product from DB as before
     productdb = shelve.open('storage/storage_products.db', 'r')
     products = productdb['product']
     productdb.close()
 
     product = products.get(product_id)
     if not product:
-        return redirect(url_for('public_donations'))
+        return jsonify({'error': 'Product not found'}), 404
 
     if product_id in cart:
         cart[product_id]['quantity'] += 1
@@ -168,7 +168,11 @@ def add_to_cart(product_id):
         }
 
     session['cart'] = cart
-    return redirect(url_for('transaction_cart'))
+    return jsonify({
+        'message': 'Product added',
+        'productName': product.get_product(),
+        'cartItemCount': sum(item['quantity'] for item in cart.values())
+    })
 
 @app.route('/donations/transaction_cart')
 def transaction_cart():

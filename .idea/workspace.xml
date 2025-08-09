@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Merge remote-tracking branch 'origin/master'">
+    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Working on cart">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/includes/public_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/public_navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754621639279</updated>
-      <workItem from="1754725588047" duration="1029000" />
+      <workItem from="1754725588047" duration="2146000" />
     </task>
     <task id="LOCAL-00001" summary="Update PWIDS_navbar.html">
       <option name="closed" value="true" />
@@ -129,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754724149747</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Working on cart">
+      <option name="closed" value="true" />
+      <created>1754726731541</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1754726731541</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,7 +147,8 @@
     <MESSAGE value="Update activities.html" />
     <MESSAGE value="Improved readability of Login Texts" />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'" />
+    <MESSAGE value="Working on cart" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on cart" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754677341965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
