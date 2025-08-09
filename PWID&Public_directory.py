@@ -505,6 +505,11 @@ def outlet_map(outlet_id):
 def participant_help():
     sync_participant_enquiry_id()
     create_enquiry_form = CreateParticipantEnquiryForm(request.form)
+    username = session.get('user', '')  # Get username from session
+
+    # Prefill name from logged-in user's session if GET request
+    if request.method == 'GET':
+        create_enquiry_form.name.data = username
 
     # Handle form submission
     if request.method == 'POST' and create_enquiry_form.validate():
@@ -527,7 +532,7 @@ def participant_help():
         db.close()
         return redirect(url_for('participant_help', show_enquiries=1))
 
-    # Handle GET requests
+    # Handle GET requests - MODIFIED TO FILTER BY CURRENT USER
     selected_subject = request.args.get('subject', '')
     selected_status = request.args.get('status', '')
     show_enquiries = request.args.get('show_enquiries', default=0, type=int)
@@ -538,10 +543,12 @@ def participant_help():
             all_enquiries = list(db.get('Participant_Enquiries', {}).values())
 
             for enquiry in all_enquiries:
-                subject_match = not selected_subject or enquiry.get_subject() == selected_subject
-                status_match = not selected_status or enquiry.get_status() == selected_status
-                if subject_match and status_match:
-                    enquiries.append(enquiry)
+                # Only show enquiries from the current user
+                if enquiry.get_name() == username:
+                    subject_match = not selected_subject or enquiry.get_subject() == selected_subject
+                    status_match = not selected_status or enquiry.get_status() == selected_status
+                    if subject_match and status_match:
+                        enquiries.append(enquiry)
 
             enquiries.sort(key=lambda x: x.get_enquiry_id())
     except Exception as e:
@@ -555,7 +562,7 @@ def participant_help():
     return render_template('PWIDS/help.html',
                            form=create_enquiry_form,
                            enquiries=enquiries,
-                           count=len(all_enquiries),
+                           count=len(enquiries),  # Changed from all_enquiries to enquiries
                            selected_subject=selected_subject,
                            selected_status=selected_status,
                            show_enquiries=show_enquiries,

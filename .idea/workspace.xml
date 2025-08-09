@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Update PWIDS_navbar.html">
-      <change beforePath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Update activities.html">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/activity_signups.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/participant_activity_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_activity_storage.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/storage/user_storage.db-shm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/storage/user_storage.db-wal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/PWIDS/activity_signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PWIDS/activity_signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,12 +84,21 @@
       <option name="project" value="LOCAL" />
       <updated>1754622205286</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update activities.html">
+      <option name="closed" value="true" />
+      <created>1754708119949</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1754708119949</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
     <MESSAGE value="Update PWIDS_navbar.html" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update PWIDS_navbar.html" />
+    <MESSAGE value="Update activities.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update activities.html" />
   </component>
 </project>
