@@ -168,22 +168,23 @@ def transaction_cart():
     print(cart)
     return render_template('Public/transaction_cart.html', cart=cart)
 
-@app.route('/donations/transaction_cart/update_quantity/<product_id>/<action>')
+@app.route('/donations/transaction_cart/update_quantity/<product_id>/<action>', methods=['POST'])
 def update_quantity(product_id, action):
     cart = session.get('cart', {})
 
-    if product_id in cart:
+    pid = int(product_id)
+    if pid in cart:
         if action == 'increase':
-            cart[product_id]['quantity'] += 1
+            cart[pid]['quantity'] += 1
         elif action == 'decrease':
-            cart[product_id]['quantity'] -= 1
-            if cart[product_id]['quantity'] <= 0:
-                del cart[product_id]
+            cart[pid]['quantity'] -= 1
+            if cart[pid]['quantity'] <= 0:
+                del cart[pid]
 
         session['cart'] = cart
         return redirect(url_for('transaction_cart'))
 
-@app.route('/donations/transaction_cart/remove_item/<product_id>')
+@app.route('/donations/transaction_cart/remove_item/<product_id>', methods=['POST'])
 def remove_item(product_id):
     cart = session.get('cart', {})
     if product_id in cart:

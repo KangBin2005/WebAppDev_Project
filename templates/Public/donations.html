@@ -21,7 +21,7 @@
                         <span class="h5 mb-0">${{ '%.2f'|format(product.get_price()) }}</span>
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-between bg-light">
+                <div class="card-footer d-flex justify-content-end bg-light">
                     <form action="{{ url_for('add_to_cart', product_id=product.get_product_id()) }}" method="POST">
                         <input type="hidden" name="name" value="{{ product.get_product() }}">
                         <input type="hidden" name="price" value="{{ product.get_price() }}">

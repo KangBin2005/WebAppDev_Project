@@ -5,27 +5,27 @@
 <div class="container mt-4">
     {% if session.cart %}
         <div class="row">
-            {% for item in session.cart %}
+            {% for pid, item in session.cart.items() %}
             <div class="col-md-4">
                 <div class="card mb-3 shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">{{ item.name }}</h5>
+                        <h5 class="card-title">{{ item['name'] }}</h5>
                         <p class="card-text">
-                            Price: ${{ "%.2f"|format(item.price) }} <br>
-                            Quantity: {{ item.quantity }} <br>
-                            Total: ${{ "%.2f"|format(item.price * item.quantity) }}
+                            Price: ${{ "%.2f"|format(item['price']) }} <br>
+                            Quantity: {{ item['quantity'] }} <br>
+                            Total: ${{ "%.2f"|format(item['price'] * item['quantity']) }}
                         </p>
                         <div class="btn-group" role="group">
                             <!-- Decrease quantity -->
-                            <form action="{{ url_for('decrease_quantity', product_name=item.name) }}" method="post" style="display:inline;">
+                            <form action="{{ url_for('update_quantity', product_id=pid, action='decrease') }}" method="POST" style="display:inline;">
                                 <button type="submit" class="btn btn-outline-secondary btn-sm">−</button>
                             </form>
                             <!-- Increase quantity -->
-                            <form action="{{ url_for('increase_quantity', product_name=item.name) }}" method="post" style="display:inline;">
+                            <form action="{{ url_for('update_quantity', product_id=pid, action='increase') }}" method="POST" style="display:inline;">
                                 <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
                             </form>
                             <!-- Remove item -->
-                            <form action="{{ url_for('remove_from_cart', product_name=item.name) }}" method="post" style="display:inline;">
+                            <form action="{{ url_for('remove_item', product_id=pid) }}" method="POST" style="display:inline;">
                                 <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
                             </form>
                         </div>

@@ -8,6 +8,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Public/donations.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/donations.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Public/transaction_cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/transaction_cart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/public_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/public_navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754621639279</updated>
-      <workItem from="1754725588047" duration="13154000" />
+      <workItem from="1754725588047" duration="15130000" />
     </task>
     <task id="LOCAL-00001" summary="Update PWIDS_navbar.html">
       <option name="closed" value="true" />
@@ -154,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754735637206</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Working on cart">
+      <option name="closed" value="true" />
+      <created>1754746615559</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1754746615559</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

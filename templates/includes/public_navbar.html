@@ -150,9 +150,15 @@
             </li>
             {% if current_page == 'public_donations' %}
                 <li class="nav-item ml-3 mr-2">
-                    <a class="cart btn"href="{{ url_for('transaction_cart') }}">
+                    <a class="cart btn" href="{{ url_for('transaction_cart') }}">
                         <i class="bi bi-cart"></i>
-                        <div class="cart-amount">{{ session.get('cart')|length if session.get('cart') else 0 }}</div>
+                        <div class="cart-amount">
+                            {% if session.get('cart') %}
+                                {{ session['cart'].values() | map(attribute='quantity') | sum }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </div>
                     </a>
                 </li>
             {% endif %}
