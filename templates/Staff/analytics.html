@@ -15,46 +15,45 @@
     </small>
   </div>
 
-  <!-- CHARTS ROW 1: Activity and Participant Enquiries -->
-  <div class="row">
-
-    <!-- ACTIVITY PARTICIPATION CARD -->
-    <div class="col-md-6 mb-4">
+   <!-- Full-width Bar Chart Row -->
+  <div class="row mb-4">
+    <div class="col-12">
       <div class="card shadow-sm">
         <div class="card-body">
           <h5 class="card-title">
             <i class="fas fa-running text-primary me-2"></i>
             Activity Participation
           </h5>
-          <canvas id="activityChart" height="300"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- PARTICIPANT ENQUIRIES CARD -->
-    <div class="col-md-6 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">
-            <i class="fas fa-comments text-success me-2"></i>
-            Participant Enquiries
-          </h5>
-          <canvas id="participantEnquiryPieChart" height="300"></canvas>
+          <canvas id="activityChart" height="100"></canvas>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CHARTS ROW 2: Public Enquiries -->
+  <!-- Pie Charts Row (2 columns) -->
   <div class="row">
+    <!-- Participant Enquiries -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-comments text-success me-2"></i>
+            Participant Enquiries
+          </h5>
+          <canvas id="participantEnquiryPieChart" height="100"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Public Enquiries -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
           <h5 class="card-title">
             <i class="fas fa-globe text-info me-2"></i>
             Public Enquiries
           </h5>
-          <canvas id="publicEnquiryPieChart" height="300"></canvas>
+          <canvas id="publicEnquiryPieChart" height="100"></canvas>
         </div>
       </div>
     </div>
@@ -85,9 +84,10 @@
 
 <script>
   // ====================
-  // CONFIGURATION
+  // COLOR CONFIGURATION
   // ====================
-  // Color palette for charts
+  // Array of colors for chart elements (bars/pie slices)
+  // Each color has RGBA values with 0.7 opacity (70% transparent)
   const colors = [
     'rgba(255, 99, 132, 0.7)',    // Red
     'rgba(54, 162, 235, 0.7)',     // Blue
@@ -101,90 +101,129 @@
   // ====================
   // UTILITY FUNCTIONS
   // ====================
-  // Display current date
+  // Display current date in the dashboard header
+  // Formats date as "Jan 1, 2023" style
   document.getElementById('current-date').textContent =
     new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+      year: 'numeric',  // Show full year (2023)
+      month: 'short',   // Short month name (Jan)
+      day: 'numeric'    // Day of month (1-31)
     });
 
   // ====================
-  // CHART 1: ACTIVITY PARTICIPATION
+  // CHART 1: ACTIVITY PARTICIPATION (HORIZONTAL BAR CHART)
   // ====================
+
+  // Get the canvas element and its 2D drawing context
   const activityCtx = document.getElementById('activityChart').getContext('2d');
+
+  // Create new Chart.js instance for activity participation
   new Chart(activityCtx, {
-    type: 'bar',
+    type: 'bar',  // Specifies this is a bar chart
     data: {
-      labels: [''], // Single dummy label for y-axis
+      // Single empty label for Y-axis (since we're using horizontal bars)
+      labels: [''],
+
+      // Create dataset for each activity using map()
       datasets: {{ activity_names | tojson }}.map((name, i) => ({
-        label: name,
-        data: [{{ signup_counts | tojson }}[i]], // Wrap count in array
+        label: name,  // Activity name from Flask template
+        // Participation count wrapped in array (required for horizontal bars)
+        data: [{{ signup_counts | tojson }}[i]],
+        // Assign color from palette using modulo to cycle through colors
         backgroundColor: colors[i % colors.length],
+        // Border color same as fill but with full opacity
         borderColor: colors[i % colors.length],
-        borderWidth: 1
+        borderWidth: 1  // 1px border around bars
       }))
     },
     options: {
-      indexAxis: 'y', // Horizontal bars
-      responsive: true,
+      indexAxis: 'y',  // Makes bars horizontal (default is vertical)
+      responsive: true,  // Chart will resize with container
+
+      // Chart plugins configuration
       plugins: {
         legend: {
-          display: true,
-          position: 'right',
+          display: true,  // Show the legend
+          position: 'right',  // Place legend on right side
           labels: {
-            boxWidth: 12 // Size of color boxes in legend
+            boxWidth: 10  // Width of color indicator boxes in legend
           }
         },
+        // Customize tooltip content
         tooltip: {
           callbacks: {
+            // Format tooltip to show "Activity: Count" format
             label: ctx => `${ctx.dataset.label}: ${ctx.dataset.data[0]}`
           }
         }
       },
+
+      // Axis configurations
       scales: {
-        x: {
-          beginAtZero: true,
-          title: { display: true, text: 'Number of Participants' },
-          ticks: { stepSize: 1 }
+        x: {  // Bottom axis (shows participant counts)
+          beginAtZero: true,  // Axis starts at 0
+          title: {
+            display: true,
+            text: 'Number of Participants'  // X-axis label
+          },
+          ticks: {
+            stepSize: 1  // Show every integer value
+          }
         },
-        y: {
-          title: { display: true, text: 'Activity Name' },
-          ticks: { display: false } // Hide dummy label
+        y: {  // Left axis (would show activity names but hidden)
+          title: {
+            display: true,
+            text: 'Activity Name'  // Y-axis label
+          },
+          ticks: {
+            display: false  // Hide the dummy label we set earlier
+          }
         }
       }
     }
   });
 
   // ====================
-  // CHART 2: PARTICIPANT ENQUIRIES
+  // CHART 2: PARTICIPANT ENQUIRIES (PIE CHART)
   // ====================
+
+  // Get canvas context for participant enquiries chart
   const participantCtx = document.getElementById('participantEnquiryPieChart').getContext('2d');
+
+  // Create pie chart instance
   new Chart(participantCtx, {
-    type: 'pie',
+    type: 'pie',  // Specifies pie chart type
     data: {
+      // Labels from Flask template (enquiry subjects)
       labels: {{ participant_subject_labels | tojson }},
       datasets: [{
+        // Data values from Flask template (count per subject)
         data: {{ participant_subject_values | tojson }},
+        // Assign colors from palette
         backgroundColor: colors,
+        // Create border colors by making fill colors fully opaque
         borderColor: colors.map(c => c.replace('0.7', '1')),
-        borderWidth: 1
+        borderWidth: 1  // 1px border around slices
       }]
     },
     options: {
-      responsive: true,
+      responsive: true,  // Responsive sizing
       plugins: {
         legend: {
-          position: 'right',
+          position: 'right',  // Legend on right side
           labels: {
-            boxWidth: 12
+            boxWidth: 12  // Color box size in legend
           }
         },
+        // Custom tooltip showing count and percentage
         tooltip: {
           callbacks: {
             label: ctx => {
+              // Calculate total of all values
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              // Calculate percentage (rounded to nearest integer)
               const percentage = Math.round((ctx.raw / total) * 100);
+              // Format as "Subject: Count (Percentage%)"
               return `${ctx.label}: ${ctx.raw} (${percentage}%)`;
             }
           }
@@ -194,9 +233,13 @@
   });
 
   // ====================
-  // CHART 3: PUBLIC ENQUIRIES
+  // CHART 3: PUBLIC ENQUIRIES (PIE CHART)
   // ====================
+
+  // Get canvas context for public enquiries chart
   const publicCtx = document.getElementById('publicEnquiryPieChart').getContext('2d');
+
+  // Create pie chart instance (same structure as participant enquiries)
   new Chart(publicCtx, {
     type: 'pie',
     data: {
@@ -230,4 +273,5 @@
     }
   });
 </script>
+
 {% endblock %}
