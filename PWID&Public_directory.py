@@ -144,6 +144,67 @@ def sync_participant_enquiry_id():
         Participant_Enquiry.ParticipantEnquiry.count_id = 0
     except Exception as e:
         print("Error syncing enquiry ID:", e)
+
+    @app.route('/donations/add_to_cart/<product_id>')
+    def add_to_cart(product_id):
+        cart = session.get('cart', {})
+
+        # Fetch product details from database
+        productdb = shelve.open('storage_products.db', 'r')
+        products = productdb['product']
+        productdb.close()
+
+        product = products.get(product_id)
+        if not product:
+            return redirect(url_for('donations'))
+
+        if product_id in cart:
+            cart[product_id]['quantity'] += 1
+        else:
+            cart[product_id] = {
+                'name': product.get_product(),
+                'price': product.get_price(),
+                'quantity': 1
+            }
+
+        session['cart'] = cart
+        return redirect(url_for('transaction_cart'))
+
+
+    @app.route('/donations/transaction_cart')
+    def transaction_cart():
+        cart = session.get('cart', {})
+        total = sum(item['price'] * item['quantity'] for item in cart.values())
+        return render_template('Public/transaction_cart.html', cart=cart, total=total)
+
+    @app.route('/donations/update_quantity/<product_id>/<action>')
+    def update_quantity(product_id, action):
+        cart = session.get('cart', {})
+
+        if product_id in cart:
+            if action == 'increase':
+                cart[product_id]['quantity'] += 1
+            elif action == 'decrease':
+                cart[product_id]['quantity'] -= 1
+                if cart[product_id]['quantity'] <= 0:
+                    del cart[product_id]
+
+        session['cart'] = cart
+        return redirect(url_for('transaction_cart'))
+
+    @app.route('/donations/remove_item/<product_id>')
+    def remove_item(product_id):
+        cart = session.get('cart', {})
+        if product_id in cart:
+            del cart[product_id]
+        session['cart'] = cart
+        return redirect(url_for('transaction_cart'))
+
+
+    @app.route('/donations/transaction_cart/checkout', methods=['POST'])
+    def checkout():
+        # Process payment logic here
+        return "Checkout complete!"
 # ========================
 # Public Routes (main site)
 # ========================

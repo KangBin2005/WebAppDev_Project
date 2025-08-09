@@ -150,10 +150,10 @@
             </li>
             {% if current_page == 'public_donations' %}
                 <li class="nav-item ml-3 mr-2">
-                    <div class="cart btn">
+                    <a href="{{ url_for('transaction_cart') }}" class="cart btn">
                         <i class="bi bi-cart"></i>
-                        <div class="cart-amount">0</div>
-                    </div>
+                        <div class="cart-amount">{{ session.get('cart')|length if session.get('cart') else 0 }}</div>
+                    </a>
                 </li>
             {% endif %}
         </ul>

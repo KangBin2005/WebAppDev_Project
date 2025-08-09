@@ -22,12 +22,10 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light">
-                    <button class="btn btn-primary btn-sm add-to-cart-btn"
-                        data-id="{{ product.get_product_id() }}"
-                        data-name="{{ product.get_product() }}"
-                        data-price="{{ product.get_price() }}">
-                            Add to Cart
-                    </button>
+                    <a href="{{ url_for('add_to_cart', product_id=product.get_product_id()) }}"
+                        class="btn btn-primary btn-sm">
+                        Add to Cart
+                    </a>
                 </div>
             </div>
         </div>
