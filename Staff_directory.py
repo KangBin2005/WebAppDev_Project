@@ -212,7 +212,7 @@ def delete_account(id):
 def activity_public():
     search_query = request.args.get('search', '').lower()
     page = request.args.get('page', 1, type=int)
-    per_page = 5  # Number of activities per page
+    per_page = 6  # Number of activities per page
 
     db = shelve.open('storage/storage_activities.db', 'r')
     activities_dict = db.get('Activities', {})
