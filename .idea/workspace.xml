@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Working on cart">
+    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Updated cart">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Public/donations.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Public/donations.html" afterDir="false" />
@@ -82,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754621639279</updated>
-      <workItem from="1754725588047" duration="15130000" />
+      <workItem from="1754725588047" duration="15427000" />
     </task>
     <task id="LOCAL-00001" summary="Update PWIDS_navbar.html">
       <option name="closed" value="true" />
@@ -164,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754746615559</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Updated cart">
+      <option name="closed" value="true" />
+      <created>1754749217927</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1754749217927</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,7 +184,8 @@
     <MESSAGE value="Improved readability of Login Texts" />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
     <MESSAGE value="Working on cart" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working on cart" />
+    <MESSAGE value="Updated cart" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated cart" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/WebAppDev_Project$Staff_directory.coverage" NAME="Staff_directory Coverage Results" MODIFIED="1754677341965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
