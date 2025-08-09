@@ -145,35 +145,30 @@ def sync_participant_enquiry_id():
     except Exception as e:
         print("Error syncing enquiry ID:", e)
 
-@app.route('/donations/add_to_cart/<product_id>', methods=['POST'])
+@app.route('/donations/add_to_cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
     cart = session.get('cart', {})
+    pid = str(product_id)
 
-    if product_id in cart:
-        cart[product_id]['quantity'] += 1
+    if pid in cart:
+        cart[pid]['quantity'] += 1
     else:
-        # Here, you’d typically expect product name & price from frontend or elsewhere,
-        # but for demo, just store the ID and a placeholder name/price:
-        cart[product_id] = {
-            'name': f'Product {product_id}',  # placeholder name
-            'price': 0.00,                    # placeholder price
+        cart[pid] = {
+            'name': request.form['name'],
+            'price': float(request.form['price']),
             'quantity': 1
         }
 
     session['cart'] = cart
-
-    return jsonify({
-        'message': 'Product added',
-        'productId': product_id,
-        'cartItemCount': sum(item['quantity'] for item in cart.values())
-    })
+    return redirect(request.referrer)
 
 @app.route('/donations/transaction_cart')
 def transaction_cart():
     cart = session.get('cart', {})
+    print(cart)
     return render_template('Public/transaction_cart.html', cart=cart)
 
-@app.route('/donations/update_quantity/<product_id>/<action>')
+@app.route('/donations/transaction_cart/update_quantity/<product_id>/<action>')
 def update_quantity(product_id, action):
     cart = session.get('cart', {})
 
@@ -188,7 +183,7 @@ def update_quantity(product_id, action):
         session['cart'] = cart
         return redirect(url_for('transaction_cart'))
 
-@app.route('/donations/remove_item/<product_id>')
+@app.route('/donations/transaction_cart/remove_item/<product_id>')
 def remove_item(product_id):
     cart = session.get('cart', {})
     if product_id in cart:
