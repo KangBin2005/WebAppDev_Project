@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import shelve, os, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
 from datetime import date
 from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm
+from math import ceil
 from functools import wraps
 
 app = Flask(__name__)
@@ -154,9 +155,55 @@ def public_home():
 def public_about():
     return render_template('Public/about.html', current_page='public_about')
 
-@app.route('/activities')
+@app.route('/activities', methods=['GET', 'POST'])
 def public_activities():
-    return render_template('Public/activities.html', current_page='public_activities')
+    # Get filter parameters
+    selected_activity = request.args.get('activity', '')
+    selected_venue = request.args.get('venue', '')
+    page = request.args.get('page', 1, type=int)
+    per_page = 6  # Items per page
+
+    # Open database
+    db = shelve.open('storage/storage_activities.db', 'r')
+    activities_dict = db.get('Activities', {})
+    db.close()
+
+    # Get all unique venues and activity names for dropdowns
+    all_activities = list(activities_dict.values())
+    venues = sorted({activity.get_activity_venue() for activity in all_activities})
+    activity_names = sorted({activity.get_activity_name() for activity in all_activities})
+
+    # Apply filters
+    filtered_activities = []
+    for activity in all_activities:
+        activity_match = not selected_activity or activity.get_activity_name() == selected_activity
+        venue_match = not selected_venue or activity.get_activity_venue() == selected_venue
+
+        if activity_match and venue_match:
+            filtered_activities.append(activity)
+
+    # Sort by date (newest first)
+    filtered_activities.sort(key=lambda x: x.get_activity_start_datetime(), reverse=True)
+
+    # Pagination
+    total = len(filtered_activities)
+    pages = ceil(total / per_page)
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_activities = filtered_activities[start:end]
+
+    return render_template(
+        'Public/activities.html',
+        current_page='public_activities',
+        count=total,
+        activities=paginated_activities,
+        page=page,
+        pages=pages,
+        selected_activity=selected_activity,
+        selected_venue=selected_venue,
+        venues=venues,
+        activity_names=activity_names
+    )
 
 @app.route('/contact')
 def public_contact():
