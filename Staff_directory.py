@@ -378,34 +378,51 @@ def analytics():
 
     # Load participant enquiries and count by subject
     with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:
-        all_enquiries = db.get('Participant_Enquiries', {}).values()
+        all_participant_enquiries = db.get('Participant_Enquiries', {}).values()
 
-    # Define the subjects to count (same as in your other route)
-    subjects = ['Activity', 'Technical Issues', 'Account Issues',
-                'General Feedback / Concerns', 'Navigation Issues', 'Others']
+    # Define the subjects to count
+    participant_subjects = ['Activity', 'Technical Issues', 'Account Issues',
+                          'General Feedback / Concerns', 'Navigation Issues', 'Others']
 
-    subject_counts = {subject: 0 for subject in subjects}
-    for enquiry in all_enquiries:
-        # Make sure enquiry is valid and has get_subject method
+    participant_subject_counts = {subject: 0 for subject in participant_subjects}
+    for enquiry in all_participant_enquiries:
         try:
             subj = enquiry.get_subject()
-            if subj in subject_counts:
-                subject_counts[subj] += 1
+            if subj in participant_subject_counts:
+                participant_subject_counts[subj] += 1
         except Exception:
             pass  # skip invalid entries
 
-    subject_labels = list(subject_counts.keys())
-    subject_values = list(subject_counts.values())
+    participant_subject_labels = list(participant_subject_counts.keys())
+    participant_subject_values = list(participant_subject_counts.values())
+
+    # Load public enquiries and count by subject
+    with shelve.open('storage/public_enquiries_storage.db', 'r') as db:
+        all_public_enquiries = db.get('Public_Enquiries', {}).values()
+
+    public_subjects = ['Activity', 'Payment Issues', 'Donations Matters',
+                      'General Enquiry', 'Navigation Issues', 'Others']
+
+    public_subject_counts = {subject: 0 for subject in public_subjects}
+    for enquiry in all_public_enquiries:
+        try:
+            subj = enquiry.get_subject()
+            if subj in public_subject_counts:
+                public_subject_counts[subj] += 1
+        except Exception:
+            pass  # skip invalid entries
+
+    public_subject_labels = list(public_subject_counts.keys())
+    public_subject_values = list(public_subject_counts.values())
 
     return render_template('Staff/analytics.html',
-                           current_page='analytics',
-                           activity_names=activity_names,
-                           signup_counts=signup_counts,
-                           subject_labels=subject_labels,
-                           subject_values=subject_values)
-
-
-# <-------- Staff (Participants) Done by Kang Bin -------->
+                         current_page='analytics',
+                         activity_names=activity_names,
+                         signup_counts=signup_counts,
+                         participant_subject_labels=participant_subject_labels,
+                         participant_subject_values=participant_subject_values,
+                         public_subject_labels=public_subject_labels,
+                         public_subject_values=public_subject_values)
 
 @app.route('/activity-management/participants')
 @login_required

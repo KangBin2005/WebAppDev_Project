@@ -1,131 +1,233 @@
 {% extends "Staff/Staff_base.html" %}
-{% block title %}Activity Analytics Dashboard{% endblock %}
+{% block title %}Analytics Dashboard{% endblock %}
 
 {% block content %}
+<!-- MAIN CONTAINER -->
 <div class="container mt-4">
-    <h2 class="mb-4">Participants Analytics Dashboard</h2>
 
-    <div class="row">
-        <!-- Left: Activity Participation Chart -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Activity Participation Overview</h5>
-                    <canvas id="activityChart" width="400" height="300"></canvas>
-                </div>
-            </div>
-        </div>
+  <!-- DASHBOARD HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Analytics Dashboard</h2>
+    <!-- Current date display -->
+    <small class="text-muted">
+      <i class="fas fa-calendar-alt me-1"></i>
+      <span id="current-date"></span>
+    </small>
+  </div>
 
-        <!-- Right: Enquiries by Subject Chart -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Participants Enquiries by Subject</h5>
-                    <canvas id="enquiryChart" width="400" height="300"></canvas>
-                </div>
-            </div>
+  <!-- CHARTS ROW 1: Activity and Participant Enquiries -->
+  <div class="row">
+
+    <!-- ACTIVITY PARTICIPATION CARD -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-running text-primary me-2"></i>
+            Activity Participation
+          </h5>
+          <canvas id="activityChart" height="300"></canvas>
         </div>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const colors = [
-            'rgba(255, 99, 132, 0.7)',
-            'rgba(54, 162, 235, 0.7)',
-            'rgba(255, 206, 86, 0.7)',
-            'rgba(75, 192, 192, 0.7)',
-            'rgba(153, 102, 255, 0.7)',
-            'rgba(255, 159, 64, 0.7)',
-            'rgba(201, 203, 207, 0.7)'
-        ];
+    <!-- PARTICIPANT ENQUIRIES CARD -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-comments text-success me-2"></i>
+            Participant Enquiries
+          </h5>
+          <canvas id="participantEnquiryPieChart" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // === Activity Participation Chart ===
-        const ctx1 = document.getElementById('activityChart').getContext('2d');
-        const activityNames = {{ activity_names | tojson }};
-        const signupCounts = {{ signup_counts | tojson }};
-
-        const datasets1 = activityNames.map((activity, i) => ({
-            label: activity,
-            data: [signupCounts[i]],
-            backgroundColor: colors[i % colors.length],
-            borderColor: colors[i % colors.length],
-            borderWidth: 1
-        }));
-
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: [''],  // dummy label for y-axis
-                datasets: datasets1
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: { display: true, position: 'right' },
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => `${ctx.dataset.label}: ${ctx.dataset.data[0]}`
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Number of Participants' },
-                        ticks: { stepSize: 1 }
-                    },
-                    y: {
-                        title: { display: true, text: 'Activity Name' },
-                        ticks: { display: false }
-                    }
-                }
-            }
-        });
-
-        // === Enquiries by Subject Chart ===
-        const ctx2 = document.getElementById('enquiryChart').getContext('2d');
-        const enquirySubjects = {{ subject_labels | tojson }};
-        const enquiryCounts = {{ subject_values | tojson }};
-
-        const datasets2 = enquirySubjects.map((subject, i) => ({
-            label: subject,
-            data: [enquiryCounts[i]],
-            backgroundColor: colors[i % colors.length],
-            borderColor: colors[i % colors.length],
-            borderWidth: 1
-        }));
-
-        new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: [''],  // dummy label for y-axis
-                datasets: datasets2
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: { display: true, position: 'right' },
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => `${ctx.dataset.label}: ${ctx.dataset.data[0]}`
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Number of Enquiries' },
-                        ticks: { stepSize: 1 }
-                    },
-                    y: {
-                        title: { display: true, text: 'Subject' },
-                        ticks: { display: false }
-                    }
-                }
-            }
-        });
-    </script>
+  <!-- CHARTS ROW 2: Public Enquiries -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-globe text-info me-2"></i>
+            Public Enquiries
+          </h5>
+          <canvas id="publicEnquiryPieChart" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- STYLES -->
+<style>
+  /* Card styling */
+  .card {
+    border-radius: 8px;
+    border: none;
+  }
+  .card-title {
+    font-weight: 600;
+  }
+  /* Icon colors */
+  .text-primary { color: #4285F4; }
+  .text-success { color: #34A853; }
+  .text-info { color: #17a2b8; }
+</style>
+
+<!-- SCRIPTS -->
+<!-- Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+  // ====================
+  // CONFIGURATION
+  // ====================
+  // Color palette for charts
+  const colors = [
+    'rgba(255, 99, 132, 0.7)',    // Red
+    'rgba(54, 162, 235, 0.7)',     // Blue
+    'rgba(255, 206, 86, 0.7)',     // Yellow
+    'rgba(75, 192, 192, 0.7)',     // Teal
+    'rgba(153, 102, 255, 0.7)',    // Purple
+    'rgba(255, 159, 64, 0.7)',     // Orange
+    'rgba(201, 203, 207, 0.7)'     // Gray
+  ];
+
+  // ====================
+  // UTILITY FUNCTIONS
+  // ====================
+  // Display current date
+  document.getElementById('current-date').textContent =
+    new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+
+  // ====================
+  // CHART 1: ACTIVITY PARTICIPATION
+  // ====================
+  const activityCtx = document.getElementById('activityChart').getContext('2d');
+  new Chart(activityCtx, {
+    type: 'bar',
+    data: {
+      labels: [''], // Single dummy label for y-axis
+      datasets: {{ activity_names | tojson }}.map((name, i) => ({
+        label: name,
+        data: [{{ signup_counts | tojson }}[i]], // Wrap count in array
+        backgroundColor: colors[i % colors.length],
+        borderColor: colors[i % colors.length],
+        borderWidth: 1
+      }))
+    },
+    options: {
+      indexAxis: 'y', // Horizontal bars
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'right',
+          labels: {
+            boxWidth: 12 // Size of color boxes in legend
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.dataset.data[0]}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Number of Participants' },
+          ticks: { stepSize: 1 }
+        },
+        y: {
+          title: { display: true, text: 'Activity Name' },
+          ticks: { display: false } // Hide dummy label
+        }
+      }
+    }
+  });
+
+  // ====================
+  // CHART 2: PARTICIPANT ENQUIRIES
+  // ====================
+  const participantCtx = document.getElementById('participantEnquiryPieChart').getContext('2d');
+  new Chart(participantCtx, {
+    type: 'pie',
+    data: {
+      labels: {{ participant_subject_labels | tojson }},
+      datasets: [{
+        data: {{ participant_subject_values | tojson }},
+        backgroundColor: colors,
+        borderColor: colors.map(c => c.replace('0.7', '1')),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 12
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = Math.round((ctx.raw / total) * 100);
+              return `${ctx.label}: ${ctx.raw} (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // ====================
+  // CHART 3: PUBLIC ENQUIRIES
+  // ====================
+  const publicCtx = document.getElementById('publicEnquiryPieChart').getContext('2d');
+  new Chart(publicCtx, {
+    type: 'pie',
+    data: {
+      labels: {{ public_subject_labels | tojson }},
+      datasets: [{
+        data: {{ public_subject_values | tojson }},
+        backgroundColor: colors,
+        borderColor: colors.map(c => c.replace('0.7', '1')),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 12
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = Math.round((ctx.raw / total) * 100);
+              return `${ctx.label}: ${ctx.raw} (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
 {% endblock %}
