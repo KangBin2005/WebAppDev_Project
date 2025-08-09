@@ -1,0 +1,15 @@
+<changelist name="Uncommitted_changes_before_Update_at_9_8_2025_10_37_am_[Changes]" date="1754707048068" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_10_37_am_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 9/8/2025 10:37 am [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="storage/participant_enquiries_storage.db" />
+    <option name="AFTER_PATH" value="storage/participant_enquiries_storage.db" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_10_37_am_[Changes]/participant_enquiries_storage.db" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="storage/user_storage.db-shm" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="storage/user_storage.db-wal" />
+  </binary>
+</changelist>

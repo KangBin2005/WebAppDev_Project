@@ -1,0 +1,83 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"6601265b-4720-44f1-8c0e-50ec8148b1ec\" name=\"Changes\" comment=\"Update PWIDS_navbar.html\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/WebAppDev_Project.iml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/WebAppDev_Project.iml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/PWID&amp;Public_directory.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/PWID&amp;Public_directory.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/storage/activity_signups.db\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/storage/activity_signups.db-shm\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/storage/activity_signups.db-wal\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/templates/PWIDS/my_activities.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/templates/PWIDS/my_activities.html\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PREVIOUS_COMMIT_AUTHORS\">\r\n      <list>\r\n        <option value=\"kiythes &lt;gabyeo06@gmail.com&gt;\" />\r\n      </list>\r\n    </option>\r\n    <option name=\"PUSH_TAGS\">\r\n      <GitPushTagMode>\r\n        <option name=\"argument\" value=\"--tags\" />\r\n        <option name=\"title\" value=\"All\" />\r\n      </GitPushTagMode>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;KangBin2005&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/KangBin2005/WebAppDev_Project.git&quot;,\r\n    &quot;accountId&quot;: &quot;0c824a9b-fc4b-4f6d-8d9d-34b07240ec50&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"30zDj7R5iJpzgdFtiSfpUOQ8HRi\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"Python.PWID&Public_directory.executor\": \"Run\",\r\n    \"Python.Staff_directory.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"settings.editor.selected.configurable\": \"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-python-sdk-348a24fa61fa-5312c7369657-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.23774.444\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"6601265b-4720-44f1-8c0e-50ec8148b1ec\" name=\"Changes\" comment=\"\" />\r\n      <created>1754621639279</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1754621639279</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Update PWIDS_navbar.html\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1754622205286</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1754622205286</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Merge remote-tracking branch 'origin/master'\" />\r\n    <MESSAGE value=\"Update PWIDS_navbar.html\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Update PWIDS_navbar.html\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision a4780209a3ec201e450f8241b7c7809830d690b7)
++++ b/.idea/workspace.xml	(date 1754663239572)
+@@ -4,15 +4,11 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Update PWIDS_navbar.html">
+-      <change beforePath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WebAppDev_Project.iml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/PWID&amp;Public_directory.py" beforeDir="false" afterPath="$PROJECT_DIR$/PWID&amp;Public_directory.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db-shm" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db-wal" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/templates/PWIDS/my_activities.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PWIDS/my_activities.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/storage/user_storage.db-shm" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/storage/user_storage.db-wal" beforeDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -53,17 +49,17 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ModuleVcsDetector.initialDetectionPerformed": "true",
+-    "Python.PWID&Public_directory.executor": "Run",
+-    "Python.Staff_directory.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "git-widget-placeholder": "master",
+-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
++    &quot;Python.PWID&amp;Public_directory.executor&quot;: &quot;Run&quot;,
++    &quot;Python.Staff_directory.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+@@ -87,12 +83,21 @@
+       <option name="project" value="LOCAL" />
+       <updated>1754622205286</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
++      <option name="closed" value="true" />
++      <created>1754662734425</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1754662734425</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
+     <MESSAGE value="Update PWIDS_navbar.html" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Update PWIDS_navbar.html" />
++    <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
++    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
+   </component>
+ </project>
+\ No newline at end of file
