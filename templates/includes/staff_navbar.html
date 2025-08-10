@@ -53,7 +53,7 @@
             <li class="nav-item {% if current_page == 'dashboard' %}active{% endif %}">
                 <a class="nav-link text-white" href="{{ url_for('dashboard') }}">Dashboard</a>
             </li>
-            <li class="nav-item text-center {% if current_page == 'account_management' %}active{% endif %}">
+            <li class="nav-item text-center {% if current_page in ['account_management', 'account_update', 'account_create'] %}active{% endif %}">
                 <a class="nav-link text-white" href="{{ url_for('manage_accounts') }}">Accounts</a>
             </li>
 
@@ -64,7 +64,7 @@
 
 
             <!-- Activity Management Dropdown -->
-            <li class="nav-item dropdown {% if current_page in ['manage_activities', 'activity_participants', 'activity_public'] %}active{% endif %}">
+            <li class="nav-item dropdown {% if current_page in ['manage_activities', 'activity_participants', 'activity_public', 'activity_public_create', 'activity_public_update'] %}active{% endif %}">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="activityDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Activities
@@ -72,7 +72,7 @@
                 <div class="dropdown-menu" aria-labelledby="activityDropdown">
                     <a class="dropdown-item {% if current_page == 'activity_participants' %}active{% endif %}"
                        href="{{ url_for('activity_participants') }}">Participants</a>
-                    <a class="dropdown-item {% if current_page == 'activity_public' %}active{% endif %}"
+                    <a class="dropdown-item {% if current_page in ['activity_public', 'activity_public_create', 'activity_public_update'] %}active{% endif %}"
                        href="{{ url_for('activity_public') }}">Public</a>
                 </div>
             </li>
