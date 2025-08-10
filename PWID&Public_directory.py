@@ -25,90 +25,6 @@ def login_required(f):
         return f(*args, **kwargs)
     return custom_login
 
-
-# ========================
-# Sample SG Enable Outlets Data
-# ========================
-outlets = {
-    1: {
-        'name': 'SG Enable Headquarters',
-        'address': '20 Lengkok Bahru (Enabling Village), #01-01, Singapore 159053',
-        'phone': '+65 6479 3700',
-        'hours': 'Mon-Fri: 9am to 5.30pm',
-        'wheelchair_accessible': True,
-        'lat': '1.2875454',
-        'lng': '103.8149975',
-        'map_zoom': '17',
-        'map_version': '1716905890037',
-        'map_url': 'https://www.google.com/maps/place/SG+Enable/@1.2875508,103.8124226,17z/data=!3m1!4b1!4m6!3m5!1s0x31da19792f952f6d:0xb7db38a7c6c26ba1!8m2!3d1.2875454!4d103.8149975!16s%2Fg%2F1vg_9cwl?entry=ttu',
-        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.669318672029!2d103.8124226!3d1.2875508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19792f952f6d%3A0xb7db38a7c6c26ba1!2sSG%20Enable!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
-    },
-    2: {
-        'name': 'Toa Payoh Enable Hub',
-        'address': '190 Lorong 6 Toa Payoh, #02-510, Singapore 310190',
-        'phone': '+65 6123 4567',
-        'hours': 'Mon-Fri: 9am-6pm',
-        'wheelchair_accessible': True,
-        'lat': '1.3345',
-        'lng': '103.8568',
-        'map_zoom': '7977.322862803088',
-        'map_version': '1716905890037',
-        'map_url': 'https://www.google.com/maps/place/190+Lor+6+Toa+Payoh,+%2302-510,+Singapore+310190',
-        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.73834704838!2d103.854225!3d1.3345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjAnMDQuMiJOIDEwM8KwNTEnMjQuNSJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
-    },
-    3: {
-        'name': 'Bishan Enable Support Centre',
-        'address': '51 Bishan Street 13, #01-01, Singapore 579799',
-        'phone': '+65 6234 5678',
-        'hours': 'Mon-Sat: 8am-7pm',
-        'wheelchair_accessible': True,
-        'lat': '1.3506',
-        'lng': '103.8484',
-        'map_zoom': '7977.322862803088',
-        'map_version': '1716905890037',
-        'map_url': 'https://www.google.com/maps/place/51+Bishan+St+13,+%2301-01,+Singapore+579799',
-        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.584402768847!2d103.846212!3d1.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMDIuMiJOIDEwM8KwNTAnNTQuMiJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
-    },
-    4: {
-        'name': 'Yishun Enable Care Centre',
-        'address': '101 Yishun Ave 5, #03-01, Singapore 760101',
-        'phone': '+65 6345 6789',
-        'hours': 'Mon-Fri: 8:30am-5:30pm',
-        'wheelchair_accessible': True,
-        'lat': '1.4295',
-        'lng': '103.8350',
-        'map_zoom': '7977.322862803088',
-        'map_version': '1716905890037',
-        'map_url': 'https://www.google.com/maps/place/101+Yishun+Ave+5,+%2303-01,+Singapore+760101',
-        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.263601270874!2d103.832812!3d1.4295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjUnNDYuMiJOIDEwM8KwNTAnMDYuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
-    },
-    5: {
-        'name': 'Tampines Enable Hub',
-        'address': '5 Tampines Central 6, #04-10, Singapore 529482',
-        'phone': '+65 6456 7890',
-        'hours': 'Mon-Sat: 9am-6pm',
-        'wheelchair_accessible': True,
-        'lat': '1.3536',
-        'lng': '103.9386',
-        'map_zoom': '7977.322862803088',
-        'map_version': '1716905890037',
-        'map_url': 'https://www.google.com/maps/place/5+Tampines+Central+6,+%2304-10,+Singapore+529482',
-        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.678350727765!2d103.936412!3d1.3536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMTMuMCJOIDEwM8KwNTYnMTkuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
-    },
-    6: {
-        'name': 'Jurong East Enable Centre',
-        'address': '135 Jurong Gateway Rd, #02-317, Singapore 600135',
-        'phone': '+65 6567 8901',
-        'hours': 'Mon-Fri: 8am-5pm',
-        'wheelchair_accessible': True,
-        'lat': '1.3333',
-        'lng': '103.7426',
-        'map_zoom': '7977.322862803088',
-        'map_version': '1716905890037',
-        'map_url': 'https://www.google.com/maps/place/135+Jurong+Gateway+Rd,+%2302-317,+Singapore+600135',
-        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.917197049249!2d103.740412!3d1.3333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTknNTkuOSJOIDEwM8KwNDQnMzMuNCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
-    }
-}
 def sync_public_enquiry_id():
     try:
         db = shelve.open('storage/public_enquiries_storage.db', 'r')
@@ -306,14 +222,100 @@ def public_enquiries():
                            current_page='public_enquiries',
                            form=create_enquiry_form)
 
+# ========================
+# Sample SG Enable Outlets Data for Public and Participants locations Route
+# ========================
+outlets = {
+    1: {
+        'name': 'SG Enable Headquarters',
+        'address': '20 Lengkok Bahru (Enabling Village), #01-01, Singapore 159053',
+        'phone': '+65 6479 3700',
+        'hours': 'Mon-Fri: 9am to 5.30pm',
+        'wheelchair_accessible': True,
+        'lat': '1.2875454',
+        'lng': '103.8149975',
+        'map_zoom': '17',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/SG+Enable/@1.2875508,103.8124226,17z/data=!3m1!4b1!4m6!3m5!1s0x31da19792f952f6d:0xb7db38a7c6c26ba1!8m2!3d1.2875454!4d103.8149975!16s%2Fg%2F1vg_9cwl?entry=ttu',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.669318672029!2d103.8124226!3d1.2875508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19792f952f6d%3A0xb7db38a7c6c26ba1!2sSG%20Enable!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    2: {
+        'name': 'Toa Payoh Enable Hub',
+        'address': '190 Lorong 6 Toa Payoh, #02-510, Singapore 310190',
+        'phone': '+65 6123 4567',
+        'hours': 'Mon-Fri: 9am-6pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3345',
+        'lng': '103.8568',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/190+Lor+6+Toa+Payoh,+%2302-510,+Singapore+310190',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.73834704838!2d103.854225!3d1.3345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjAnMDQuMiJOIDEwM8KwNTEnMjQuNSJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    3: {
+        'name': 'Bishan Enable Support Centre',
+        'address': '51 Bishan Street 13, #01-01, Singapore 579799',
+        'phone': '+65 6234 5678',
+        'hours': 'Mon-Sat: 8am-7pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3506',
+        'lng': '103.8484',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/51+Bishan+St+13,+%2301-01,+Singapore+579799',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.584402768847!2d103.846212!3d1.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMDIuMiJOIDEwM8KwNTAnNTQuMiJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    4: {
+        'name': 'Yishun Enable Care Centre',
+        'address': '101 Yishun Ave 5, #03-01, Singapore 760101',
+        'phone': '+65 6345 6789',
+        'hours': 'Mon-Fri: 8:30am-5:30pm',
+        'wheelchair_accessible': True,
+        'lat': '1.4295',
+        'lng': '103.8350',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/101+Yishun+Ave+5,+%2303-01,+Singapore+760101',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.263601270874!2d103.832812!3d1.4295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjUnNDYuMiJOIDEwM8KwNTAnMDYuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    5: {
+        'name': 'Tampines Enable Hub',
+        'address': '5 Tampines Central 6, #04-10, Singapore 529482',
+        'phone': '+65 6456 7890',
+        'hours': 'Mon-Sat: 9am-6pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3536',
+        'lng': '103.9386',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/5+Tampines+Central+6,+%2304-10,+Singapore+529482',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.678350727765!2d103.936412!3d1.3536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjEnMTMuMCJOIDEwM8KwNTYnMTkuMCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    },
+    6: {
+        'name': 'Jurong East Enable Centre',
+        'address': '135 Jurong Gateway Rd, #02-317, Singapore 600135',
+        'phone': '+65 6567 8901',
+        'hours': 'Mon-Fri: 8am-5pm',
+        'wheelchair_accessible': True,
+        'lat': '1.3333',
+        'lng': '103.7426',
+        'map_zoom': '7977.322862803088',
+        'map_version': '1716905890037',
+        'map_url': 'https://www.google.com/maps/place/135+Jurong+Gateway+Rd,+%2302-317,+Singapore+600135',
+        'embed_url': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.917197049249!2d103.740412!3d1.3333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTknNTkuOSJOIDEwM8KwNDQnMzMuNCJF!5e0!3m2!1sen!2ssg!4v1716905890037!5m2!1sen!2ssg'
+    }
+}
+# Get list of outlets
 @app.route('/contact/locations')
 def public_locations():
     return render_template('Public/contact_locations.html',
                            outlets=outlets,
                            current_page='public_locations')
 
+# See Map based on the respective outlet address
 @app.route('/contact/locations/<int:outlet_id>')
 def public_contact_outlet_map(outlet_id):
+    # Retrieve specific outlet by ID
     outlet = outlets.get(outlet_id)
     if not outlet:
         return redirect(url_for('public_locations'))
@@ -343,104 +345,92 @@ def public_donations():
 
     return render_template('Public/donations.html', current_page='public_donations',product_list=product_list)
 
-# ========================
-# Participant Routes (under /participants/)
-# ========================
+
 @app.route('/participants/home')
 @login_required
 def participant_home():
-    try:
-        # Get today's date
-        today = date.today()
+    activities_dict = {}
+    db = shelve.open('storage/participant_activity_storage.db', 'r')
+    activities_dict = db['Activities']
+    db.close()
 
-        # Open the shelve database
-        with shelve.open('storage/participant_activity_storage.db', 'r') as db:
-            activities_dict = db.get('Activities', {})
+    today = date.today()
+    upcoming_activities = []
 
-            # Filter upcoming activities (today or future)
-            upcoming = [
-                a for a in activities_dict.values()
-                if a.get_date() >= today
-            ]
+    for key in activities_dict:
+        activity = activities_dict.get(key)
+        if activity.get_date() >= today:
+            upcoming_activities.append(activity)
 
-            # Sort by date (earliest first) and take first 3
-            upcoming_activities = sorted(
-                upcoming,
-                key=lambda x: x.get_date()
-            )[:3]
+    upcoming_activities.sort(key=lambda x: x.get_date())
+    upcoming_activities = upcoming_activities[:3]
 
-            return render_template(
-                'PWIDS/home.html',
-                current_page='participant_home',
-                upcoming_activities=upcoming_activities
-            )
+    return render_template(
+        'PWIDS/home.html',
+        current_page='participant_home',
+        upcoming_activities=upcoming_activities
+    )
 
-    except Exception as e:
-        print(f"Error accessing activity database: {str(e)}")
-        return render_template(
-            'PWIDS/home.html',
-            current_page='participant_home',
-            upcoming_activities=[]
-        )
-
-@app.route('/participants/my-activities', methods=['GET'])
-@login_required
+@app.route('/participant_activities')
 def participant_activities():
     try:
-        # Get filter parameters
+        # Get filter parameters from URL
         activity_name_filter = request.args.get('activity_name', '')
         location_filter = request.args.get('location', '')
 
-        with shelve.open('storage/participant_activity_storage.db', 'r') as db:
-            activities_dict = db.get('Activities', {})
-            all_activities = list(activities_dict.values())
+        # Open activities database
+        activities_db = shelve.open('storage/participant_activity_storage.db', 'r')
+        activities_dict = activities_db['Activities']
+        activities_db.close()
 
-            # Get user's registered activities
-            username = session.get('user')
-            registered_activity_ids = set()
-            with shelve.open('storage/activity_signups.db', 'r') as signups_db:
-                signups_dict = signups_db.get('Activity_Signups', {})
-                for signup in signups_dict.values():
-                    if signup.get_name() == username:
-                        registered_activity_ids.add(signup.get_activity_id())
+        # Open signups database
+        signups_db = shelve.open('storage/activity_signups.db', 'r')
+        signups_dict = signups_db['Activity_Signups']
+        signups_db.close()
 
-            # Split activities into upcoming and registered
-            upcoming_activities = []
-            registered_activities = []
+        # Get current user
+        username = session.get('user')
 
-            today = date.today()
+        # Find which activities user has registered for
+        registered_ids = set()
+        for signup in signups_dict.values():
+            if signup.get_name() == username:
+                registered_ids.add(signup.get_activity_id())
 
-            for activity in all_activities:
-                # Apply filters
-                if (activity_name_filter and activity.get_name() != activity_name_filter) or \
-                        (location_filter and activity.get_venue() != location_filter):
-                    continue
+        # Categorize activities
+        today = date.today()
+        upcoming = []
+        registered = []
 
-                # Registered activities (regardless of date)
-                if activity.get_activity_id() in registered_activity_ids:
-                    registered_activities.append(activity)
-                # Upcoming activities (future only + not registered)
-                elif activity.get_date() >= today:
-                    upcoming_activities.append(activity)
+        for activity in activities_dict.values():
+            # Skip if doesn't match filters
+            if (activity_name_filter and activity.get_name() != activity_name_filter) or \
+                    (location_filter and activity.get_venue() != location_filter):
+                continue
 
-            # Sort activities by date
-            upcoming_activities.sort(key=lambda x: x.get_date())
-            registered_activities.sort(key=lambda x: x.get_date())
+            if activity.get_activity_id() in registered_ids:
+                registered.append(activity)
+            elif activity.get_date() >= today:
+                upcoming.append(activity)
 
-            # Get all unique activity names and venues for filters
-            activity_names = sorted({a.get_name() for a in all_activities})
-            venues = sorted({a.get_venue() for a in all_activities})
+        # Sort by date
+        upcoming.sort(key=lambda x: x.get_date())
+        registered.sort(key=lambda x: x.get_date())
 
-            return render_template(
-                'PWIDS/my_activities.html',
-                current_page='participant_activities',
-                upcoming_activities=upcoming_activities,
-                registered_activities=registered_activities,
-                activity_names=activity_names,
-                venues=venues,
-                selected_activity=activity_name_filter,
-                selected_location=location_filter
-            )
+        # Get unique values for filters
+        activity_names = sorted({a.get_name() for a in activities_dict.values()})
+        venues = sorted({a.get_venue() for a in activities_dict.values()})
+
+        return render_template(
+            'PWIDS/my_activities.html',
+            current_page='participant_activities',
+            upcoming_activities=upcoming,
+            registered_activities=registered,
+            activity_names=activity_names,
+            venues=venues,
+            selected_activity=activity_name_filter,
+            selected_location=location_filter
+        )
 
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -466,59 +456,62 @@ def activity_signup(activity_id):
     signup_form = CreateParticipantSignUpForm(request.form)
 
     # Get activity
+    activity = None
+    activity_db = shelve.open('storage/participant_activity_storage.db', 'r')
     try:
-        with shelve.open('storage/participant_activity_storage.db', 'r') as db:
-            activities_dict = db.get('Activities', {})
-            activity = activities_dict.get(activity_id)
-            if not activity:
-                return redirect(url_for('participant_activities'))  # Silent redirect if activity not found
-    except Exception as e:
-        print(f"Error accessing activity data: {str(e)}")
+        activities_dict = activity_db['Activities']
+        activity = activities_dict.get(activity_id)
+    except:
+        print("Error accessing activity data")
+    finally:
+        activity_db.close()
+
+    if not activity:
         return redirect(url_for('participant_activities'))
 
-    # Prefill name from logged-in user's session if GET request
+    # Prefill name from logged-in user if GET request
     if request.method == 'GET':
-        # Get username from session
         username = session.get('user', '')
-        # Open user storage to get user details
+        user_db = shelve.open('storage/user_storage.db', 'r')
         try:
-            with shelve.open('storage/user_storage.db', 'r') as db:
-                users_dict = db.get('Users', {})
-                # Here you would need to modify to store more user details
-                # Currently only stores username:password pairs
-                # For now, we'll just use the username as the name
-                signup_form.name.data = username
-        except Exception as e:
-            print(f"Error accessing user data: {str(e)}")
-            # Continue without prefilling if there's an error
+            users_dict = user_db['Users']
+            signup_form.name.data = username
+        except:
+            print("Error accessing user data")
+        finally:
+            user_db.close()
 
+    # Handle form submission
     if request.method == 'POST' and signup_form.validate():
+        signups_dict = {}
+        signup_db = shelve.open('storage/activity_signups.db', 'c')
+
         try:
-            with shelve.open('storage/activity_signups.db', 'c') as db:
-                signups_dict = db.get('Activity_Signups', {})
+            signups_dict = signup_db['Activity_Signups']
 
-                new_signup = Participant_Activity_Sign_Up.ParticipantActivitySignUp(
-                    name=signup_form.name.data,
-                    phone=signup_form.phone.data,
-                    email=signup_form.email.data,
-                    accessibility_needs=signup_form.accessibility_needs.data,
-                    emergency_contact_name=signup_form.emergency_contact_name.data,
-                    emergency_phone=signup_form.emergency_phone.data,
-                    activity_id=activity_id
-                )
+            new_signup = Participant_Activity_Sign_Up.ParticipantActivitySignUp(
+                name=signup_form.name.data,
+                phone=signup_form.phone.data,
+                email=signup_form.email.data,
+                accessibility_needs=signup_form.accessibility_needs.data,
+                emergency_contact_name=signup_form.emergency_contact_name.data,
+                emergency_phone=signup_form.emergency_phone.data,
+                activity_id=activity_id
+            )
 
-                signups_dict[new_signup.get_signup_id()] = new_signup
-                db['Activity_Signups'] = signups_dict
+            signups_dict[new_signup.get_signup_id()] = new_signup
+            signup_db['Activity_Signups'] = signups_dict
 
-                return redirect(url_for('participant_activities'))
-        except Exception as e:
-            print(f"Error saving signup: {str(e)}")
-            # You could pass an error message to template if needed
+            return redirect(url_for('participant_activities'))
+        except:
+            print("Error saving signup")
             return render_template('PWIDS/activity_signup.html',
                                    form=signup_form,
                                    activity=activity,
                                    error="Failed to save signup",
                                    current_page='activity_signup')
+        finally:
+            signup_db.close()
 
     return render_template('PWIDS/activity_signup.html',
                            form=signup_form,
@@ -567,23 +560,26 @@ def outlet_map(outlet_id):
                            outlet=outlet,
                            current_page='outlet_map')
 
+
 @app.route('/participants/help', methods=['GET', 'POST'])
 @login_required
 def participant_help():
+    # Sync ID and initialize form
     sync_participant_enquiry_id()
     create_enquiry_form = CreateParticipantEnquiryForm(request.form)
-    username = session.get('user', '')  # Get username from session
+    username = session.get('user', '')
 
-    # Prefill name from logged-in user's session if GET request
+    # Prefill name for GET requests
     if request.method == 'GET':
         create_enquiry_form.name.data = username
 
-    # Handle form submission
+    # Handle form submission (CREATE)
     if request.method == 'POST' and create_enquiry_form.validate():
         enquiries_dict = {}
         db = shelve.open('storage/participant_enquiries_storage.db', 'c')
+
         try:
-            enquiries_dict = db.get('Participant_Enquiries', {})
+            enquiries_dict = db['Participant_Enquiries']
         except:
             print("Error in retrieving Participant_Enquiries from shelve.")
 
@@ -599,29 +595,30 @@ def participant_help():
         db.close()
         return redirect(url_for('participant_help', show_enquiries=1))
 
-    # Handle GET requests - MODIFIED TO FILTER BY CURRENT USER
+    # Handle retrieving enquiries (READ)
+    # Get filter parameters from URL
     selected_subject = request.args.get('subject', '')
     selected_status = request.args.get('status', '')
     show_enquiries = request.args.get('show_enquiries', default=0, type=int)
 
+    enquiries_dict = {}
+    db = shelve.open('storage/participant_enquiries_storage.db', 'r')
+    enquiries_dict = db['Participant_Enquiries']
+    db.close()
+
+    # Filtered Enquiries
     enquiries = []
-    try:
-        with shelve.open('storage/participant_enquiries_storage.db', 'r') as db:
-            all_enquiries = list(db.get('Participant_Enquiries', {}).values())
+    for key in enquiries_dict:
+        enquiry = enquiries_dict.get(key)
+        if enquiry.get_name() == username:
+            subject_match = not selected_subject or enquiry.get_subject() == selected_subject
+            status_match = not selected_status or enquiry.get_status() == selected_status
+            if subject_match and status_match:
+                enquiries.append(enquiry)
 
-            for enquiry in all_enquiries:
-                # Only show enquiries from the current user
-                if enquiry.get_name() == username:
-                    subject_match = not selected_subject or enquiry.get_subject() == selected_subject
-                    status_match = not selected_status or enquiry.get_status() == selected_status
-                    if subject_match and status_match:
-                        enquiries.append(enquiry)
+    enquiries.sort(key=lambda x: x.get_enquiry_id())
 
-            enquiries.sort(key=lambda x: x.get_enquiry_id())
-    except Exception as e:
-        print(f"Error loading enquiries: {str(e)}")
-
-    # Defined subject and status field data
+    # Defined filter options
     subjects = ['Activity', 'Technical Issues', 'Account Issues',
                 'General Feedback / Concerns', 'Navigation Issues', 'Others']
     statuses = ['Pending', 'Replied']
@@ -629,14 +626,13 @@ def participant_help():
     return render_template('PWIDS/help.html',
                            form=create_enquiry_form,
                            enquiries=enquiries,
-                           count=len(enquiries),  # Changed from all_enquiries to enquiries
+                           count=len(enquiries),
                            selected_subject=selected_subject,
                            selected_status=selected_status,
                            show_enquiries=show_enquiries,
                            subjects=subjects,
                            statuses=statuses,
-                           current_page='participant_help'
-                           )
+                           current_page='participant_help')
 
 @app.route('/update_participant_enquiry/<int:id>/', methods=['GET', 'POST'])
 @login_required
@@ -676,11 +672,6 @@ def delete_participant_enquiry(id):
     db['Participant_Enquiries'] = enquiries_dict
     db.close()
     return redirect(url_for('participant_help', show_enquiries=1))
-
-
-from datetime import datetime
-
-from datetime import datetime
 
 
 @app.route('/donations/transaction_payment', methods=['GET', 'POST'])

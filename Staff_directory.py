@@ -79,6 +79,7 @@ def sync_product_id():
     except Exception as e:
         print("Error syncing product ID:", e)
         Product.count_id = 0
+
 # <-------- Routes -------->
 
 @app.route('/')
@@ -215,17 +216,17 @@ def activity_public():
     page = request.args.get('page', 1, type=int)
     per_page = 6  # Items per page
 
-
+    # Open database
     db = shelve.open('storage/storage_activities.db', 'r')
     activities_dict = db.get('Activities', {})
     db.close()
 
-
+    # Get all unique venues and activity names for dropdowns
     all_activities = list(activities_dict.values())
     venues = sorted({activity.get_activity_venue() for activity in all_activities})
     activity_names = sorted({activity.get_activity_name() for activity in all_activities})
 
-
+    # Apply filters
     filtered_activities = []
     for activity in all_activities:
         activity_match = not selected_activity or activity.get_activity_name() == selected_activity
