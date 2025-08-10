@@ -4,7 +4,7 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
-    <h1 class="display-4">Update Account</h1>
+    <h1">Update Account</h1>
 
     <form method="POST" action="">
         <div class="form-group">
@@ -28,4 +28,5 @@
         <a href="{{ url_for('manage_accounts') }}" class="btn btn-secondary ml-2">Cancel</a>
     </form>
 {% endblock %}
+
 
