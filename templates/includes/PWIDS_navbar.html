@@ -78,7 +78,7 @@
                     {{ session['user'] }} (PWID)
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                 </div>
