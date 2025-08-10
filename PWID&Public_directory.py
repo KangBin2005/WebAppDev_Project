@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import shelve, os, Participant_Enquiry, Public_Enquiry, Participant_Activity_Sign_Up
-from datetime import date, datetime
-
+from datetime import date, datetime, timedelta
 
 from Transaction import Transaction
 from Forms import CreateParticipantEnquiryForm, CreatePublicEnquiryForm, CreateParticipantSignUpForm, CreateTransactionForm
@@ -10,12 +9,14 @@ from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'fb814d13-2f3e-48b1-937b-ef33a4d35c18'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # 10 minutes inactivity before timeout
 
 # PWID users details:
 # Amy: password
-# Julie: password123
+# Julie: "password123
 # mary: mary123
 # Karl: karl123
+
 
 def login_required(f):
     @wraps(f)                                       # Prevent access if not logged in
@@ -25,6 +26,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return custom_login
 
+# <-------- Sync ID Routes -------->
 def sync_public_enquiry_id():
     try:
         db = shelve.open('storage/public_enquiries_storage.db', 'r')
@@ -74,58 +76,6 @@ def sync_transaction_id():
     except Exception as e:
         print("Error syncing transaction ID:", e)
         Transaction.count_id = 0
-
-# ========================
-# Transaction Cart
-# ========================
-@app.route('/donations/add_to_cart/<int:product_id>', methods=['POST'])
-def add_to_cart(product_id):
-    cart = session.get('cart', {})
-    pid = str(product_id)
-
-    if pid in cart:
-        cart[pid]['quantity'] += 1
-    else:
-        cart[pid] = {
-            'name': request.form['name'],
-            'price': float(request.form['price']),
-            'quantity': 1
-        }
-
-    session['cart'] = cart
-    return redirect(request.referrer)
-
-@app.route('/donations/transaction_cart')
-def transaction_cart():
-    cart = session.get('cart', {})
-    print(cart)
-    return render_template('Public/transaction_cart.html', cart=cart)
-
-@app.route('/donations/transaction_cart/update_quantity/<product_id>/<action>', methods=['POST'])
-def update_quantity(product_id, action):
-    cart = session.get('cart', {})
-    pid = str(product_id)  # Make sure to use string keys
-
-    if pid in cart:
-        if action == 'increase':
-            cart[pid]['quantity'] += 1
-        elif action == 'decrease':
-            cart[pid]['quantity'] -= 1
-            if cart[pid]['quantity'] <= 0:
-                del cart[pid]
-
-        session['cart'] = cart
-
-    return redirect(url_for('transaction_cart'))
-
-
-@app.route('/donations/transaction_cart/remove_item/<product_id>', methods=['POST'])
-def remove_item(product_id):
-    cart = session.get('cart', {})
-    if product_id in cart:
-        del cart[product_id]
-    session['cart'] = cart
-    return redirect(url_for('transaction_cart'))
 
 # ========================
 # Public Routes (main site)
@@ -345,6 +295,103 @@ def public_donations():
 
     return render_template('Public/donations.html', current_page='public_donations',product_list=product_list)
 
+@app.route('/donations/transaction_payment', methods=['GET', 'POST'])
+def create_transaction():
+    form = CreateTransactionForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        sync_transaction_id()
+        Transaction.count_id += 1
+        shared_transaction_id = Transaction.count_id
+
+        cart = session.get('cart', {})
+        if not cart:
+            return "Cart is empty", 400
+
+        with shelve.open('storage/storage_transactions.db', 'c') as db:
+            transactions_dict = db.get('transaction', {})
+
+            for pid, item in cart.items():
+                new_transaction = Transaction(
+                    product_id=pid,
+                    product_name=item["name"],
+                    quantity=item["quantity"],
+                    price=item["price"],
+                    customer_name=form.customer_name.data,
+                    payment_type=form.payment_type.data,
+                    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
+                # Set all transactions to share the same transaction id
+                new_transaction._Transaction__transaction_id = shared_transaction_id
+                transactions_dict[f"{shared_transaction_id}-{pid}"] = new_transaction
+
+            db['transaction'] = transactions_dict
+        return redirect(url_for('transaction_complete'))
+
+    # For GET requests or invalid form, render the payment page
+    return render_template('Public/transaction_payment.html', form=form)
+
+
+@app.route('/donations/transaction_cart/transaction_complete')
+def transaction_complete():
+    session['cart'] = {}
+    return render_template('Public/transaction_completion.html')
+
+# ========================
+# Transaction Cart Routes
+# ========================
+@app.route('/donations/add_to_cart/<int:product_id>', methods=['POST'])
+def add_to_cart(product_id):
+    cart = session.get('cart', {})
+    pid = str(product_id)
+
+    if pid in cart:
+        cart[pid]['quantity'] += 1
+    else:
+        cart[pid] = {
+            'name': request.form['name'],
+            'price': float(request.form['price']),
+            'quantity': 1
+        }
+
+    session['cart'] = cart
+    return redirect(request.referrer)
+
+@app.route('/donations/transaction_cart')
+def transaction_cart():
+    cart = session.get('cart', {})
+    print(cart)
+    return render_template('Public/transaction_cart.html', cart=cart)
+
+@app.route('/donations/transaction_cart/update_quantity/<product_id>/<action>', methods=['POST'])
+def update_quantity(product_id, action):
+    cart = session.get('cart', {})
+    pid = str(product_id)  # Make sure to use string keys
+
+    if pid in cart:
+        if action == 'increase':
+            cart[pid]['quantity'] += 1
+        elif action == 'decrease':
+            cart[pid]['quantity'] -= 1
+            if cart[pid]['quantity'] <= 0:
+                del cart[pid]
+
+        session['cart'] = cart
+
+    return redirect(url_for('transaction_cart'))
+
+
+@app.route('/donations/transaction_cart/remove_item/<product_id>', methods=['POST'])
+def remove_item(product_id):
+    cart = session.get('cart', {})
+    if product_id in cart:
+        del cart[product_id]
+    session['cart'] = cart
+    return redirect(url_for('transaction_cart'))
+
+# ========================
+# Participants Routes
+# ========================
 
 @app.route('/participants/home')
 @login_required
@@ -567,7 +614,7 @@ def participant_help():
     # Sync ID and initialize form
     sync_participant_enquiry_id()
     create_enquiry_form = CreateParticipantEnquiryForm(request.form)
-    username = session.get('user', '')
+    username = session.get('user', '') #Get current logged in user
 
     # Prefill name for GET requests
     if request.method == 'GET':
@@ -587,7 +634,7 @@ def participant_help():
             name=create_enquiry_form.name.data,
             subject=create_enquiry_form.subject.data,
             message=create_enquiry_form.message.data,
-            status="Pending"
+            status="Pending" # Default status after submitting enquiry
         )
 
         enquiries_dict[new_enquiry.get_enquiry_id()] = new_enquiry
@@ -597,9 +644,9 @@ def participant_help():
 
     # Handle retrieving enquiries (READ)
     # Get filter parameters from URL
-    selected_subject = request.args.get('subject', '')
-    selected_status = request.args.get('status', '')
-    show_enquiries = request.args.get('show_enquiries', default=0, type=int)
+    selected_subject = request.args.get('subject', '') # Filter by subject
+    selected_status = request.args.get('status', '') # Filter by status
+    show_enquiries = request.args.get('show_enquiries', default=0, type=int) # Toggle display
 
     enquiries_dict = {}
     db = shelve.open('storage/participant_enquiries_storage.db', 'r')
@@ -610,12 +657,14 @@ def participant_help():
     enquiries = []
     for key in enquiries_dict:
         enquiry = enquiries_dict.get(key)
-        if enquiry.get_name() == username:
+        if enquiry.get_name() == username: # Only show current user's enquiries
+            # Check if selected field matches
             subject_match = not selected_subject or enquiry.get_subject() == selected_subject
             status_match = not selected_status or enquiry.get_status() == selected_status
             if subject_match and status_match:
                 enquiries.append(enquiry)
 
+    # Sort enquiries by ID (chronological order)
     enquiries.sort(key=lambda x: x.get_enquiry_id())
 
     # Defined filter options
@@ -673,48 +722,10 @@ def delete_participant_enquiry(id):
     db.close()
     return redirect(url_for('participant_help', show_enquiries=1))
 
-
-@app.route('/donations/transaction_payment', methods=['GET', 'POST'])
-def create_transaction():
-    form = CreateTransactionForm(request.form)
-
-    if request.method == 'POST' and form.validate():
-        sync_transaction_id()
-        Transaction.count_id += 1
-        shared_transaction_id = Transaction.count_id
-
-        cart = session.get('cart', {})
-        if not cart:
-            return "Cart is empty", 400
-
-        with shelve.open('storage/storage_transactions.db', 'c') as db:
-            transactions_dict = db.get('transaction', {})
-
-            for pid, item in cart.items():
-                new_transaction = Transaction(
-                    product_id=pid,
-                    product_name=item["name"],
-                    quantity=item["quantity"],
-                    price=item["price"],
-                    customer_name=form.customer_name.data,
-                    payment_type=form.payment_type.data,
-                    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                )
-                # Set all transactions to share the same transaction id
-                new_transaction._Transaction__transaction_id = shared_transaction_id
-                transactions_dict[f"{shared_transaction_id}-{pid}"] = new_transaction
-
-            db['transaction'] = transactions_dict
-        return redirect(url_for('transaction_complete'))
-
-    # For GET requests or invalid form, render the payment page
-    return render_template('Public/transaction_payment.html', form=form)
-
-
-@app.route('/donations/transaction_cart/transaction_complete')
-def transaction_complete():
-    session['cart'] = {}
-    return render_template('Public/transaction_completion.html')
+@app.route('/participants/profile')
+@login_required
+def profile():
+    return render_template('PWIDS/profile.html', current_page='profile')
 
 # ========================
 # Login_Sign Up Routes
@@ -730,8 +741,8 @@ def login():
         db.close()
 
         if username in users and users[username] == password:
+            session.permanent = True  # Start inactivity tracking
             session['user'] = username
-            flash("Logged in successfully!", "success")
             return redirect(url_for('participant_home'))
         else:
             flash("Invalid username or password", "error")
@@ -766,6 +777,38 @@ def signup():
 def logout():
     session.clear()
     return redirect(url_for('public_home'))
+
+@app.route('/participants/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    username = session['user']
+
+    if request.method == 'POST':
+        current_pw = request.form['current_password']
+        new_pw = request.form['new_password']
+        confirm_pw = request.form['confirm_password']
+
+        # Open database with writeback=True for proper saving
+        db = shelve.open('storage/user_storage.db', writeback=True)
+        users = db.get('Users', {})
+
+        if username not in users:
+            flash("User not found", "error")
+        elif users[username] != current_pw:
+            flash("Current password is incorrect.", "error")
+        elif new_pw != confirm_pw:
+            flash("New passwords do not match.", "error")
+        else:
+            # Update password and save to database
+            users[username] = new_pw
+            db['Users'] = users  # Explicitly save changes
+            flash("Password updated successfully!", "success")
+            db.close()  # Close database
+            return redirect(url_for('participant_home'))
+
+        db.close()  # Close database in all cases
+
+    return render_template('PWIDS/change_password.html', current_page='change_password')
 
 if __name__ == '__main__':
     app.run(debug=True)

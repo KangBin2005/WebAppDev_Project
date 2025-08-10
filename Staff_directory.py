@@ -345,12 +345,6 @@ def activity_public_delete(id):
     db.close()
     return redirect(url_for('activity_public'))
 
-
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('Staff/profile.html', current_page='profile')
-
 @app.route('/analytics')
 @login_required
 def analytics():
@@ -1022,6 +1016,10 @@ def delete_transaction(transaction_id):
 def manage_store():
     return render_template('Staff/store_management.html', current_page='store_management')
 
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('Staff/profile.html', current_page='profile')
 # <-------- Login Routes -------->
 
 @app.route('/login', methods=['GET', 'POST'])
