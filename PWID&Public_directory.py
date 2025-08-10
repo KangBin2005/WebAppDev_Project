@@ -159,7 +159,9 @@ def sync_transaction_id():
         print("Error syncing transaction ID:", e)
         Transaction.count_id = 0
 
-
+# ========================
+# Transaction Cart
+# ========================
 @app.route('/donations/add_to_cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
     cart = session.get('cart', {})

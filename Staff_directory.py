@@ -955,11 +955,8 @@ def update_transaction(transaction_id):
             print("Error retrieving transaction data for updating.")
             return redirect(url_for('manage_transactions'))
 
-        # Since your shelve keys are likely composite like "transactionID-productID",
-        # you need to find all keys for this transaction_id and update them.
         updated = False
         for key, transaction in transaction_dict.items():
-            # transaction_id might be int or string, convert to int for comparison
             if transaction.get_transaction_id() == transaction_id:
                 transaction.set_customer_name(update_transaction_form.customer_name.data)
                 transaction.set_payment_type(update_transaction_form.payment_type.data)
