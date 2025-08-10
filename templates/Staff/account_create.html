@@ -4,7 +4,8 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
-    <h1 class="display-4">Create Account</h1>
+<div class="mt-4">
+    <h1>Create Account</h1>
 
     <form method="POST" action="">
         <div class="form-group">
@@ -25,5 +26,7 @@
             </div>
         </div>
         <input type="submit" value="Create" class="btn btn-primary"/>
+        <a href="{{ url_for('manage_accounts') }}" class="btn btn-secondary ml-2">Cancel</a>
     </form>
+</div>
 {% endblock %}
