@@ -1,40 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Signup</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Participants Signup</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            background: linear-gradient(90deg, #007BFF, #28A745);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        .error-msg {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="container mt-5">
+<body>
+<div class="container text-center">
+    <h1 class="mb-0"><span style="color: white;">SG</span><span style="color: #7ed957;">Enable</span></h1>
+    <h6 class="text-white mb-4">Staff Signup Portal</h6>
 
-    <h2>Signup</h2>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    <div class="signup-box mx-auto">
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+        <div class="error-msg mb-3">{{ messages[0][1] }}</div>
         {% endif %}
-    {% endwith %}
+        {% endwith %}
 
-    <form method="POST">
-        <div class="mb-3">
-            <label for="username" class="form-label">Name</label>
-            <input type="text" class="form-control" name="username" id="username" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" id="password" required>
-        </div>
-        <div class="mb-3">
-            <label for="confirm_password" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
-    </form>
+        <form method="POST">
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Name</label>
+                <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Sign Up</button>
+        </form>
 
-    <p class="mt-3">Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
-
+        <p class="mt-3">Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+    </div>
+</div>
 </body>
 </html>
