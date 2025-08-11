@@ -1,63 +1,162 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Participants Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <style>
-        body {
-            background: linear-gradient(90deg, #007BFF, #28A745);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+{% extends "Public/base.html" %}
+{% block title %}SG Enable - Participants Login{% endblock %}
+{% block content %}
 
-        .login-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
+<style>
+    .login-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 60px 0;
+    }
 
-        h1 {
-            font-weight: bold;
-        }
+    .login-box {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        transition: transform 0.3s ease;
+    }
 
-        .error-msg {
-            color: red;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-<div class="container text-center">
-    <h1 class="mb-0"><span style="color: white;">SG</span><span style="color: #7ed957;">Enable</span></h1>
-    <h6 class="text-white mb-4">Participants Login Portal</h6>
+    .login-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
 
+    .brand-logo {
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+    }
 
-    <div class="login-box mx-auto">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="error-msg mb-3">{{ messages[0][1] }}</div>
-        {% endif %}
-        {% endwith %}
+    .brand-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
 
-        <form method="POST">
-            <div class="mb-3 text-start">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="username" required>
+    .form-control {
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #28A745;
+        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #007BFF 0%, #28A745 100%);
+        border: none;
+        padding: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .error-msg {
+        color: #dc3545;
+        text-align: center;
+        padding: 10px;
+        background-color: rgba(220, 53, 69, 0.1);
+        border-radius: 6px;
+        margin-bottom: 1.5rem;
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: #6c757d;
+    }
+
+    .login-footer a {
+        color: #007BFF;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .login-footer a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    .support-section {
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 3rem;
+        text-align: center;
+    }
+
+    .support-btn {
+        border: 2px solid #007BFF;
+        color: #007BFF;
+        font-weight: 600;
+        padding: 8px 20px;
+        transition: all 0.3s;
+    }
+
+    .support-btn:hover {
+        background-color: #007BFF;
+        color: white;
+    }
+</style>
+
+<!-- Login Section -->
+<div class="login-section">
+    <div class="container">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="brand-logo">
+                    <span style="color: #007BFF;">SG</span><span style="color: #28A745;">Enable</span>
+                </div>
+                <div class="brand-subtitle">Participants Login Portal</div>
             </div>
-            <div class="mb-4 text-start">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" required>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="error-msg">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ messages[0][1] }}
             </div>
-            <button type="submit" class="btn btn-dark w-100">Login</button>
-        </form>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-login btn-primary w-100 mb-3">Login</button>
+                
+                <div class="login-footer">
+                    Don't have an account? <a href="{{ url_for('signup') }}">Sign Up here</a>
+                </div>
+            </form>
+
+            <div class="support-section">
+                <h5>Need Help Accessing Your Account?</h5>
+                <p class="text-muted mb-3">Our support team is ready to assist you</p>
+                <a href="{{ url_for('public_contact') }}" class="btn support-btn">
+                    <i class="fas fa-life-ring me-2"></i>Contact Support
+                </a>
+            </div>
+        </div>
     </div>
 </div>
-</body>
-</html>
+
+{% endblock %}
