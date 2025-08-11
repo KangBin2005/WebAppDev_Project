@@ -10,10 +10,10 @@
                 <h2 class="card-title">Create Public Activity</h2>
                 <form method="POST" action="">
                     <div class="form-group">
-                        {{ render_field(form.activity_name, class="form-control") }}
+                        {{ render_field(form.activity_name, class="form-control", placeholder="Enter activity name") }}
                     </div>
                     <div class="form-group">
-                        {{ render_field(form.activity_details, class="form-control", rows="3") }}
+                        {{ render_field(form.activity_details, class="form-control", rows="3", placeholder="Enter detailed description of activity") }}
                     </div>
                     <div class="form-group">
                         {{ render_field(form.activity_venue, class="form-control", rows="3") }}
@@ -34,5 +34,4 @@
         </div>
     </div>
 {% endblock %}
-
 
