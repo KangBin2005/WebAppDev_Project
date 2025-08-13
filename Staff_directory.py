@@ -724,8 +724,8 @@ def enquiry_public():
         print(f"Error loading enquiries: {str(e)}")
 
     # Define options for filters
-    subjects = ['Activity', 'Technical Issues', 'Account Issues',
-                'General Feedback', 'Navigation Issues', 'Others']
+    subjects = ['Activity', 'Payment Issues', 'Donations Matters',
+                'General Enquiry', 'Navigation Issues', 'Others']
     statuses = ['Pending', 'Replied']
 
     return render_template('Staff/enquiry_public.html',

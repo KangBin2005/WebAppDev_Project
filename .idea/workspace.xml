@@ -4,7 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Consistent title format" />
+    <list default="true" id="6601265b-4720-44f1-8c0e-50ec8148b1ec" name="Changes" comment="Consistent title format">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_8_2025_10_12_am_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_8_2025_10_12_am__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_8_2025_8_03_pm_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_8_2025_8_03_pm__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_10_37_am_[Changes]/participant_enquiries_storage.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_10_37_am_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_10_37_am__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_3_50_pm_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_3_50_pm__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_9_11_pm_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_9_8_2025_9_11_pm__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/activity_signups.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/activity_signups.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/participant_activity_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_activity_storage.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/participant_enquiries_storage.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/public_enquiries_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/public_enquiries_storage.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/storage_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/storage_accounts.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/storage_activities.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/storage_activities.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/storage_products.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/storage_products.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/storage_transactions.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/storage_transactions.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/user_storage.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/user_storage.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/PWIDS_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/PWIDS_navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/staff_navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/staff_navbar.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -256,7 +280,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754881211641</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Consistent title format">
+      <option name="closed" value="true" />
+      <created>1754881262217</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1754881262217</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
