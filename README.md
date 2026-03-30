@@ -75,13 +75,13 @@ Every time you work on the project, ensure you follow these steps to start the c
 This handles public activity sign-ups and participant accounts.
 
 ```bash
-# Activate virtual environment
-# Windows: venv\Scripts\activate.bat 
-# Mac/Linux: source venv/bin/activate
-
 # Run the Public/Participant portal
 python "PWID&Public_directory.py"
+```
 
+# Staff portal (Port 5001)
+This handle administrative functions for staffs.
+```bash
 # Run the Staff portal
 python "Staff_directory.py"
 ```
