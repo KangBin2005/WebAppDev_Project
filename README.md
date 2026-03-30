@@ -32,7 +32,7 @@ This platform addresses the gap in community support for PWID and their caregive
 
 ### Tech Stack
 * **Backend:** Python / Flask
-* **Frontend:** Jinja2 Templates, Bootstrap 5, CSS3
+* **Frontend:** Jinja2 Templates, Bootstrap 5, HTML, CSS, Chart.JS
 * **Persistence:** `shelve` (Object-oriented persistent storage)
 * **Form Logic:** WTForms with advanced validation (Email, length constraints, and custom error messages)
 
