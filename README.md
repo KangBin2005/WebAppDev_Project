@@ -68,7 +68,7 @@ mkdir storage
 ```
 ---
 
-### 🏃 3. Running the Application
+### 3. Running the Application
 Every time you work on the project, ensure you follow these steps to start the correct portal.
 
 ### Main Portal (Port 5000)
@@ -79,7 +79,7 @@ This handles public activity sign-ups and participant accounts.
 python "PWID&Public_directory.py"
 ```
 
-# Staff portal (Port 5001)
+### Staff portal (Port 5001)
 This handle administrative functions for staffs.
 ```bash
 # Run the Staff portal
