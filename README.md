@@ -1,65 +1,38 @@
-# 🏥 PWID Support & Integrated Management System
+🏥 PWID Support & Integrated Management System
+
 > **A dual-sided Flask Web Application empowering Persons with Intellectual Disabilities (PWID) and streamlining social service operations.**
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![Flask](https://img.shields.io/badge/Framework-Flask-lightgrey.svg)
 ![Bootstrap](https://img.shields.io/badge/Frontend-Bootstrap-purple.svg)
+![Chart.js](https://img.shields.io/badge/Charts-Chart.js-green.svg)
 ![Shelve](https://img.shields.io/badge/Database-Shelve-orange.svg)
 
 ## 🌟 Project Overview
-This platform addresses the gap in community support for PWID and their caregivers. It features a simplified **Public/Participant Portal** for service engagement and a robust **Staff Management Suite** for data-driven administration.
+
+This platform was developed for **SG Enable**, an agency in Singapore that supports Persons with Intellectual Disabilities (PWIDs) through skills training, job coaching, and community services. The web application bridges the gap in community support by offering:
+
+- A simplified **Public/Participant Portal** for service engagement.
+- A robust **Staff Management Suite** for data‑driven administration.
+
+The solution centralises activities, enquiries, transactions, and analytics, making it easier for PWIDs, caregivers, and staff to connect and manage services efficiently.
 
 ---
 
 ## ✨ Core Features
 
 ### 👥 Participant & Public Portal (`PWID&Public_directory.py`)
-* **Activity Discovery:** Browse and register for activities with specialized **Accessibility Needs** tracking.
-* **Integrated Enquiry System:** Submit support tickets (Public or Member) and track real-time resolution status.
-* **Secure Account Management:** Role-specific access (PWID, Caregiver, Member) with profile editing and password recovery.
-* **Inactivity Protection:** 10-minute session timeout (`PERMANENT_SESSION_LIFETIME`) to protect sensitive user information.
+- **Activity Discovery** – Browse and register for workshops/activities with **Accessibility Needs** tracking.
+- **Integrated Enquiry System** – Submit support tickets (as public or registered member) and track real‑time resolution status.
+- **Secure Account Management** – Role‑specific access (PWID, Caregiver, Member) with profile editing, password recovery, and secure login.
+- **Inactivity Protection** – 10‑minute session timeout (`PERMANENT_SESSION_LIFETIME`) to protect sensitive user information.
 
 ### 🏢 Staff Administrative Portal (`Staff_directory.py`)
-* **Centralized Dashboard:** Management of accounts, public activities, and participant workshops.
-* **Financial Tracking:** A dedicated **Transaction System** to log sales and services with multi-payment support (Debit, Credit, Digital).
-* **Enquiry Management:** Staff-side interface to review, reply to, and archive community feedback.
-* **Sync ID Protocol:** Custom logic to synchronize auto-incrementing IDs across multiple `.db` files, ensuring data consistency.
-* **Data Analytics Dashboard:** Real-time visualization using **Chart.js** to track activity participation (Bar Charts) and categorize enquiry trends (Pie Charts) for both Public and Registered users.
-
----
-
-## 🛠️ Technical Architecture
-
-### Tech Stack
-* **Backend:** Python / Flask
-* **Frontend:** Jinja2 Templates, Bootstrap 5, HTML, CSS, Chart.JS
-* **Persistence:** `shelve` (Object-oriented persistent storage)
-* **Form Logic:** WTForms with advanced validation (Email, length constraints, and custom error messages)
-
-### Persistence Layer
-The system uses a modular storage approach. Each module (Accounts, Enquiries, Transactions) is stored in its own `.db` file within the `storage/` directory, managed via the `shelve` module with `writeback=True` for reliable updates.
-
----
-
-## 🌟 Project Overview
-This platform addresses the gap in community support for PWID and their caregivers. It features a simplified **Public/Participant Portal** for service engagement and a robust **Staff Management Suite** for data-driven administration and operational tracking.
-
----
-
-## ✨ Core Features
-
-### 👥 Participant & Public Portal (`PWID&Public_directory.py`)
-* **Activity Discovery:** Browse and register for workshops with specialized **Accessibility Needs** tracking.
-* **Unified Enquiry System:** Submit support tickets (Public or Member) and track real-time resolution status.
-* **Secure Account Management:** Role-specific access (PWID, Caregiver, Member) with profile management and password recovery.
-* **Inactivity Protection:** 10-minute session timeout (`PERMANENT_SESSION_LIFETIME`) to ensure the privacy of vulnerable users.
-
-### 🏢 Staff Administrative Suite (`Staff_directory.py`)
-* **Operations Dashboard:** Manage user accounts, public activities, and internal participant workshops.
-* **Transaction System:** Track product sales and service logs with multi-payment support (Debit, Credit, Apple Pay, etc.).
-* **Enquiry Lifecycle:** Review, reply to, and archive community feedback through a centralized staff interface.
-* **Sync ID Protocol:** Custom synchronization logic that prevents ID collisions by fetching the highest existing ID across multiple `.db` storage files.
-
+- **Centralized Dashboard** – Manage user accounts, public activities, and participant workshops.
+- **Financial Tracking** – Transaction system to log sales and services with multi‑payment support (Debit, Credit, Digital, Apple Pay).
+- **Enquiry Management** – Review, reply, and archive community feedback through a centralised interface.
+- **Sync ID Protocol** – Custom logic that synchronises auto‑incrementing IDs across multiple `.db` files, ensuring data consistency.
+- **Data Analytics Dashboard** – Real‑time visualisation using **Chart.js** to track activity participation (bar charts) and categorise enquiry trends (pie charts) for both public and registered users.
 ---
 
 ## 🛠️ Technical Architecture
@@ -70,8 +43,8 @@ This platform addresses the gap in community support for PWID and their caregive
 * **Persistence:** `shelve` (Object-oriented persistent storage)
 * **Form Logic:** WTForms with advanced data validation (Email, Length, and Required Fields).
 
-### Database Strategy
-The system uses a modular storage approach. Each data type is isolated in its own `.db` file within the `storage/` directory, utilizing the `writeback=True` protocol for reliable object updates and data persistence.
+### Persistence Layer
+The system uses a modular storage approach. Each module (Accounts, Enquiries, Transactions) is stored in its own `.db` file within the `storage/` directory. The `shelve` module is used with `writeback=True` for reliable updates
 
 ---
 ## 🚀 Installation & Setup
@@ -108,6 +81,9 @@ This handles public activity sign-ups and participant accounts.
 
 # Run the Public/Participant portal
 python "PWID&Public_directory.py"
+
+# Run the Staff portal
+python "Staff_directory.py"
 ```
 ---
 
